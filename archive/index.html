@@ -152,6 +152,28 @@ body{background:var(--night);color:var(--parch);font-family:'IM Fell English','N
   .scrap{width:40vw} #feather{display:none}
 }
 
+/* loader gate + music box */
+#ld .go{display:flex;gap:10px;justify-content:center;margin-top:22px;opacity:0;transform:translateY(8px);transition:opacity .6s,transform .6s;pointer-events:none}
+#ld.ready .go{opacity:1;transform:none;pointer-events:auto}
+#ld .go button{font-family:Cinzel;font-size:11px;letter-spacing:.3em;padding:11px 18px;border:1px solid rgba(216,180,106,.55);background:rgba(20,12,6,.6);color:var(--gold2);cursor:pointer}
+#ld .go button.main{background:var(--blood);border-color:#c0392b}
+#ld .go button:hover{filter:brightness(1.2)}
+#mus{position:fixed;left:16px;bottom:16px;z-index:35;display:flex;align-items:center;gap:10px;padding:8px 12px 8px 8px;border:1px solid rgba(216,180,106,.35);background:rgba(10,6,3,.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-radius:999px;max-width:calc(100vw - 32px)}
+#musBtn{position:relative;width:42px;height:42px;border-radius:50%;border:0;cursor:pointer;flex:0 0 auto;
+  background:radial-gradient(circle,#8e1f17 0 18%,#120b06 19% 22%,#2a1d10 23% 26%,#120b06 27% 31%,#2a1d10 32% 35%,#120b06 36% 100%);box-shadow:0 0 0 2px rgba(216,180,106,.5)}
+#musBtn::after{content:"▶";position:absolute;inset:0;display:grid;place-items:center;color:var(--gold2);font-size:12px}
+#mus.on #musBtn{animation:spin 3.2s linear infinite} #mus.on #musBtn::after{content:""}
+@keyframes spin{to{transform:rotate(360deg)}}
+#mus .meta{line-height:1.2;min-width:0}
+#mus .meta b{display:block;font-family:Cinzel;font-size:11px;letter-spacing:.18em;color:var(--gold2);white-space:nowrap}
+#mus .meta i{font-size:12px;color:#c9b38c;white-space:nowrap}
+#ytWrap{width:0;height:45px;overflow:hidden;border-radius:6px;transition:width .5s;flex:0 0 auto}
+#mus.on #ytWrap{width:80px}
+#ytWrap iframe{width:80px;height:45px;display:block}
+#musYT{font-family:Cinzel;font-size:9px;letter-spacing:.2em;color:#c98a5a;text-decoration:none;display:none}
+#mus.err #musYT{display:inline} #mus.err #musBtn{opacity:.4}
+@media (max-width:640px){#mus .meta i{display:none} .hint{bottom:84px} #ld .go{flex-wrap:wrap;padding:0 16px}}
+
 #rail{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:30;display:flex;flex-direction:column;gap:12px;font-family:Cinzel;font-size:11px;color:rgba(216,180,106,.4)}
 #rail span{transition:color .4s,transform .4s}
 #rail span.on{color:var(--gold2);transform:translateX(-4px)}
@@ -162,7 +184,8 @@ body{background:var(--night);color:var(--parch);font-family:'IM Fell English','N
 @media (prefers-reduced-motion:reduce){.grain{animation:none}}
 </style>
 
-<div id="ld"><div><div class="seal">K</div><p>UNSEALING THE ARCHIVE</p><i><b id="ldb"></b></i></div></div>
+<div id="ld"><div><div class="seal">K</div><p>UNSEALING THE ARCHIVE</p><i><b id="ldb"></b></i><div class="go"><button type="button" class="main" id="goMusic">♪ ENTER WITH MUSIC</button><button type="button" id="goQuiet">ENTER SILENTLY</button></div></div></div>
+<div id="mus" title="Archive Music"><button type="button" id="musBtn" aria-label="播放 / 暂停配乐"></button><div class="meta"><b>MAIN TITLE</b><i>Ramin Djawadi · Game of Thrones</i></div><div id="ytWrap"><div id="yt"></div></div><a id="musYT" href="https://www.youtube.com/watch?v=XLWXN_Q3Jkw" target="_blank" rel="noopener">YOUTUBE ↗</a></div>
 <div class="grain"></div>
 <div id="bar"></div>
 <a id="tag" href="../">← SQUID☆STAR<small>House Kepler · 冰与火档案馆</small></a>
@@ -244,7 +267,7 @@ body{background:var(--night);color:var(--parch);font-family:'IM Fell English','N
   const load=(s,j)=>new Promise(r=>{ const im=new Image(); im.decoding='async'; im.onload=()=>{ s.sheets[j]=im; r(); }; im.onerror=r; im.src='seq/'+s.dir+'_'+String(j).padStart(2,'0')+'.webp'; }).then(()=>{ done++; $('ldb').style.width=(done/total*100)+'%'; });
   (async()=>{
     await Promise.all([load(S1,0),load(S2,S2.sheets.length-1)]);
-    setTimeout(()=>$('ld').classList.add('done'),500);
+    $('ld').classList.add('ready');
     const q=[]; [S1,S2,S3,S4].forEach(s=>{ for(let j=0;j<s.sheets.length;j++) if(!s.sheets[j]) q.push([s,j]); }); let k=0;
     await Promise.all(Array.from({length:3},async()=>{ while(k<q.length){ const [s,j]=q[k++]; await load(s,j); } }));
   })();
@@ -355,6 +378,22 @@ body{background:var(--night);color:var(--parch);font-family:'IM Fell English','N
     const oe=seg(v,T.seal); $('hEnd').style.opacity=seg(v,[T.seal[0]-.2,T.seal[0]+.2]);
     $('endSeal').style.transform=`scale(${2.4-out(oe)*1.4}) rotate(${(1-oe)*-25}deg)`; $('endSeal').style.opacity=oe;
   }
+
+
+  /* ---------- archive music (YouTube embed — only the official upload is played) ---------- */
+  const YTID='XLWXN_Q3Jkw'; let yp=null, ypReady=false, want=false;
+  function ytLoad(){ if(window.YT||document.getElementById('ytapi')) return; const t=document.createElement('script'); t.id='ytapi'; t.src='https://www.youtube.com/iframe_api'; t.onerror=()=>$('mus').classList.add('err'); document.head.appendChild(t); }
+  window.onYouTubeIframeAPIReady=()=>{ yp=new YT.Player('yt',{videoId:YTID,width:80,height:45,playerVars:{playsinline:1,controls:0,rel:0,loop:1,playlist:YTID,modestbranding:1,iv_load_policy:3},
+    events:{ onReady:()=>{ ypReady=true; yp.setVolume(0); if(want) play(); },
+             onStateChange:e=>{ $('mus').classList.toggle('on',e.data===1||e.data===3); },
+             onError:()=>{ $('mus').classList.add('err'); } } }); };
+  function fade(to,ms=1800){ if(!yp) return; const from=yp.getVolume?yp.getVolume():0, t0=performance.now(); (function st(){ const k=Math.min(1,(performance.now()-t0)/ms); yp.setVolume(from+(to-from)*k); if(k<1) requestAnimationFrame(st); else if(to===0) yp.pauseVideo(); })(); }
+  function play(){ want=true; ytLoad(); if(!ypReady) return; yp.playVideo(); fade(55); try{ localStorage.setItem('sq_arc_music','1'); }catch(e){} }
+  function stop(){ want=false; if(ypReady) fade(0,700); try{ localStorage.setItem('sq_arc_music','0'); }catch(e){} }
+  $('musBtn').addEventListener('click',()=>{ if($('mus').classList.contains('err')){ open('https://www.youtube.com/watch?v='+YTID,'_blank','noopener'); return; } ($('mus').classList.contains('on')||want)?stop():play(); });
+  $('goMusic').addEventListener('click',()=>{ play(); $('ld').classList.add('done'); });
+  $('goQuiet').addEventListener('click',()=>{ ytLoad(); $('ld').classList.add('done'); });
+  document.addEventListener('visibilitychange',()=>{ if(!ypReady||!want) return; document.hidden?yp.pauseVideo():yp.playVideo(); });
 
   const rail=[...document.querySelectorAll('#rail span')];
   let v=0, f1=0, f2=0, f3=0, f4=0;
