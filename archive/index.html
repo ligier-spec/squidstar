@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Seven Kingdoms Archive · SQUID☆STAR</title>
+<link rel="icon" href="../squid.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&family=Pinyon+Script&family=Noto+Serif+SC:wght@400;600&display=swap">
+<style>
+:root{ --night:#0b0806; --gold:#d8b46a; --gold2:#f3dfa6; --parch:#e9d8b0; --blood:#8e1f17; --ink:#2a1609 }
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--night)}
+body{background:var(--night);color:var(--parch);font-family:'IM Fell English','Noto Serif SC',serif;overflow-x:hidden}
+::selection{background:var(--blood);color:#fff}
+
+#ld{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:var(--night);transition:opacity .9s ease,visibility .9s}
+#ld.done{opacity:0;visibility:hidden}
+#ld .seal{width:92px;height:92px;margin:0 auto;border-radius:50%;background:radial-gradient(circle at 35% 30%,#c0392b,#6d120c 70%);box-shadow:0 0 0 6px #4a0b07 inset,0 8px 30px #000;display:grid;place-items:center;font-family:Cinzel;color:#f6c9a8;font-size:30px}
+#ld p{margin-top:18px;font-family:Cinzel;letter-spacing:.35em;font-size:11px;color:var(--gold);text-align:center}
+#ld i{display:block;margin:10px auto 0;width:160px;height:1px;background:#3a2b1c;position:relative}
+#ld i b{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--gold);transition:width .2s}
+
+/* one fixed stage, the page height is just the timeline */
+#stage{position:fixed;inset:0;overflow:hidden;background:#0b0605}
+#track{height:3600vh}
+#ember{position:absolute;inset:-4%;background:url(img/ember.webp) center/cover;will-change:transform}
+#paper{position:absolute;inset:0;will-change:clip-path}
+#cv{position:absolute;inset:0;width:100%;height:100%;display:block;will-change:transform}
+.vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 50%,rgba(5,3,2,.72) 100%)}
+.grain{position:fixed;inset:-50%;z-index:40;pointer-events:none;opacity:.07;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");animation:grain 1s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}}
+.lay{position:absolute;inset:0;pointer-events:none;opacity:0}
+
+/* intro caption — sits low so the cover title stays the hero */
+#capA{display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;padding:0 clamp(16px,5vw,72px) clamp(70px,12vh,120px);background:linear-gradient(transparent 55%,rgba(8,5,3,.85))}
+#capA .kick{font-family:Cinzel;letter-spacing:.5em;font-size:11px;color:var(--gold)}
+#capA h1{font-family:Cinzel;font-weight:700;font-size:clamp(26px,4vw,58px);letter-spacing:.06em;color:var(--gold2);line-height:1.05;margin:10px 0 12px;text-shadow:0 4px 30px #000}
+#capA h1 em{font-family:'Pinyon Script';font-style:normal;font-weight:400;color:var(--gold);font-size:1.25em;letter-spacing:0;margin-right:.08em}
+#capA p{font-style:italic;font-size:clamp(14px,1.4vw,18px);max-width:520px;color:#e8d6b0}
+.hint{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);font-family:Cinzel;font-size:10px;letter-spacing:.4em;color:var(--gold);display:flex;flex-direction:column;align-items:center;gap:8px}
+.hint span{width:1px;height:40px;background:linear-gradient(var(--gold),transparent);animation:drip 1.8s ease-in-out infinite;transform-origin:top}
+@keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+
+/* a slip of paper tucked into the open book */
+#slip{display:grid;place-items:center}
+#slip .note{position:relative;width:min(560px,84vw);padding:clamp(22px,3.4vw,40px) clamp(22px,4vw,48px) clamp(26px,3.6vw,42px);color:var(--ink);text-align:center;
+  background:radial-gradient(ellipse at 30% 20%,rgba(255,255,255,.45),transparent 60%),#efe2c2;
+  box-shadow:0 30px 60px rgba(0,0,0,.55),0 2px 0 rgba(0,0,0,.1);
+  clip-path:polygon(0 3%,6% 0,14% 2%,23% 0,33% 1.5%,44% 0,57% 2%,68% .5%,80% 2%,91% 0,100% 2.5%,99% 18%,100% 39%,98.5% 61%,100% 82%,99% 98%,88% 100%,76% 98%,63% 100%,49% 98.5%,36% 100%,22% 98%,10% 100%,0 97%,1% 78%,0 56%,1.5% 33%,0 14%)}
+#slip .note::before{content:"";position:absolute;inset:0;opacity:.35;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='p'><feTurbulence type='fractalNoise' baseFrequency='.035' numOctaves='4'/><feColorMatrix values='0 0 0 0 .45  0 0 0 0 .3  0 0 0 0 .12  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23p)'/></svg>");mix-blend-mode:multiply;pointer-events:none}
+#slip .plate{font-family:Cinzel;font-size:10px;letter-spacing:.45em;color:#7a4b22;position:relative}
+#slip .hand{font-family:'Pinyon Script',cursive;font-size:clamp(42px,6.4vw,84px);line-height:1.15;margin:8px 0 6px;position:relative;white-space:nowrap;
+  -webkit-mask-image:linear-gradient(90deg,#000 var(--w,0%),transparent calc(var(--w,0%) + 5%));mask-image:linear-gradient(90deg,#000 var(--w,0%),transparent calc(var(--w,0%) + 5%))}
+#slip .cn{position:relative;font-family:'Noto Serif SC';font-size:clamp(13px,1.2vw,15px);line-height:1.95;color:#4a2c14;letter-spacing:.05em}
+#slip .seal{position:absolute;right:16px;bottom:12px;width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#c0392b,#6d120c 70%);box-shadow:0 0 0 5px #4a0b07 inset,0 6px 16px rgba(0,0,0,.5);display:grid;place-items:center;font-family:Cinzel;color:#f6c9a8;font-size:20px}
+
+/* houses */
+#houseT{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#houseT{background:radial-gradient(ellipse at center,rgba(10,6,3,.55),transparent 65%)}
+#houseT .plate{font-family:Cinzel;font-size:11px;letter-spacing:.45em;color:var(--gold);text-shadow:0 2px 10px #000}
+#houseT h2{font-family:'Pinyon Script';font-weight:400;font-size:clamp(58px,9vw,132px);color:var(--gold2);line-height:1.05;text-shadow:0 4px 30px rgba(0,0,0,.9)}
+#houseT p{font-family:'Noto Serif SC';font-size:14px;color:#f0e2c2;text-shadow:0 2px 10px #000;max-width:460px;line-height:1.8}
+.sig{position:absolute;left:0;top:0;width:clamp(84px,11.5vw,180px);text-align:center;will-change:transform,opacity;opacity:0}
+.sig img{width:100%;display:block;filter:drop-shadow(0 18px 22px rgba(30,15,5,.55))}
+.sig b{display:block;margin-top:6px;font-family:Cinzel;font-size:clamp(8px,.8vw,11px);letter-spacing:.16em;color:var(--gold2);text-shadow:0 2px 8px #000}
+.sig i{display:block;font-size:clamp(10px,.95vw,13px);color:#f0e2c2;text-shadow:0 2px 8px #000;line-height:1.2}
+
+/* fire */
+#fire{background:radial-gradient(ellipse at center,rgba(20,5,0,.55),transparent 65%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 16px}
+#fire .plate{font-family:Cinzel;font-size:11px;letter-spacing:.45em;color:#f0b07a}
+#fire h2{font-family:'Pinyon Script';font-weight:400;font-size:clamp(56px,8.4vw,124px);color:#ffd9a8;text-shadow:0 0 30px rgba(255,90,20,.6);line-height:1.1}
+#fire p{font-family:'Noto Serif SC';color:#f2cfaa;font-size:14px;max-width:520px;line-height:1.9}
+#ice{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 16px;background:radial-gradient(ellipse at center,rgba(4,10,24,.55),transparent 65%)}
+#ice .plate{font-family:Cinzel;font-size:11px;letter-spacing:.45em;color:#bcd6ff}
+#ice h2{font-family:'Pinyon Script';font-weight:400;font-size:clamp(56px,8.4vw,124px);color:#eef5ff;text-shadow:0 0 30px rgba(120,170,255,.6);line-height:1.1}
+#ice p{font-family:'Noto Serif SC';color:#dce8ff;font-size:14px;max-width:520px;line-height:1.9;text-shadow:0 2px 10px #000}
+#ice .soon,#fire .soon{margin-top:22px;font-family:Cinzel;font-size:10px;letter-spacing:.3em;color:#c98a5a;border:1px solid #6b3a20;padding:8px 14px}
+.spark{position:absolute;left:0;top:0;width:3px;height:3px;border-radius:50%;background:#ffb35c;box-shadow:0 0 8px 2px rgba(255,120,30,.8);pointer-events:none}
+
+
+/* ---------- the archive halls ---------- */
+.hall{position:absolute;inset:0;opacity:0;pointer-events:none;overflow:hidden}
+.hall .hd{position:absolute;left:0;right:0;top:clamp(54px,9vh,96px);text-align:center;z-index:5;padding:0 16px}
+.hall .hd .plate{font-family:Cinzel;font-size:11px;letter-spacing:.45em;color:var(--gold);text-shadow:0 2px 10px #000}
+.hall .hd h2{font-family:'Pinyon Script';font-weight:400;font-size:clamp(46px,6.4vw,92px);line-height:1.05;color:var(--gold2);text-shadow:0 4px 26px rgba(0,0,0,.9)}
+.hall .hd p{font-family:'Noto Serif SC';font-size:13px;line-height:1.8;color:#eadcc0;max-width:520px;margin:4px auto 0;text-shadow:0 2px 10px #000}
+
+/* IV · portrait cabinet */
+#hChar{background:radial-gradient(ellipse at 50% 60%,rgba(70,14,10,.55),rgba(8,4,3,.92) 70%)}
+#strip{position:absolute;left:0;top:0;height:100%;display:flex;align-items:center;gap:clamp(28px,4vw,64px);padding-top:clamp(120px,16vh,170px);will-change:transform}
+.pc{position:relative;flex:0 0 auto;width:clamp(210px,22vw,320px);text-align:center}
+.pc .pic{position:relative;aspect-ratio:422/640}
+.pc canvas{position:absolute;left:12%;right:12%;top:9.5%;bottom:7%;width:76%;height:83.5%;border-radius:50% 50% 3px 3px/24% 24% 3px 3px;background:#1a0d08}
+.pc .fr{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 20px 30px rgba(0,0,0,.7))}
+.pc .tag{display:inline-block;margin-top:12px;font-family:Cinzel;font-size:10px;letter-spacing:.35em;color:#1b0f08;background:linear-gradient(#e8c983,#b48a45);padding:4px 10px 3px}
+.pc h3{font-family:'Pinyon Script';font-weight:400;font-size:clamp(34px,3.4vw,50px);line-height:1.05;color:var(--gold2);margin-top:6px}
+.pc p{font-style:italic;font-size:14px;color:#d8c3a0}
+.pc .no{position:absolute;top:-6px;left:-6px;font-family:Cinzel;font-size:11px;color:var(--gold);letter-spacing:.2em}
+#charQ{position:absolute;left:0;right:0;bottom:clamp(18px,4vh,40px);text-align:center;font-style:italic;font-size:clamp(13px,1.2vw,16px);color:#cdb48a;padding:0 24px}
+
+/* V · themes under glass */
+#hTheme{background:radial-gradient(ellipse at 50% 55%,rgba(40,30,12,.5),rgba(6,5,3,.94) 72%)}
+#orn{position:absolute;left:50%;top:clamp(150px,24vh,230px);width:min(640px,80vw);transform:translateX(-50%);opacity:.85}
+.th{position:absolute;left:50%;top:54%;width:clamp(110px,13vw,190px);margin-left:calc(clamp(110px,13vw,190px)/-2);will-change:transform,opacity}
+.th img{width:100%;display:block;filter:drop-shadow(0 16px 26px rgba(0,0,0,.75))}
+#thLabel{position:absolute;left:0;right:0;bottom:clamp(16px,4vh,40px);text-align:center;z-index:30;text-shadow:0 2px 12px #000}
+#thLabel b{display:block;font-family:Cinzel;font-weight:700;font-size:clamp(24px,3vw,40px);letter-spacing:.2em;color:var(--gold2)}
+#thLabel span{font-style:italic;font-size:16px;color:#d8c3a0}
+#thLabel i{display:block;font-style:normal;font-family:'Noto Serif SC';font-size:13px;color:#b9a27c;margin-top:4px}
+
+/* VI · chronicle map */
+#hTime{background:#2a1d10 url(img2/mapboard.webp) center/cover}
+#hTime::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 40%,rgba(30,18,8,.65))}
+#hTime .hd .plate{color:#5a3a1a;text-shadow:none} #hTime .hd h2{color:#3b1d0b;text-shadow:0 2px 0 rgba(255,240,200,.4)} #hTime .hd p{color:#4a2e16;text-shadow:none}
+#tl{position:absolute;left:0;top:0;height:100%;will-change:transform}
+#tl svg{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible}
+#tl path{fill:none;stroke:#a77a2c;stroke-width:3;stroke-linecap:round;filter:drop-shadow(0 0 4px rgba(255,200,90,.5))}
+#tl path.dash{stroke:#5a3a1a;stroke-width:1.2;stroke-dasharray:4 7;filter:none;opacity:.6}
+.tn{position:absolute;width:clamp(150px,15vw,220px);text-align:center;transform:translate(-50%,-50%);will-change:transform,opacity}
+.tn img{width:72%;display:block;margin:0 auto;filter:drop-shadow(0 12px 18px rgba(40,20,5,.55))}
+.tn small{display:block;font-family:Cinzel;font-size:10px;letter-spacing:.35em;color:#7a4b22;margin-top:6px}
+.tn b{display:block;font-family:'Pinyon Script';font-weight:400;font-size:clamp(30px,2.8vw,42px);line-height:1.05;color:#3b1d0b}
+.tn i{display:block;font-size:14px;color:#5b3518}
+#compass{position:absolute;right:3vw;bottom:3vh;width:clamp(90px,10vw,150px);opacity:.75}
+
+/* VII · marginalia desk */
+#hNote{background:#120b06 url(img2/desk.webp) center/cover}
+#hNote::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(0,0,0,.05) 30%,rgba(0,0,0,.6))}
+.scrap{position:absolute;width:clamp(170px,19vw,280px);will-change:transform,opacity}
+.scrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;filter:drop-shadow(0 14px 18px rgba(0,0,0,.6))}
+.scrap .tx{position:relative;padding:14% 13% 12%;color:#2a1609;text-align:left}
+.scrap small{font-family:Cinzel;font-size:9px;letter-spacing:.35em;color:#8e1f17}
+.scrap b{display:block;font-family:'Pinyon Script';font-weight:400;font-size:clamp(26px,2.3vw,36px);line-height:1.05;margin:2px 0}
+.scrap i{font-size:13px;color:#4a2c14}
+#quote{position:absolute;left:50%;top:50%;width:min(440px,78vw);transform:translate(-50%,-50%);text-align:center;padding:30px 26px;color:#2a1609;
+  background:radial-gradient(ellipse at 30% 20%,rgba(255,255,255,.4),transparent 60%),#ead9b4;box-shadow:0 30px 60px rgba(0,0,0,.6);
+  clip-path:polygon(0 4%,8% 0,20% 3%,35% 0,52% 2%,70% 0,86% 3%,100% 0,98% 30%,100% 62%,98% 100%,80% 97%,60% 100%,40% 97%,20% 100%,0 96%,2% 60%,0 30%)}
+#quote q{display:block;font-family:'IM Fell English',serif;font-style:italic;font-size:clamp(20px,2vw,28px);line-height:1.35;quotes:"“" "”"}
+#quote small{display:block;margin-top:12px;font-family:Cinzel;font-size:10px;letter-spacing:.35em;color:#7a4b22}
+.stain{position:absolute;opacity:.55;mix-blend-mode:multiply;pointer-events:none}
+#feather{position:absolute;width:clamp(120px,14vw,220px);right:4vw;top:16vh;will-change:transform}
+
+/* the end — the book closes and is sealed */
+#hEnd{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:radial-gradient(ellipse at 50% 62%,rgba(8,4,2,.78),rgba(8,4,2,.25) 60%,transparent 80%)}
+#endSeal{width:clamp(130px,14vw,190px);filter:drop-shadow(0 18px 30px rgba(0,0,0,.8));will-change:transform,opacity}
+#hEnd h2{font-family:'Pinyon Script';font-weight:400;font-size:clamp(42px,5vw,72px);color:var(--gold2);text-shadow:0 4px 26px #000;margin-top:10px}
+#hEnd p{font-family:'Noto Serif SC';font-size:13px;color:#e4d3b0;text-shadow:0 2px 10px #000}
+#hEnd a{pointer-events:auto;margin-top:22px;font-family:Cinzel;font-size:11px;letter-spacing:.3em;color:var(--gold2);border:1px solid rgba(216,180,106,.5);padding:10px 18px;text-decoration:none;background:rgba(10,6,3,.5)}
+#hEnd a:hover{background:var(--blood);border-color:var(--blood)}
+@media (max-width:700px){
+  .scrap{width:40vw} #feather{display:none}
+}
+
+#rail{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:30;display:flex;flex-direction:column;gap:12px;font-family:Cinzel;font-size:11px;color:rgba(216,180,106,.4)}
+#rail span{transition:color .4s,transform .4s}
+#rail span.on{color:var(--gold2);transform:translateX(-4px)}
+#bar{position:fixed;left:0;top:0;height:2px;background:linear-gradient(90deg,var(--blood),var(--gold));z-index:31;width:0}
+#tag{text-decoration:none;position:fixed;left:18px;top:16px;z-index:30;font-family:Cinzel;font-size:10px;letter-spacing:.35em;color:var(--gold);text-shadow:0 1px 6px #000}
+#tag small{display:block;color:rgba(216,180,106,.6);letter-spacing:.15em;margin-top:4px;font-family:'Noto Serif SC'}
+@media (max-width:640px){#rail{display:none}}
+@media (prefers-reduced-motion:reduce){.grain{animation:none}}
+</style>
+
+<div id="ld"><div><div class="seal">K</div><p>UNSEALING THE ARCHIVE</p><i><b id="ldb"></b></i></div></div>
+<div class="grain"></div>
+<div id="bar"></div>
+<a id="tag" href="../">← SQUID☆STAR<small>House Kepler · 冰与火档案馆</small></a>
+<nav id="rail"><span>I</span><span>II</span><span>III</span><span>IV</span><span>V</span><span>VI</span><span>VII</span></nav>
+
+<div id="stage">
+  <div id="ember"></div>
+  <div id="paper">
+    <canvas id="cv"></canvas><div class="vig"></div>
+    <div id="capA" class="lay" style="opacity:1">
+      <div class="kick">HOUSE KEPLER · SPECIAL COLLECTION</div>
+      <h1><em>The</em> Seven Kingdoms Archive</h1>
+      <p>A private archive of power, blood, prophecy, dragons, women, war, and doomed history.</p>
+      <div class="hint">SCROLL TO OPEN<span></span></div>
+    </div>
+    <div id="slip" class="lay"><div class="note">
+      <div class="plate">PLATE I · PRIVATE CODEX</div>
+      <div class="hand" id="hand">This is not a wiki.</div>
+      <div class="cn">这是我的私人冰火档案馆：收藏权力、血脉、女王、狼、龙、预言、战争与注定毁灭的历史。</div>
+      <div class="seal">K</div>
+    </div></div>
+    <div id="houseT" class="lay"><div class="plate">PLATE II · LINEAGE GALLERY</div><h2>The Seven Houses</h2><p>每个家族不是百科条目，而是 Kepler 视角里的权力气味和命运纹章。</p></div>
+    <div id="sigils" class="lay" style="opacity:1"></div>
+  </div>
+
+  <div id="hChar" class="hall">
+    <div class="hd"><div class="plate">PLATE IV · PORTRAIT CABINET</div><h2>Characters</h2><p>人物页不是百科，而是“我为什么被她震住”的私人肖像柜。</p></div>
+    <div id="strip"></div>
+    <div id="charQ">Every face is filed as a question: who was loved, who was used, and who learned to survive the story.</div>
+  </div>
+  <div id="hTheme" class="hall">
+    <img id="orn" src="img2/orn.webp" alt="">
+    <div class="hd"><div class="plate">PLATE V · THEMES UNDER GLASS</div><h2>Themes</h2><p>权力、血统、女性、母职、战争与预言，围绕同一处伤口展开。</p></div>
+    <div id="ring"></div>
+    <div id="thLabel"><b id="thName"></b><span id="thSub"></span><i id="thCn"></i></div>
+  </div>
+  <div id="hTime" class="hall">
+    <div class="hd"><div class="plate">PLATE VI · CHRONICLE MAP</div><h2>Timeline</h2><p>从长夜传说到龙家内战，从征服战争到五王之战。</p></div>
+    <div id="tl"><svg id="tlsvg"><path class="dash" id="tlDash"/><path id="tlPath"/></svg></div>
+    <img id="compass" src="img2/compass.webp" alt="">
+  </div>
+  <div id="hNote" class="hall">
+    <img class="stain" src="img2/stain0.webp" style="left:8vw;top:58vh;width:15vw" alt="">
+    <img class="stain" src="img2/stain2.webp" style="right:18vw;top:8vh;width:11vw" alt="">
+    <img class="stain" src="img2/stain3.webp" style="left:44vw;bottom:4vh;width:9vw" alt="">
+    <img id="feather" src="img2/feather.webp" alt="">
+    <div class="hd" style="top:clamp(30px,5vh,60px)"><div class="plate">PLATE VII · KEPLER MARGINALIA</div><h2>My Obsession Notes</h2></div>
+    <div id="quote"><q>I did not come here to summarize. I came here to keep the wound.</q><small>— KEPLER · PRIVATE MARGINALIA</small></div>
+    <div id="scraps"></div>
+  </div>
+  <div id="hEnd" class="hall">
+    <img id="endSeal" src="img2/seal.webp" alt="wax seal">
+    <h2>The archive is sealed.</h2>
+    <p>档案馆暂时封存 · 往上滚可以重新打开这本书</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center"><a href="#" id="toTop">↑ OPEN AGAIN</a><a href="../">← SQUID☆STAR</a></div>
+  </div>
+  <div id="fire" class="lay"><div class="plate">PLATE III · FIRE &amp; DREAMS</div><h2>Dragons &amp; Prophecy</h2><p>龙不是宠物，是王朝、梦境、暴力、神话和毁灭的集合体。</p></div>
+  <div id="ice" class="lay"><div class="plate">PLATE III · ICE &amp; FIRE</div><h2>Winter Is Coming</h2><p>火焰里长出一棵心树，雪落下来，整个世界安静地结霜。<br>两种元素，同一道伤口。</p></div>
+</div>
+<div id="track"></div>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+  const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+  const out=t=>1-Math.pow(1-t,3);
+  const $=id=>document.getElementById(id);
+
+  /* timeline, in viewport-heights of scroll */
+  const T={ open:[0,3.2], slipIn:[3.3,3.7], write:[3.6,4.6], slipOut:[4.9,5.3], map:[5.2,8.2], houseT:[7.9,8.5], houseTout:[9.0,9.4], rise:[9.1,11.2], wing:[11.0,12.6], burn:[12.6,16.4], fire:[12.7,13.2], fireOut:[13.9,14.3], ice:[15.6,16.1], iceOut:[16.7,17.1], char:[17.0,21.0], theme:[21.0,24.2], time:[24.2,28.4], note:[28.4,31.6], close:[31.4,33.8], seal:[33.6,34.2] };
+  const seg=(v,[a,b])=>clamp((v-a)/(b-a));
+
+  /* frame sequences (Kling clips → webp stills, drawn on one canvas) */
+  // each clip is packed 16 frames to a sheet (4×4 of 1024×576)
+  const FW=1024, FH=576;
+  const mk=(dir,n)=>({dir,n,sheets:new Array(Math.ceil(n/16))});
+  const S1=mk('f1',121), S2=mk('f2',97), S3=mk('f3',97), S4=mk('f4',97); const total=S1.sheets.length+S2.sheets.length+S3.sheets.length+S4.sheets.length; let done=0;
+  const load=(s,j)=>new Promise(r=>{ const im=new Image(); im.decoding='async'; im.onload=()=>{ s.sheets[j]=im; r(); }; im.onerror=r; im.src='seq/'+s.dir+'_'+String(j).padStart(2,'0')+'.webp'; }).then(()=>{ done++; $('ldb').style.width=(done/total*100)+'%'; });
+  (async()=>{
+    await Promise.all([load(S1,0),load(S2,S2.sheets.length-1)]);
+    setTimeout(()=>$('ld').classList.add('done'),500);
+    const q=[]; [S1,S2,S3,S4].forEach(s=>{ for(let j=0;j<s.sheets.length;j++) if(!s.sheets[j]) q.push([s,j]); }); let k=0;
+    await Promise.all(Array.from({length:3},async()=>{ while(k<q.length){ const [s,j]=q[k++]; await load(s,j); } }));
+  })();
+
+  const cv=$('cv'), ctx=cv.getContext('2d');
+  function fit(){ const d=Math.min(2,devicePixelRatio||1); cv.width=innerWidth*d; cv.height=innerHeight*d; }
+  addEventListener('resize',()=>{ fit(); layout(); }); fit();
+  const frm=(s,i)=>{ if(i<0||i>=s.n) return null; const sh=s.sheets[i>>4]; if(!sh) return null; const k=i&15; return {im:sh,sx:(k&3)*FW,sy:(k>>2)*FH}; };
+  const near=(s,i)=>{ for(let d=0;d<s.n;d++){ const a=frm(s,i-d)||frm(s,i+d); if(a) return a; } return null; };
+  function draw(s,f,zoom=1){
+    const i0=Math.floor(f), t=f-i0, a=near(s,i0), b=near(s,Math.min(s.n-1,i0+1)); if(!a) return;
+    const sc=Math.max(cv.width/FW,cv.height/FH)*zoom, dw=FW*sc, dh=FH*sc, dx=(cv.width-dw)/2, dy=(cv.height-dh)/2;
+    ctx.globalAlpha=1; ctx.drawImage(a.im,a.sx,a.sy,FW,FH,dx,dy,dw,dh);
+    if(b&&(b.sx!==a.sx||b.sy!==a.sy||b.im!==a.im)&&t>.02){ ctx.globalAlpha=t; ctx.drawImage(b.im,b.sx,b.sy,FW,FH,dx,dy,dw,dh); ctx.globalAlpha=1; }   // blend neighbours: 12fps feels like 60
+  }
+
+  /* sigils */
+  const H=[['targaryen','House Targaryen','Fire and Blood'],['stark','House Stark','Winter Is Coming'],['lannister','House Lannister','Hear Me Roar!'],['baratheon','House Baratheon','Ours Is the Fury'],['tyrell','House Tyrell','Growing Strong'],['martell','House Martell','Unbowed, Unbent, Unbroken'],['greyjoy','House Greyjoy','We Do Not Sow']];
+  const depth=[1.25,.85,1.05,.7,1.15,.8,1];
+  const sigs=H.map(([k,n,w],i)=>{ const d=document.createElement('div'); d.className='sig'; d.innerHTML=`<img src="img/${k}.webp" alt="${n} sigil"><b>${n.toUpperCase()}</b><i>${w}</i>`; $('sigils').appendChild(d); return {el:d,i,z:depth[i]}; });
+  function layout(){ const W=innerWidth, Hh=innerHeight, narrow=W<700;
+    sigs.forEach(s=>{ const w=s.el.offsetWidth, h=s.el.offsetHeight||w*1.7;
+      if(narrow){ const row=s.i<4?0:1, col=row?s.i-4:s.i, cols=row?3:4; s.bx=(col+.5)/cols*W-w/2; s.by=Hh*(row?.66:.36)-h/2; }
+      else { const t=s.i/6, arc=Math.sin(t*Math.PI); s.bx=(.09+.82*t)*W-w/2; s.by=Hh*(.6-.14*arc)-h/2; } }); }
+  layout(); addEventListener('load',layout); setTimeout(layout,500);
+
+  /* torn edge */
+  const pts=(()=>{ const p=[]; let x=0; while(x<100){ p.push([x,Math.random()]); x+=1+Math.random()*2.4; } p.push([100,Math.random()]); return p; })();
+  function tear(p){ if(p<=0){ $('paper').style.clipPath='none'; return; }
+    const y=100-out(p)*115; $('paper').style.clipPath='polygon(0 0,100% 0,'+pts.slice().reverse().map(([x,j])=>`${x}% ${y+j*3.2+Math.sin(x*.6)*1.3}%`).join(',')+')'; }
+
+  /* embers */
+  const sparks=Array.from({length:44},()=>{ const e=document.createElement('i'); e.className='spark'; $('stage').insertBefore(e,$('fire')); return {e,x:Math.random(),y:Math.random(),v:.0007+Math.random()*.0018,w:Math.random()*6.3}; });
+
+
+  /* ---------- IV · portrait cabinet ---------- */
+  const CH=[
+    ['rhaenyra','HEIR · GREEN','Rhaenyra & Alicent','inheritance · devotion · fear'],
+    ['dany','DRAGON','Daenerys','exile · liberation · loneliness'],
+    ['sansa','WOLF','Sansa','survival · court · memory'],
+    ['cersei','LIONESS','Cersei','power · motherhood · poison'],
+    ['../img/stark','NEEDLE','Arya','identity · vengeance · freedom'] ];
+  const cards=CH.map(([k,t,n,w],i)=>{ const d=document.createElement('div'); d.className='pc';
+    d.innerHTML=`<div class="pic"><canvas></canvas><img class="fr" src="img2/frame.webp" alt=""></div><span class="no">No. 0${i+1}</span><div class="tag">${t}</div><h3>${n}</h3><p>${w}</p>`;
+    $('strip').appendChild(d); const im=new Image(); im.src='img2/'+k+'.webp'; const c=d.querySelector('canvas');
+    return {d,c,im,k:-1}; });
+  const tiny=document.createElement('canvas'), tctx=tiny.getContext('2d');
+  function pix(card,k){ // redraw only when the pixel size changes
+    if(card.k===k||!card.im.complete||!card.im.naturalWidth) return; card.k=k;
+    const c=card.c, w=c.clientWidth, h=c.clientHeight; if(!w) return; c.width=w; c.height=h; const x=c.getContext('2d');
+    const im=card.im, sc=Math.max(w/im.naturalWidth,h/im.naturalHeight), sw=w/sc, sh=h/sc, sx=(im.naturalWidth-sw)/2, sy=(im.naturalHeight-sh)/2*.6;
+    if(k<=1){ x.imageSmoothingEnabled=true; x.drawImage(im,sx,sy,sw,sh,0,0,w,h); return; }
+    const tw=Math.max(1,Math.ceil(w/k)), th=Math.max(1,Math.ceil(h/k)); tiny.width=tw; tiny.height=th;
+    tctx.imageSmoothingEnabled=true; tctx.drawImage(im,sx,sy,sw,sh,0,0,tw,th);
+    x.imageSmoothingEnabled=false; x.clearRect(0,0,w,h); x.drawImage(tiny,0,0,tw,th,0,0,w,h); }
+
+  /* ---------- V · themes ---------- */
+  const TH=[['power','Power','who holds it · who pays','权力'],['bloodline','Bloodline','names · claims · legitimacy','血统'],['women','Women','queens · daughters · wives','女性'],['motherhood','Motherhood','love as shield and weapon','母职'],['war','War','everyone becomes a cost','战争'],['prophecy','Prophecy','destiny or self-destruction','预言']];
+  const ths=TH.map(([k])=>{ const d=document.createElement('div'); d.className='th'; d.innerHTML=`<img src="img2/t_${k}.webp" alt="${k} emblem">`; $('ring').appendChild(d); return d; });
+  let thCur=-1;
+
+  /* ---------- VI · chronicle ---------- */
+  const TL=[['long-night','ANCIENT','Long Night','the first shadow in memory'],['valyria','EMPIRE','Valyria','dragon empire and doom'],['aegon-conquest','CONQUEST','Aegon','fire becomes monarchy'],['dance','CIVIL WAR','The Dance','the house eats itself'],['robert-rebellion','REBELLION','Robert','love, lies, dynasty collapse'],['five-kings','CHAOS','Five Kings','everyone claims the wound']];
+  const tns=TL.map(([k,a,b,c])=>{ const d=document.createElement('div'); d.className='tn'; d.innerHTML=`<img src="img2/tl_${k}.webp" alt="${b}"><small>${a}</small><b>${b}</b><i>${c}</i>`; $('tl').appendChild(d); return d; });
+  let tlW=0, tlLen=1;
+  function layoutTL(){ const W=innerWidth, H=innerHeight, gap=Math.max(300,W*.34); tlW=W*.5+gap*(TL.length-1)+W*.5;
+    $('tl').style.width=tlW+'px'; let d='', dd='';
+    tns.forEach((n,i)=>{ const x=W*.5+gap*i, y=H*(.6+(i%2?.06:-.04)); n.style.left=x+'px'; n.style.top=y+'px'; n._x=x;
+      d+= i?` S ${x-gap*.5} ${y+(i%2?-90:90)} ${x} ${y}`:`M ${x-W*.5} ${y} L ${x} ${y}`; });
+    d+=` L ${tlW} ${H*.6}`; $('tlPath').setAttribute('d',d); $('tlDash').setAttribute('d',d); tlLen=$('tlPath').getTotalLength(); $('tlPath').style.strokeDasharray=tlLen; }
+
+  /* ---------- VII · marginalia ---------- */
+  const NT=[['ESSAY','Why I Love ASOIAF','the size, the cruelty, the women',0,[-.36,-.2],-7],['LIST','My Favorite Women','queens, girls, mothers, survivors',1,[.3,-.22],5],['DEFENSE','Characters I Defend','complicated, doomed, misread',2,[-.34,.24],4],['SCENES','Cannot Forget','chapters and episodes that stay',3,[.33,.25],-5],['DISEASE','Dragon Girl Disease','diagnosis: terminal',1,[0,.36],2]];
+  const scraps=NT.map(([a,b,c,img,pos,rot])=>{ const d=document.createElement('div'); d.className='scrap'; d.innerHTML=`<img src="img2/scrap${img}.webp" alt=""><div class="tx"><small>${a}</small><b>${b}</b><i>${c}</i></div>`; $('scraps').appendChild(d); return {d,pos,rot}; });
+
+  $('toTop').addEventListener('click',e=>{ e.preventDefault(); scrollTo({top:0,behavior:'smooth'}); });
+  addEventListener('resize',layoutTL); layoutTL();
+
+  function halls(v){
+    const W=innerWidth, H=innerHeight;
+    const show=(el,[a,b],fi=.4,fo=.4)=>{ const o=seg(v,[a,a+fi])*(1-seg(v,[b-fo,b])); el.style.opacity=o; return o; };
+    // IV
+    const oc=show($('hChar'),T.char);
+    if(oc>0){ const p=seg(v,[T.char[0]+.3,T.char[1]-.4]), sw=$('strip').scrollWidth; const x=W*.62-(sw-W*.3)*ease(p)*1; $('strip').style.transform=`translateX(${x}px)`;
+      cards.forEach(c=>{ const r=c.d.getBoundingClientRect(), cx=r.left+r.width/2, dist=(cx-W*.5)/(W*.5); const k=dist>0?Math.round(1+clamp(dist*1.4-.1)*38):1; pix(c,Math.max(1,k));
+        c.d.style.transform=`translateY(${Math.sin(dist*1.2)*14}px) rotate(${dist*-3}deg)`; c.d.style.opacity=clamp(1.25-Math.abs(dist)*.6); }); }
+    // V
+    const ot=show($('hTheme'),T.theme);
+    if(ot>0){ const rot=ease(seg(v,[T.theme[0]+.3,T.theme[1]-.5]))*5/6*Math.PI*2; const Rx=Math.min(W*.36,460), Ry=Math.min(H*.07,60); let best=-2, bi=0;
+      ths.forEach((d,i)=>{ const a=i/6*Math.PI*2-rot, z=Math.cos(a); if(z>best){best=z;bi=i;}
+        const sc=.5+.5*(z+1)/2; d.style.transform=`translate(${Math.sin(a)*Rx}px,${-50+z*Ry}%) scale(${sc})`; d.style.opacity=.25+.75*(z+1)/2; d.style.zIndex=Math.round(z*10)+10; d.style.filter=`blur(${(1-z)*1.2}px)`; });
+      if(bi!==thCur){ thCur=bi; const t=TH[bi]; $('thName').textContent=t[1].toUpperCase(); $('thSub').textContent=t[2]; $('thCn').textContent=t[3]; } }
+    // VI
+    const oti=show($('hTime'),T.time);
+    if(oti>0){ const p=seg(v,[T.time[0]+.3,T.time[1]-.5]); const x=-(tlW-W)*p; $('tl').style.transform=`translateX(${x}px)`;
+      $('tlPath').style.strokeDashoffset=tlLen*(1-clamp((W*.55-x)/tlW*1.0+.02));
+      tns.forEach(n=>{ const sx=n._x+x, d=(sx-W*.5)/W; const q=clamp(1-d*2.2); n.style.opacity=q; n.style.transform=`translate(-50%,-50%) scale(${.7+.3*out(q)}) translateY(${(1-q)*30}px)`; });
+      $('compass').style.transform=`rotate(${p*220}deg)`; }
+    // VII
+    const on=show($('hNote'),T.note);
+    if(on>0){ const p=seg(v,[T.note[0]+.2,T.note[1]-.5]);
+      $('quote').style.transform=`translate(-50%,-50%) scale(${1.15-out(seg(p,[0,.15]))*.15}) rotate(${-1+out(seg(p,[0,.15]))}deg)`; $('quote').style.opacity=seg(p,[0,.12]);
+      scraps.forEach((s,i)=>{ const q=out(seg(p,[.12+i*.14,.32+i*.14])); const narrow=W<700;
+        const px=W*.5+s.pos[0]*W*(narrow?.68:1)-s.d.offsetWidth/2, py=H*.52+s.pos[1]*H*(narrow?1.25:1)-s.d.offsetHeight/2;
+        s.d.style.transform=`translate(${px}px,${py-(1-q)*H*.9}px) rotate(${s.rot+(1-q)*(i%2?40:-40)}deg)`; s.d.style.opacity=q?1:0; });
+      $('feather').style.transform=`translate(${(1-out(seg(p,[.05,.4])))*40}vw,${Math.sin(v*2)*8}px) rotate(${-20+Math.sin(v*1.4)*4}deg)`; }
+    // end
+    const oe=seg(v,T.seal); $('hEnd').style.opacity=seg(v,[T.seal[0]-.2,T.seal[0]+.2]);
+    $('endSeal').style.transform=`scale(${2.4-out(oe)*1.4}) rotate(${(1-oe)*-25}deg)`; $('endSeal').style.opacity=oe;
+  }
+
+  const rail=[...document.querySelectorAll('#rail span')];
+  let v=0, f1=0, f2=0, f3=0, f4=0;
+  function tick(){
+    const target=scrollY/innerHeight; v=reduce?target:v+(target-v)*.1;   // glide
+
+    // I — the book opens, then rests while a note is written
+    const o=seg(v,T.open); if(v<T.close[0]) f1+=((o*(S1.n-1))-f1)*.4;
+    const inMap=v>=T.map[0];
+    if(!inMap&&v<T.close[0]) draw(S1,f1,1+seg(v,[3.2,5.2])*.04);
+    const ca=1-seg(v,[.15,.9]); $('capA').style.opacity=ca; $('capA').style.transform=`translateY(${(1-ca)*-30}px)`;
+    const si=seg(v,T.slipIn)*(1-seg(v,T.slipOut));
+    $('slip').style.opacity=si; $('slip').querySelector('.note').style.transform=`translateY(${(1-out(seg(v,T.slipIn)))*60 - seg(v,T.slipOut)*80}px) rotate(${-2+seg(v,T.slipIn)*1.2}deg)`;
+    $('hand').style.setProperty('--w',(seg(v,T.write)*105)+'%');
+
+    // II — the page becomes a map, then the house words and sigils rise
+    const inFly=v>=T.map[1];
+    if(inMap&&!inFly){ const m=seg(v,T.map); f2+=((m*(S2.n-1))-f2)*.4; draw(S2,f2,1); }
+    // the camera keeps gliding over the ink world while the houses rise, then the dragon wing sweeps past
+    const inBurn=v>=T.burn[0];
+    const inClose=v>=T.close[0];
+    if(inClose){ const c=1-seg(v,T.close); f1+=((c*(S1.n-1))-f1)*.4; draw(S1,f1,1); }
+    else if(inBurn){ f4+=((seg(v,T.burn)*(S4.n-1))-f4)*.4; draw(S4,f4,1); }
+    if(inFly&&!inBurn){ const glide=seg(v,[T.map[1],T.wing[0]])*(S3.n-1)*.62, wing=seg(v,T.wing)*(S3.n-1)*.38; f3+=((glide+wing)-f3)*.4; draw(S3,f3,1); }
+    const ht=seg(v,T.houseT)*(1-seg(v,T.houseTout)); $('houseT').style.opacity=ht; $('houseT').style.transform=`translateY(${(1-ht)*20 - seg(v,T.houseTout)*-0}px) scale(${1-seg(v,T.houseTout)*.06})`;
+    const r=seg(v,T.rise), gone=seg(v,[11.2,11.8]);
+    sigs.forEach(s=>{ const st=s.i*.08, q=out(clamp((r-st)/.45));
+      const dy=(1-q)*innerHeight*.6*s.z + (r-.5)*-90*s.z - gone*innerHeight*.5*s.z;
+      s.el.style.transform=`translate(${s.bx}px,${s.by+dy}px) scale(${.8+q*.2}) rotate(${(1-q)*(s.i%2?7:-7)}deg)`;
+      s.el.style.opacity=q*(1-gone); });
+
+    // V — the map rips away into fire
+    const fi=seg(v,T.fire)*(1-seg(v,T.fireOut)); $('fire').style.opacity=fi; $('fire').style.transform=`translateY(${(1-seg(v,T.fire))*30 - seg(v,T.fireOut)*30}px)`;
+    const ic=seg(v,T.ice)*(1-seg(v,T.iceOut)); $('ice').style.opacity=ic; $('ice').style.transform=`translateY(${(1-ic)*30}px)`;
+    // embers rise in the fire, then the same motes cool into falling snow
+    const snow=seg(v,[14.4,15.4]);
+    if(v>12&&v<17.6){ sparks.forEach(s=>{ const down=snow>.5; s.y+=(down?.8:-1)*s.v; s.w+=.02; if(s.y<-.05){ s.y=1.05; s.x=Math.random(); } if(s.y>1.05){ s.y=-.05; s.x=Math.random(); }
+      s.e.style.transform=`translate(${(s.x+Math.sin(s.w)*.02)*innerWidth}px,${s.y*innerHeight}px) scale(${1+snow*.6})`;
+      s.e.style.background=down?'#f4f8ff':'#ffb35c'; s.e.style.boxShadow=down?'0 0 6px 1px rgba(220,235,255,.8)':'0 0 8px 2px rgba(255,120,30,.8)';
+      s.e.style.opacity=seg(v,[12.4,13])*(1-seg(v,[16.8,17.4]))*(snow>.4&&snow<.6?0:.9); }); }
+    halls(v);
+
+    $('bar').style.width=(scrollY/(document.documentElement.scrollHeight-innerHeight)*100)+'%';
+    const cur=v<5.2?0:v<12?1:v<17?2:v<21?3:v<24.2?4:v<28.4?5:6; rail.forEach((e,i)=>e.classList.toggle('on',i===cur));
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+</html>

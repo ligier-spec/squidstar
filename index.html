@@ -3038,8 +3038,7 @@ body.insite #sound{left:16px}
       <li><span class="k">Nico 妮妮</span>：从博德之门 3 存档里重建的角色。</li></ul>`,
     archive:`<h1>ARCHIVE</h1>
       <p><span class="k">The Seven Kingdoms Archive · House Kepler</span></p>
-      <p>冰与火之歌档案馆。点进来会切换成文艺复兴油画风的子网站：羊皮纸、花体字、家徽。</p>
-      <p class="en">Under construction.</p>`,
+      <p>冰与火之歌档案馆。点一下 ARCHIVE 就会翻开那本古书 ✦</p>`,
     about:`<h1>ABOUT</h1>
       <p><span class="k">Ziyan Wu / 小鱿鱼</span></p>
       <p>Emerson College · BFA Film, Television &amp; Media Arts。想做导演、做剧集、做自己的 IP。</p>
@@ -3053,7 +3052,8 @@ body.insite #sound{left:16px}
     document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t.dataset.p===k));
     content.classList.remove('printing'); if(print&&!reduce){void content.offsetWidth; content.classList.add('printing');}
   }
-  document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{ const p=t.dataset.p; if(p==='room'){ show('room',false); window.__room&&window.__room(); } else if(p==='cherry'){ show('room',false); window.__dive&&window.__dive(); } else if(p==='about'){ show('about',false); window.__about&&window.__about(); } else show(p); }));
+  addEventListener('pageshow',()=>{ document.body.style.opacity=''; });
+  document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{ const p=t.dataset.p; if(p==='room'){ show('room',false); window.__room&&window.__room(); } else if(p==='cherry'){ show('room',false); window.__dive&&window.__dive(); } else if(p==='about'){ show('about',false); window.__about&&window.__about(); } else if(p==='archive'){ try{ sfx.whoosh(); }catch(e){} document.body.style.transition='opacity .6s'; document.body.style.opacity='0'; setTimeout(()=>{ location.href='archive/'; },600); } else show(p); }));
   show('room',false);
 
   document.querySelectorAll('.mood button').forEach(b=>b.addEventListener('click',()=>{
