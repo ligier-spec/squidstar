@@ -1077,6 +1077,45 @@ body.intro{background:#080d32}
 
 /* owner form */
 .rv-fsheet{display:block; overflow-y:auto; grid-template-columns:none}
+/* ---------- owner editor ---------- */
+.rv-fsheet{max-width:820px}
+.rv-fsec{margin:12px 0 4px; padding:10px 12px 12px; border:2px dashed #ffc6e0; border-radius:14px; background:#fff9fc}
+.rv-fsec>b{display:block; margin-bottom:8px; font-family:"Mochiy Pop One",sans-serif; font-weight:400; font-size:12px; color:var(--pk)}
+.rv-fsec>small{display:block; margin:-6px 0 8px; font-size:10px; color:#b98aa3}
+.rv-fgrid label.c2{grid-column:span 2}
+.rv-fgrid label.chk{display:flex; align-items:center; gap:6px; font-size:11px}
+.rv-fgrid label.chk input{width:auto}
+.rv-up{display:flex; flex-wrap:wrap; gap:8px; align-items:flex-start}
+.rv-up .ph{position:relative; width:84px; height:110px; border-radius:10px; overflow:hidden; border:2px solid #ffd0e6; background:#fff}
+.rv-up .ph.wide{width:150px; height:84px}
+.rv-up .ph img{width:100%; height:100%; object-fit:cover; display:block}
+.rv-up .ph i{position:absolute; top:3px; right:3px; width:20px; height:20px; border-radius:50%; background:#ff2f6e; color:#fff; font-style:normal; font-size:12px; display:grid; place-items:center; cursor:pointer}
+.rv-up .ph.busy::after{content:"上传中…"; position:absolute; inset:0; display:grid; place-items:center; background:rgba(255,255,255,.8); font-size:10px; color:var(--pk)}
+.rv-up .add{width:84px; height:110px; border:2px dashed #ff9ccf; border-radius:10px; display:grid; place-items:center; text-align:center; font-size:10px; font-weight:800; color:var(--pk); cursor:pointer; background:#fff}
+.rv-up .add.wide{width:150px; height:84px}
+.rv-up .add input{display:none}
+.rv-up .or{flex:1 1 200px; font-size:10px; color:#b98aa3}
+.rv-up .or input{width:100%; margin-top:2px; font:inherit; font-size:11px; border:2px solid #ffd0e6; border-radius:10px; padding:4px 8px}
+.rv-rep{display:grid; gap:6px}
+.rv-up .add[hidden]{display:none}
+.rv-row label{display:grid; gap:2px; font-size:9px; font-weight:800; color:#c0508a}
+.rv-row label.c2{grid-column:span 2} .rv-row label.chk{display:flex; align-items:center; gap:4px}
+.rv-row input,.rv-row select,.rv-row textarea{font:inherit; font-size:12px; border:2px solid #ffd0e6; border-radius:8px; padding:3px 6px; color:var(--ink); min-width:0}
+.rv-row input[type=checkbox]{width:auto} .rv-row input[type=color]{padding:0; height:28px}
+@media (max-width:700px){ .rv-row{grid-template-columns:repeat(2,1fr)!important} }
+.rv-row{display:grid; gap:6px; align-items:end; padding:6px 30px 6px 8px; border-radius:10px; background:#fff; border:1px solid #ffe0ee; position:relative}
+.rv-row label{font-size:9px}
+.rv-row .rm{position:absolute; top:4px; right:4px; width:20px; height:20px; border:0; border-radius:50%; background:#ffe0ee; color:#c0508a; font-weight:800; cursor:pointer}
+.rv-rep-add{justify-self:start; border:1px dashed #ff9ccf; border-radius:99px; background:#fff; color:var(--pk); font-weight:800; font-size:11px; padding:4px 12px; cursor:pointer}
+.rv-draft{margin:0 0 6px; padding:6px 10px; border-radius:10px; background:#fff3c4; font-size:11px; color:#8a6a00}
+.rv-draft button{border:1px solid #e0b800; background:#fff; border-radius:99px; font-size:10px; padding:2px 8px; cursor:pointer}
+.rv-fbtns{position:sticky; bottom:-14px; padding:8px 0 4px; background:linear-gradient(transparent,#fff 30%)}
+.rv-save[disabled]{opacity:.5}
+.card .own{position:absolute; top:1.5cqw; right:1.5cqw; z-index:6; display:flex; gap:1.5cqw}
+.card .own span{width:11cqw; height:11cqw; border-radius:50%; display:grid; place-items:center; font-size:5.5cqw; background:#fff; box-shadow:0 0 0 .7cqw var(--c),0 1cqw 2cqw rgba(0,0,0,.25); cursor:pointer}
+.card .own span:hover{transform:scale(1.12)}
+@media (max-width:700px){ .rv-fgrid label.c2{grid-column:1/-1} }
+
 .rv-fsheet h2{margin:0 0 10px; font-family:"Mochiy Pop One",sans-serif; font-weight:400; color:var(--pk)}
 .rv-fgrid{display:grid; grid-template-columns:repeat(4,1fr); gap:8px 10px}
 .rv-fgrid label{display:grid; gap:2px; font-size:10px; font-weight:800; color:#c0508a}
@@ -2519,30 +2558,13 @@ body.insite #sound{left:16px}
 
   <!-- owner form -->
   <div class="rv-modal" id="rvForm" hidden>
-    <form class="rv-sheet rv-fsheet" id="rvFormEl">
+    <form class="rv-sheet rv-fsheet" id="rvFormEl" novalidate>
       <button class="rv-x" type="button" data-close aria-label="关闭">✕</button>
-      <h2>新しいカード ♡</h2>
-      <div class="rv-fgrid">
-        <label>タイトル<input name="title" required maxlength="40"></label>
-        <label>原题<input name="original_title" maxlength="60"></label>
-        <label>種類<select name="type"><option>电影</option><option>剧集</option><option>动画</option><option>漫画</option><option>游戏</option><option>音乐剧</option><option>书</option><option>专辑</option></select></label>
-        <label>年份<input name="year" maxlength="4" inputmode="numeric"></label>
-        <label>导演 / 作者<input name="director" maxlength="60"></label>
-        <label>封面图片链接 (可选)<input name="cover" maxlength="400" placeholder="https://..."></label>
-        <label>总评 ★<input name="rating" type="number" min="1" max="5" step="0.5" value="5"></label>
-        <label>一句话<input name="excerpt" maxlength="60"></label>
-        <label>STORY<input name="story_score" type="number" min="0" max="5" step="0.5" value="5"></label>
-        <label>VISUAL<input name="visuals_score" type="number" min="0" max="5" step="0.5" value="5"></label>
-        <label>CHARA<input name="characters_score" type="number" min="0" max="5" step="0.5" value="5"></label>
-        <label>LOVE<input name="obsession_score" type="number" min="0" max="5" step="0.5" value="5"></label>
-        <label>最喜欢的角色<input name="favorite_character" maxlength="40"></label>
-        <label>心情<input name="mood" maxlength="30"></label>
-        <label class="w">最喜欢的场景<input name="favorite_scene" maxlength="200"></label>
-        <label class="w">留在心里的<input name="stayed_with_me" maxlength="200"></label>
-        <label class="w">感想<textarea name="body" rows="6" maxlength="6000"></textarea></label>
-      </div>
+      <h2 id="rvFTitle">新しいカード ♡</h2>
+      <p class="rv-draft" id="rvDraft" hidden>📝 上次没写完的草稿还在 <button type="button" id="rvDraftLoad">↺ 继续写</button> <button type="button" id="rvDraftDrop">丢掉</button></p>
+      <div id="rvFBody"></div>
       <p class="tiny" id="rvFormNote"></p>
-      <button class="rv-save" type="submit">カードを保存 ✦</button>
+      <div class="rv-fbtns"><button class="rv-save" type="submit" id="rvSaveBtn">カードを保存 ✦</button></div>
     </form>
   </div>
   <div class="rv-zoom" id="rvZoom" hidden><img id="rvZoomImg" alt=""></div>
@@ -3643,7 +3665,7 @@ body.insite #sound{left:16px}
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const rar=r=>(+r.rating>=5 && +(r.obsession_score??5)>=4.5)?'PR':(+r.rating>=4.5?'R':(+r.rating>=4?'R':'N'));
   const stars=n=>{ n=+n||0; const f=Math.floor(n); return '★'.repeat(f)+(n-f>=.5?'½':'')+'☆'.repeat(Math.max(0,5-f-(n-f>=.5?1:0))); };
-  const safeUrl=u=>{ u=String(u||'').trim(); if(!u) return ''; if(/^(rev|room|about|site)\//.test(u)) return u; return /^https:\/\//i.test(u)?u:''; };
+  const safeUrl=u=>{ u=String(u||'').trim(); if(!u) return ''; if(/^(rev|room|about|site)\//.test(u)||/^\/api\/media\/[\w-]+$/.test(u)) return u; return /^https:\/\//i.test(u)?u:''; };
   function md(s){ return esc(s).split(/\n{2,}/).map(p=>'<p>'+p.replace(/\*\*\*(.+?)\*\*\*/g,'<b><i>$1</i></b>').replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\*(.+?)\*/g,'<i>$1</i>').replace(/\n/g,'<br>')+'</p>').join(''); }
 
   function cardHTML(r,i){ const T=rvT(r.type), R=rar(r), cov=safeUrl(r.cover);
@@ -3663,7 +3685,7 @@ body.insite #sound{left:16px}
         <span class="k-no">KP-${no}</span>
         ${R==='PR'?'<span class="k-pr">PR</span>':''}
         <span class="holo"></span>
-      </span>${r._new?'<span class="new">NEW!</span>':''}
+      </span>${r._new?'<span class="new">NEW!</span>':''}${rvIsOwner?`<span class="own"><span data-edit="${i}" title="编辑">✏️</span><span data-drop="${i}" title="删除">🗑</span></span>`:''}
     </button>`; }
 
   /* menu */
@@ -3730,7 +3752,7 @@ body.insite #sound{left:16px}
   function untilt(el){ const f=el.querySelector('.face'); f.style.setProperty('--ry','0deg'); f.style.setProperty('--rx','0deg'); }
   reviews.addEventListener('pointermove',e=>{ const c=e.target.closest('.card'); if(c&&e.pointerType==='mouse') tilt(c,e); });
   reviews.addEventListener('pointerout',e=>{ const c=e.target.closest('.card'); if(c&&!c.contains(e.relatedTarget)) untilt(c); });
-  rvGrid.addEventListener('click',e=>{ const c=e.target.closest('.card'); if(!c) return; sfx.zap(); openCard(+c.dataset.i); });
+  rvGrid.addEventListener('click',e=>{ const ed=e.target.closest('[data-edit]'), dr=e.target.closest('[data-drop]'); if(ed){ e.stopPropagation(); rvEdit(+ed.dataset.edit); return; } if(dr){ e.stopPropagation(); rvDrop(+dr.dataset.drop); return; } const c=e.target.closest('.card'); if(!c) return; sfx.zap(); openCard(+c.dataset.i); });
 
   /* favorite frames */
   const FF=[...Array(21)].map((_,i)=>'rev/ff'+String(i+1).padStart(2,'0')+'.webp');
@@ -3853,17 +3875,139 @@ body.insite #sound{left:16px}
   async function reviewsOnce(){ if(rvReady) return; rvReady=true;
     let user=null; try{ [rvDb,user]=await Promise.all([window.claude?.use?.('db'),window.claude?.use?.('user')]); }catch(e){} if(!rvDb) return;
     try{ rvIsOwner=!!(await user?.isOwner()); }catch(e){}
-    rvDb.collection('reviews').onSnapshot(snap=>{ const extra=snap.docs.map(d=>({...(d.data()||{}),_id:d.id,_new:true}));
-      rvAll=[...extra,...RV_SEED]; drawMenu(); drawGrid(); drawFeature(); },()=>{});
-    if(rvIsOwner){ const nb=document.getElementById('rvNewBtn'), fm=document.getElementById('rvForm'), fe=document.getElementById('rvFormEl'); nb.hidden=false;
-      nb.addEventListener('click',()=>{ fm.hidden=false; });
-      fm.addEventListener('click',e=>{ if(e.target===fm||e.target.closest('[data-close]')) fm.hidden=true; });
-      fe.addEventListener('submit',async e=>{ e.preventDefault(); const f=new FormData(fe), d={};
-        for(const [k,v] of f.entries()){ const s=String(v).trim(); if(s!=='') d[k]=/_score$|^rating$/.test(k)?Math.max(0,Math.min(5,+s)):s.slice(0,k==='body'?6000:400); }
-        if(d.cover && !safeUrl(d.cover)) delete d.cover;
-        const n=new Date(); d.date=n.toISOString().slice(0,10); d.watched_on=d.date; d.ts=Date.now();
-        try{ await rvDb.doc('reviews/'+d.ts).set(d); fe.reset(); fm.hidden=true; sfx.dock(); }catch(err){ document.getElementById('rvFormNote').textContent='保存失败了，再试一次 (；ω；)'; } });
-    } }
+    rvDb.collection('reviews').onSnapshot(snap=>{ const seedIds=new Set(RV_SEED.map(r=>r.id)), over={}, extra=[];
+      snap.docs.forEach(d=>{ const v=d.data()||{}; if(seedIds.has(d.id)) over[d.id]=v; else if(!v._hidden) extra.push({...v,_id:d.id,_new:true}); });
+      extra.sort((a,b)=>(b.ts||0)-(a.ts||0));
+      const seeds=RV_SEED.filter(r=>!(over[r.id]&&over[r.id]._hidden)).map(r=>over[r.id]?{...over[r.id],id:r.id,_id:r.id,_seed:true}:{...r,_seed:true});
+      rvAll=[...extra,...seeds]; drawMenu(); drawGrid(); drawFeature(); },()=>{});
+    if(rvIsOwner){ rvEditorInit(); drawGrid(); } }
+
+
+  /* ---------- owner editor: schema → form, uploads, edit / delete, drafts ---------- */
+  const F_COMMON=[
+    {k:'title',l:'タイトル 标题',req:1,c2:1},{k:'original_title',l:'原题',c2:1},
+    {k:'type',l:'種類',t:'sel',o:['电影','剧集','动画','漫画','游戏','音乐剧','书','专辑']},{k:'year',l:'年份',t:'num'},{k:'director',l:'导演 / 作者 / 厂商',c2:1},
+    {k:'watched_on',l:'看完的日子',t:'date'},{k:'runtime',l:'片长 / 篇幅'},{k:'rating',l:'总评 ★ (0–5)',t:'score'},{k:'excerpt',l:'一句话短评',c2:1},
+    {k:'story_score',l:'STORY',t:'score'},{k:'visuals_score',l:'VISUAL',t:'score'},{k:'characters_score',l:'CHARA',t:'score'},{k:'obsession_score',l:'LOVE',t:'score'},
+    {k:'favorite_character',l:'最喜欢的角色',c2:1},{k:'mood',l:'心情'},{k:'rewatch',l:'会重看吗'},{k:'tears',l:'哭了吗'},{k:'aftertaste',l:'余韵',c2:1},{k:'spoiler',l:'含剧透',t:'chk'},
+    {k:'first_impression',l:'第一印象',t:'area',w:1},{k:'favorite_scene',l:'最喜欢的场景',t:'area',w:1},{k:'stayed_with_me',l:'留在心里的',t:'area',w:1},
+    {k:'body',l:'正文（支持 **粗体** *斜体* ，空一行分段）',t:'area',w:1,rows:9,max:8000},
+    {k:'douban_url',l:'豆瓣链接',t:'url',c2:1},{k:'imdb_url',l:'IMDb 链接',t:'url',c2:1}];
+  const F_TYPE={
+    '电影':[{k:'before_screening',l:'看之前',t:'area',w:1},{k:'visual_notes',l:'画面笔记',t:'area',w:1},
+      {k:'movie_palette',l:'这部电影的颜色',t:'rep',max:5,f:[{k:'color',l:'颜色',t:'color'},{k:'name',l:'名字'},{k:'scene',l:'场景'},{k:'note',l:'说明',c2:1}]},
+      {k:'scene_timeline',l:'场景时间轴',t:'rep',max:8,f:[{k:'label',l:'标签'},{k:'scene',l:'场景'},{k:'mood',l:'情绪'},{k:'camera',l:'镜头'},{k:'note',l:'笔记',c2:1}]}],
+    '剧集':[{k:'season_number',l:'第几季',t:'num'},{k:'episode_count',l:'总集数',t:'num'},{k:'progress_current',l:'看到第几集',t:'num'},{k:'status',l:'状态'},
+      {k:'favorite_relationship',l:'最爱关系',c2:1},{k:'most_complex_character',l:'最复杂的角色',c2:1},{k:'most_growth_character',l:'成长最多',c2:1},{k:'least_favorite_character',l:'最不喜欢',c2:1},
+      {k:'series_episodes',l:'分集记录',t:'rep',max:30,f:[{k:'title',l:'集名',c2:1},{k:'watched_date',l:'日期',t:'date'},{k:'rating',l:'★',t:'score'},{k:'mood',l:'心情'},{k:'favorite',l:'神回',t:'chk'},{k:'favorite_moment',l:'名场面',c2:1}]},
+      {k:'series_characters',l:'角色',t:'rep',max:12,f:[{k:'name',l:'名字'},{k:'role',l:'身份'},{k:'favorite',l:'推し',t:'chk'},{k:'note',l:'印象',c2:1}]},
+      {k:'series_timeline',l:'剧情时间轴',t:'rep',max:8,f:[{k:'label',l:'阶段'},{k:'note',l:'笔记',c2:1}]},
+      {k:'series_predictions',l:'下季预言（一行一个）',t:'lines',w:1}],
+    '动画':[{k:'episode_count',l:'总集数',t:'num'},{k:'progress_current',l:'看到第几集',t:'num'},{k:'status',l:'状态'},{k:'anime_channel',l:'频道号（两位数）'},
+      {k:'anime_arcs',l:'篇章',t:'rep',max:10,f:[{k:'title',l:'篇章名'},{k:'episodes',l:'集数范围'},{k:'note',l:'笔记',c2:1}]},
+      {k:'anime_characters',l:'角色',t:'rep',max:10,f:[{k:'name',l:'名字'},{k:'role',l:'身份'},{k:'note',l:'印象',c2:1}]},
+      {k:'anime_songs',l:'主题曲 OP / ED',t:'rep',max:6,f:[{k:'kind',l:'种类',t:'sel',o:['OP','ED','INSERT']},{k:'title',l:'曲名'},{k:'artist',l:'歌手'},{k:'music_url',l:'YouTube 链接',t:'url'},{k:'note',l:'感想',c2:1}]}],
+    '游戏':[{k:'game_platform',l:'平台'},{k:'game_playtime',l:'游玩时间'},{k:'game_completion',l:'完成度 %',t:'num'},{k:'game_status',l:'状态'},{k:'game_ending',l:'结局'},{k:'game_difficulty',l:'难度'},
+      {k:'game_route',l:'路线',c2:1},{k:'game_build',l:'Build / 职业',c2:1},{k:'game_favorite_companion',l:'最爱同伴',c2:1},
+      {k:'game_saves',l:'存档',t:'rep',max:6,f:[{k:'name',l:'存档名'},{k:'hours',l:'时长'},{k:'ending',l:'结局'},{k:'route',l:'路线'},{k:'note',l:'备注',c2:1}]},
+      {k:'game_quests',l:'任务',t:'rep',max:12,f:[{k:'title',l:'任务名'},{k:'kind',l:'类型'},{k:'completed',l:'完成',t:'chk'},{k:'note',l:'备注',c2:1}]},
+      {k:'game_party',l:'队友',t:'rep',max:8,f:[{k:'name',l:'名字'},{k:'class',l:'职业'},{k:'note',l:'印象',c2:1}]},
+      {k:'game_achievements',l:'成就',t:'rep',max:10,f:[{k:'title',l:'成就名'},{k:'note',l:'说明',c2:1}]}],
+    '漫画':[{k:'manga_volumes',l:'卷数',t:'num'},{k:'manga_chapters',l:'话数',t:'num'},{k:'manga_status',l:'连载状态'},{k:'manga_tags',l:'标签（逗号分隔）',t:'tags',c2:1},
+      {k:'favorite_panel',l:'最喜欢的一格',t:'area',w:1},
+      {k:'manga_pages',l:'阅读器里的内页',t:'rep',max:10,f:[{k:'title',l:'页标题'},{k:'text',l:'内容',t:'area',c2:1}]}],
+    '音乐剧':[{k:'venue',l:'剧院'},{k:'city',l:'城市'},{k:'performance_date',l:'演出日',t:'date'},{k:'companion',l:'和谁一起',c2:1},
+      {k:'musical_songs',l:'喜欢的曲目',t:'rep',max:10,f:[{k:'title',l:'曲名'},{k:'act',l:'幕'},{k:'performer',l:'演唱'},{k:'music_url',l:'YouTube 链接',t:'url'},{k:'favorite',l:'最爱',t:'chk'},{k:'note',l:'感想',c2:1}]},
+      {k:'musical_cast',l:'卡司',t:'rep',max:8,f:[{k:'name',l:'演员'},{k:'role',l:'角色'},{k:'favorite',l:'最爱',t:'chk'},{k:'note',l:'印象',c2:1}]}],
+    '书':[{k:'favorite_panel',l:'最喜欢的一段',t:'area',w:1}],
+    '专辑':[{k:'favorite_panel',l:'最喜欢的一首',t:'area',w:1}] };
+  const allKeys=()=>new Set([...F_COMMON,...Object.values(F_TYPE).flat()].map(f=>f.k).concat(['cover','screenshots']));
+  const fid=k=>'rvf_'+k;
+  function fieldHTML(f,pre=''){ const n=pre+f.k, cls=[f.w?'w':'',f.c2?'c2':'',f.t==='chk'?'chk':''].join(' ').trim(), L=esc(f.l);
+    if(f.t==='chk') return `<label class="${cls}"><input type="checkbox" data-k="${n}"> ${L}</label>`;
+    if(f.t==='sel') return `<label class="${cls}">${L}<select data-k="${n}">${f.o.map(o=>`<option>${o}</option>`).join('')}</select></label>`;
+    if(f.t==='area'||f.t==='lines') return `<label class="${cls}">${L}<textarea data-k="${n}" rows="${f.rows||3}" maxlength="${f.max||1500}"></textarea></label>`;
+    const ty=f.t==='num'||f.t==='score'?'number':f.t==='date'?'date':f.t==='url'?'url':f.t==='color'?'color':'text';
+    const ex=f.t==='score'?' min="0" max="5" step="0.5"':f.t==='num'?' min="0"':'';
+    return `<label class="${cls}">${L}<input type="${ty}" data-k="${n}"${ex}${f.req?' required':''} maxlength="${f.max||400}"></label>`; }
+  function repRow(f){ return `<div class="rv-row" style="grid-template-columns:repeat(4,1fr)">${f.f.map(x=>fieldHTML(x)).join('')}<button type="button" class="rm" title="删掉这一行">×</button></div>`; }
+  function repHTML(f){ return `<div class="rv-fsec" data-rep="${f.k}"><b>${esc(f.l)}</b><div class="rv-rep"></div><button type="button" class="rv-rep-add">＋ 加一行</button></div>`; }
+  function upHTML(k,l,multi,wide){ return `<div class="rv-fsec"><b>${l}</b><small>${multi?'可以一次选多张，最多 8 张':'选一张图，会自动压缩'}${multi?'':'；也可以直接贴网址'}</small>
+    <div class="rv-up" data-up="${k}" data-multi="${multi?1:0}"><label class="add ${wide?'wide':''}">＋<br>${multi?'添加图片':'上传封面'}<input type="file" accept="image/*" ${multi?'multiple':''}></label>${multi?'':`<div class="or">或者图片网址（https://…）<input type="url" data-k="cover"></div>`}</div></div>`; }
+  function buildForm(){ const typ=Object.keys(F_TYPE);
+    document.getElementById('rvFBody').innerHTML=
+      `<div class="rv-fsec"><b>基本信息</b><div class="rv-fgrid">${F_COMMON.map(f=>fieldHTML(f)).join('')}</div></div>`+
+      upHTML('cover','封面',0,0)+upHTML('screenshots','剧照 / 截图 / 相册',1,1)+
+      typ.map(t=>`<div class="rv-tsec" data-t="${t}" hidden>${(()=>{ const flat=F_TYPE[t].filter(f=>f.t!=='rep'), reps=F_TYPE[t].filter(f=>f.t==='rep');
+        return (flat.length?`<div class="rv-fsec"><b>${t} 专属</b><div class="rv-fgrid">${flat.map(f=>fieldHTML(f,'')).join('')}</div></div>`:'')+reps.map(repHTML).join(''); })()}</div>`).join(''); }
+  const rvF=()=>document.getElementById('rvFormEl');
+  const curType=()=>rvF().querySelector('[data-k="type"]').value;
+  function showType(){ const t=curType(); rvF().querySelectorAll('.rv-tsec').forEach(x=>x.hidden=x.dataset.t!==t); }
+  // value plumbing
+  const scope=t=>rvF().querySelector(`.rv-tsec[data-t="${t}"]`);
+  function readField(el,f){ if(!el) return undefined; if(f.t==='chk') return el.checked||undefined; const v=el.value.trim(); if(v==='') return undefined;
+    if(f.t==='num') return +v; if(f.t==='score') return Math.max(0,Math.min(5,+v)); if(f.t==='tags') return v.split(/[,，、]/).map(x=>x.trim()).filter(Boolean);
+    if(f.t==='lines') return v.split('\n').map(x=>x.trim()).filter(Boolean); if(f.t==='url') return /^https:\/\//i.test(v)?v:undefined; return v; }
+  function writeField(el,f,v){ if(!el) return; if(f.t==='chk'){ el.checked=!!v; return; } if(v==null){ el.value=f.t==='sel'?f.o[0]:f.t==='color'?'#c9a46b':''; return; }
+    el.value=Array.isArray(v)?(f.t==='lines'?v.join('\n'):v.join(', ')):String(v); }
+  const upState={cover:[],screenshots:[]};
+  function drawUps(){ ['cover','screenshots'].forEach(k=>{ const box=rvF().querySelector(`[data-up="${k}"]`); box.querySelectorAll('.ph').forEach(x=>x.remove());
+    const add=box.querySelector('.add'); upState[k].forEach((u,i)=>{ const d=document.createElement('div'); d.className='ph'+(k==='screenshots'?' wide':'')+(u.busy?' busy':''); d.innerHTML=`<img src="${esc(u.src)}" alt=""><i data-rm="${k}:${i}">×</i>`; box.insertBefore(d,add); });
+    add.hidden=k==='cover'?upState.cover.length>0:upState.screenshots.length>=8; }); }
+  function collect(){ const d={}; const put=(f,el)=>{ const v=readField(el,f); if(v!==undefined) d[f.k]=v; };
+    F_COMMON.forEach(f=>put(f,rvF().querySelector(`.rv-fsec [data-k="${f.k}"]`)));
+    const t=curType(), sc=scope(t);
+    (F_TYPE[t]||[]).forEach(f=>{ if(f.t!=='rep'){ put(f,sc.querySelector(`[data-k="${f.k}"]`)); return; }
+      const rows=[...sc.querySelectorAll(`[data-rep="${f.k}"] .rv-row`)].map(row=>{ const o={}; f.f.forEach(x=>{ const v=readField(row.querySelector(`[data-k="${x.k}"]`),x); if(v!==undefined) o[x.k]=v; }); return o; }).filter(o=>Object.keys(o).some(k=>typeof o[k]!=='boolean'));
+      if(rows.length) d[f.k]=rows; });
+    const cv=upState.cover.find(u=>u.url)?.url||readField(rvF().querySelector('.or [data-k="cover"]'),{t:'url'})||(rvF().querySelector('.or [data-k="cover"]').value.trim().match(/^(rev|room|about|site)\//)?rvF().querySelector('.or [data-k="cover"]').value.trim():undefined);
+    if(cv) d.cover=cv; const shots=upState.screenshots.filter(u=>u.url).map(u=>u.url); if(shots.length) d.screenshots=shots;
+    if(t==='动画'&&Array.isArray(d.anime_songs)) d.anime_songs=d.anime_songs.map(x=>{ const m=String(x.music_url||'').match(/(?:v=|youtu\.be\/|embed\/)([\w-]{11})/); return m?{...x,youtube_id:m[1]}:x; });
+    return d; }
+  function fill(r){ F_COMMON.forEach(f=>writeField(rvF().querySelector(`.rv-fsec [data-k="${f.k}"]`),f,r[f.k]));
+    if(!r.type) rvF().querySelector('[data-k="type"]').value='电影';
+    Object.entries(F_TYPE).forEach(([t,fs])=>{ const sc=scope(t); fs.forEach(f=>{ if(f.t!=='rep'){ writeField(sc.querySelector(`[data-k="${f.k}"]`),f,r[f.k]); return; }
+      const box=sc.querySelector(`[data-rep="${f.k}"] .rv-rep`); box.innerHTML=''; (Array.isArray(r[f.k])?r[f.k]:[]).forEach(o=>{ box.insertAdjacentHTML('beforeend',repRow(f)); const row=box.lastElementChild; f.f.forEach(x=>writeField(row.querySelector(`[data-k="${x.k}"]`),x,o[x.k])); }); }); });
+    const c=safeUrl(r.cover); upState.cover=c&&/^\/api\/media\//.test(c)?[{src:c,url:c}]:[]; rvF().querySelector('.or [data-k="cover"]').value=c&&!/^\/api\/media\//.test(c)?c:'';
+    upState.screenshots=(r.screenshots||[]).map(safeUrl).filter(Boolean).map(u=>({src:u,url:u})); drawUps(); showType(); }
+  // image upload: shrink in the browser, then post to /api/media
+  function shrink(file,max){ return new Promise((res,rej)=>{ const im=new Image(); const u=URL.createObjectURL(file); im.onload=()=>{ const sc=Math.min(1,max/Math.max(im.naturalWidth,im.naturalHeight)); const c=document.createElement('canvas'); c.width=Math.round(im.naturalWidth*sc); c.height=Math.round(im.naturalHeight*sc); c.getContext('2d').drawImage(im,0,0,c.width,c.height); URL.revokeObjectURL(u);
+      const tryQ=q=>c.toBlob(b=>{ if(!b) return rej(new Error('encode')); if(b.size>1100000&&q>.45) tryQ(q-.12); else res(b); },'image/webp',q); tryQ(.84); }; im.onerror=()=>rej(new Error('read')); im.src=u; }); }
+  async function upload(file,max){ const blob=await shrink(file,max); const r=await fetch('/api/media',{method:'POST',body:blob,headers:{'content-type':blob.type||'image/webp','x-admin-key':(()=>{ try{ return localStorage.getItem('sq_admin')||''; }catch(e){ return ''; } })()}}); if(!r.ok) throw new Error('upload '+r.status); return (await r.json()).url; }
+  async function addFiles(k,files){ const note=document.getElementById('rvFormNote'); const list=[...files].slice(0,k==='cover'?1:8-upState[k].length);
+    for(const f of list){ const it={src:URL.createObjectURL(f),busy:1}; if(k==='cover') upState.cover=[it]; else upState[k].push(it); drawUps();
+      try{ it.url=await upload(f,k==='cover'?1100:1600); it.busy=0; }catch(e){ upState[k]=upState[k].filter(x=>x!==it); note.textContent='图片上传失败了 (；ω；) 是不是还没登录站长？'; } drawUps(); saveDraft(); } }
+  // drafts (new cards only)
+  let editing=null; const DK='sq_rv_draft';
+  let dT=0; function saveDraft(){ if(editing) return; clearTimeout(dT); dT=setTimeout(()=>{ try{ localStorage.setItem(DK,JSON.stringify(collect())); }catch(e){} },400); }
+  function openEditor(r){ editing=r||null; buildForm(); fill(r||{type:'电影',rating:5,watched_on:new Date().toISOString().slice(0,10)});
+    document.getElementById('rvFTitle').textContent=r?'カードを編集 ✏️ '+(r.title||''):'新しいカード ♡';
+    let dr=null; try{ dr=!r&&JSON.parse(localStorage.getItem(DK)||'null'); }catch(e){} document.getElementById('rvDraft').hidden=!(dr&&dr.title);
+    document.getElementById('rvFormNote').textContent=''; document.getElementById('rvForm').hidden=false; rvF().scrollTop=0; }
+  function rvEdit(i){ const r=rvAll[i]; if(r) openEditor(r); }
+  async function rvDrop(i){ const r=rvAll[i]; if(!r||!rvDb) return; if(!confirm(`确定要删除「${r.title}」这张卡吗？`)) return;
+    try{ if(r._seed) await rvDb.doc('reviews/'+r.id).set({_hidden:true,ts:Date.now()}); else await rvDb.doc('reviews/'+r._id).delete(); sfx.blip(0); }catch(e){ alert('删除失败了，再试一次'); } }
+  function rvEditorInit(){ const fm=document.getElementById('rvForm'); document.getElementById('rvNewBtn').hidden=false;
+    document.getElementById('rvNewBtn').addEventListener('click',()=>openEditor(null));
+    fm.addEventListener('click',e=>{ if(e.target===fm||e.target.closest('[data-close]')){ fm.hidden=true; return; }
+      const rm=e.target.closest('[data-rm]'); if(rm){ const [k,i]=rm.dataset.rm.split(':'); upState[k].splice(+i,1); drawUps(); saveDraft(); return; }
+      const ad=e.target.closest('.rv-rep-add'); if(ad){ const sec=ad.closest('[data-rep]'), t=sec.closest('.rv-tsec').dataset.t, f=F_TYPE[t].find(x=>x.k===sec.dataset.rep), box=sec.querySelector('.rv-rep'); if(box.children.length<(f.max||10)) box.insertAdjacentHTML('beforeend',repRow(f)); return; }
+      const rr=e.target.closest('.rv-row .rm'); if(rr){ rr.parentElement.remove(); saveDraft(); return; }
+      if(e.target.id==='rvDraftLoad'){ try{ fill(JSON.parse(localStorage.getItem(DK)||'{}')); }catch(err){} document.getElementById('rvDraft').hidden=true; }
+      if(e.target.id==='rvDraftDrop'){ try{ localStorage.removeItem(DK); }catch(err){} document.getElementById('rvDraft').hidden=true; } });
+    fm.addEventListener('change',e=>{ if(e.target.matches('[data-k="type"]')) showType(); const up=e.target.closest('[data-up]'); if(up&&e.target.files&&e.target.files.length){ addFiles(up.dataset.up,e.target.files); e.target.value=''; } saveDraft(); });
+    fm.addEventListener('input',saveDraft);
+    rvF().addEventListener('submit',async e=>{ e.preventDefault(); const note=document.getElementById('rvFormNote'), btn=document.getElementById('rvSaveBtn');
+      if([...upState.cover,...upState.screenshots].some(u=>u.busy)){ note.textContent='图片还在上传，等一下下 ⏳'; return; }
+      const d=collect(); if(!d.title){ note.textContent='标题要填哦'; return; }
+      let base={}, id;
+      if(editing){ base={...editing}; ['_id','_new','_seed'].forEach(k=>delete base[k]); allKeys().forEach(k=>{ if(!(k in d)) delete base[k]; }); id=editing._seed?editing.id:editing._id; }
+      else { id=String(Date.now()); base={date:new Date().toISOString().slice(0,10)}; }
+      const out={...base,...d,ts:editing&&editing.ts||Date.now(),updated:Date.now()}; if(!out.watched_on) out.watched_on=out.date||new Date().toISOString().slice(0,10); if(!out.date) out.date=out.watched_on;
+      btn.disabled=true; note.textContent='保存中…';
+      try{ await rvDb.doc('reviews/'+id).set(out); if(!editing){ try{ localStorage.removeItem(DK); }catch(err){} } document.getElementById('rvForm').hidden=true; sfx.dock(); }
+      catch(err){ note.textContent='保存失败了，再试一次 (；ω；)'+(JSON.stringify(out).length>58000?' — 内容太长啦，正文删短一点':''); }
+      btn.disabled=false; }); }
 
   /* ---------- WICKED shrine ---------- */
   const wk=document.getElementById('wk'); let wkR=null, wkBuilt=false;

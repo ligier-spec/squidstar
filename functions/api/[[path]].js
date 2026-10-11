@@ -24,6 +24,7 @@ export async function onRequest({ request, env, params }) {
   if (!env.DB) return J({ error: 'D1 database is not bound as DB' }, 500);
   if (!ready) {
     await env.DB.prepare('CREATE TABLE IF NOT EXISTS docs (col TEXT NOT NULL, id TEXT NOT NULL, data TEXT NOT NULL, updated INTEGER NOT NULL, PRIMARY KEY (col, id))').run();
+    await env.DB.prepare('CREATE TABLE IF NOT EXISTS media (id TEXT PRIMARY KEY, mime TEXT NOT NULL, b64 TEXT NOT NULL, created INTEGER NOT NULL)').run();
     ready = true;
   }
   const seg = [].concat(params.path || []);
@@ -31,6 +32,31 @@ export async function onRequest({ request, env, params }) {
   const admin = isAdmin(request, env);
 
   if (seg[0] === 'auth') return J({ ok: admin });
+
+  // images the owner uploads from the review editor (stored as base64 in D1, served with long cache)
+  if (seg[0] === 'media') {
+    const mid = seg[1];
+    if (m === 'GET' && mid && /^[\w-]{6,40}$/.test(mid)) {
+      const r = await env.DB.prepare('SELECT mime, b64 FROM media WHERE id = ?').bind(mid).first();
+      if (!r) return new Response('not found', { status: 404 });
+      const bin = atob(r.b64), out = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+      return new Response(out, { headers: { 'content-type': r.mime, 'cache-control': 'public, max-age=31536000, immutable' } });
+    }
+    if (!admin) return J({ error: 'forbidden' }, 403);
+    if (m === 'POST' && !mid) {
+      const mime = (request.headers.get('content-type') || '').split(';')[0];
+      if (!/^image\/(webp|jpeg|png|gif)$/.test(mime)) return J({ error: 'bad type' }, 415);
+      const buf = new Uint8Array(await request.arrayBuffer());
+      if (!buf.length || buf.length > 1400000) return J({ error: 'too large' }, 413);
+      let bin = ''; for (let i = 0; i < buf.length; i += 0x8000) bin += String.fromCharCode.apply(null, buf.subarray(i, i + 0x8000));
+      const id = crypto.randomUUID().replace(/-/g, '').slice(0, 20);
+      await env.DB.prepare('INSERT INTO media (id, mime, b64, created) VALUES (?, ?, ?, ?)').bind(id, mime, btoa(bin), Date.now()).run();
+      return J({ id, url: '/api/media/' + id });
+    }
+    if (m === 'DELETE' && mid) { await env.DB.prepare('DELETE FROM media WHERE id = ?').bind(mid).run(); return J({ ok: true }); }
+    return J({ error: 'bad request' }, 400);
+  }
 
   const [kind, col, id] = seg;
   if (!OWNER.has(col) && !OPEN.has(col)) return J({ error: 'unknown collection' }, 404);
