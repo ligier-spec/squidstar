@@ -1,0 +1,1104 @@
+<title>Paper Bride Presentation</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&display=swap">
+<style>
+/* Layout: one full-bleed stage; layers stacked like a paper-cut diorama — candle and red thread, red paper world, torn seam, ghost bride beneath. */
+:root{
+  --ink:#0b0607;          /* night behind the paper */
+  --cinnabar:#c8141c;     /* wedding red, paper-cut red */
+  --blood:#6e0a10;        /* deep shadow red */
+  --mourning:#efe9df;     /* funeral white, paper white */
+  --ash:#9c8f86;          /* faded caption */
+  --flame:#f4b860;        /* candle light */
+  --display-cn:"Ma Shan Zheng","STKaiti","KaiTi",serif;
+  --display-en:"IM Fell English SC","IM Fell English",Georgia,"Times New Roman",serif;
+  --body:"IM Fell English",Georgia,"Times New Roman",serif;
+  --xi:"Noto Serif SC","Songti SC","SimSun",serif;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--ink);color:var(--mourning);font-family:var(--body);overflow:hidden;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.stage{position:fixed;inset:0;overflow:hidden;background:var(--ink);cursor:pointer;user-select:none}
+.layer{position:absolute;inset:0}
+.cover{width:100%;height:100%;object-fit:cover;display:block;max-width:none}
+
+/* ---- ghost bride (revealed beneath) ---- */
+.bride{opacity:0}
+.bride img{filter:saturate(.85) contrast(1.05) brightness(.8)}
+.bride::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 45%,transparent 25%,rgba(11,6,7,.55) 60%,var(--ink) 100%),
+             linear-gradient(to top,var(--ink) 0%,transparent 45%)}
+
+/* ---- red paper world, split into two torn halves ---- */
+.half{opacity:0;will-change:transform}
+.half .cover{filter:saturate(1.1)}
+.xi{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.xi svg{width:min(62vh,70vw);height:auto;overflow:visible}
+.xi text{font-family:var(--xi);font-weight:900;font-size:200px;
+  fill:transparent;stroke:var(--mourning);stroke-width:2.2;
+  stroke-dasharray:1400;stroke-dashoffset:1400;paint-order:stroke}
+/* hanging bells + paper dolls inside the paper world */
+.bells,.dolls{position:absolute;left:0;width:100%;pointer-events:none;overflow:visible}
+.bells{top:0;height:46%}
+.dolls{bottom:3%;height:30%}
+.bell{transform-box:fill-box;transform-origin:50% 0;animation:sway var(--dur) ease-in-out infinite alternate;animation-delay:var(--off)}
+.doll{transform-box:fill-box;transform-origin:50% 100%;transform:scaleY(0) skewX(24deg)}
+
+/* ---- candle, thread + opening lines ---- */
+.candle{opacity:0}
+.glow{position:absolute;left:50%;top:58%;width:90vmin;height:90vmin;border-radius:50%;transform:translate(-50%,-50%) scale(.2);opacity:0;
+  background:radial-gradient(circle,rgba(244,184,96,.26) 0%,rgba(200,20,28,.12) 34%,transparent 66%)}
+.stick{position:absolute;left:50%;top:72%;width:clamp(18px,2.2vmin,30px);height:20vh;transform:translateX(-50%);
+  background:linear-gradient(90deg,var(--blood),var(--cinnabar) 45%,#e04048 60%,var(--blood));border-radius:3px 3px 0 0}
+.stick::before{content:"";position:absolute;left:50%;top:-1.2vmin;width:2px;height:1.4vmin;background:#1a0d0b;transform:translateX(-50%)}
+.flame{position:absolute;left:50%;top:72%;width:clamp(14px,2vmin,26px);height:clamp(30px,5vmin,62px);transform:translate(-50%,-112%) scale(0);transform-origin:50% 100%;
+  border-radius:50% 50% 50% 50% / 62% 62% 38% 38%;
+  background:radial-gradient(ellipse at 50% 72%,#fff6dc 0%,var(--flame) 38%,rgba(232,82,40,.85) 70%,transparent 74%);
+  filter:blur(.4px)}
+.spark{position:absolute;left:50%;top:calc(72% - 2.4vmin);width:4px;height:4px;border-radius:50%;background:#ffe2a6;opacity:0}
+.lines{position:absolute;left:50%;top:36%;transform:translate(-50%,-50%);display:grid;gap:.55em;text-align:center;width:min(92vw,30ch);
+  font-size:clamp(20px,3.6vw,44px);letter-spacing:.01em;text-wrap:balance}
+.line .w{display:inline-block;opacity:0;transform:translateY(.4em);filter:blur(6px)}
+.red{color:var(--cinnabar);font-style:italic}
+.white{color:var(--mourning);font-style:italic}
+.both{font-family:var(--display-en);letter-spacing:.12em;font-size:.82em;color:var(--ash)}
+.thread{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.thread path{fill:none;stroke:var(--cinnabar);stroke-width:3;stroke-dasharray:1;stroke-dashoffset:1;filter:drop-shadow(0 0 4px rgba(200,20,28,.8))}
+.mirror{opacity:0;pointer-events:none}
+.mirror img{filter:contrast(1.3) saturate(1.3) brightness(.9) sepia(.15) hue-rotate(-12deg)}
+
+/* ---- title ---- */
+.title{display:grid;place-items:center;align-content:end;padding-bottom:calc(9vh + 28px);gap:clamp(6px,1.4vh,14px);text-align:center;pointer-events:none}
+.cn{font-family:var(--display-cn);font-size:clamp(84px,19vw,240px);line-height:.9;color:var(--mourning);
+  text-shadow:0 0 30px rgba(200,20,28,.55),.04em .04em 0 var(--blood);opacity:0;letter-spacing:.06em}
+.en{font-family:var(--display-en);font-size:clamp(18px,3vw,34px);letter-spacing:.6em;padding-left:.6em;color:var(--mourning);opacity:0}
+.rule{width:clamp(80px,22vw,260px);height:1px;background:var(--cinnabar);transform:scaleX(0)}
+.sub{font-style:italic;font-size:clamp(15px,1.9vw,22px);color:var(--mourning);opacity:0;max-width:36ch;text-wrap:balance;line-height:1.35}
+.foot{position:absolute;left:0;right:0;bottom:calc(18px + env(safe-area-inset-bottom,0px));text-align:center;
+  font-family:var(--display-en);font-size:clamp(10px,1.1vw,13px);letter-spacing:.32em;color:var(--ash);opacity:0}
+
+/* ---- atmosphere ---- */
+canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.grain{position:absolute;inset:-50%;pointer-events:none;opacity:.09;mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
+  animation:grain 1s steps(6) infinite}
+.flash{background:var(--cinnabar);opacity:0;mix-blend-mode:screen}
+.replay{position:absolute;right:calc(16px + env(safe-area-inset-right,0px));top:calc(14px + env(safe-area-inset-top,0px));
+  font:inherit;font-family:var(--display-en);letter-spacing:.24em;font-size:12px;color:var(--ash);
+  background:transparent;border:1px solid rgba(156,143,134,.35);padding:8px 12px 7px;cursor:pointer;opacity:.7}
+.replay:hover,.replay:focus-visible{opacity:1;color:var(--mourning);border-color:var(--cinnabar);outline:none}
+
+/* ================= timeline (runs when .play is on the stage) ================= */
+/* intro: match → candle → three lines on a red thread, a mirror flash, the thread yanks */
+.play .candle{animation:fadeIn .01s .3s forwards, fadeOut .7s 7.5s forwards}
+.play .spark{animation:spark .45s .5s ease-out forwards}
+.play .flame{animation:ignite .6s .75s cubic-bezier(.2,1.6,.4,1) forwards, flick .18s 1.4s infinite alternate, blowout .5s 7.3s ease-in forwards}
+.play .glow{animation:glowIn 1.4s .8s ease-out forwards, flicker 2.3s 2.2s infinite alternate ease-in-out}
+.play .thread path{animation:thread 6s 1.3s cubic-bezier(.45,0,.4,1) forwards}
+.play .thread{animation:yank .55s 7.3s cubic-bezier(.7,0,.9,.4) forwards}
+.play .line .w{animation:word .9s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--d) + var(--i) * .14s)}
+.play .l1 .w{--d:1.8s}.play .l2 .w{--d:3.5s}.play .l3 .w{--d:5.5s}
+.play .lines{animation:fadeOut .6s 7.4s forwards}
+.play .mirror{animation:mflash .9s 4.75s linear forwards}
+
+/* paper world */
+.play .half{animation:paperIn 1.6s 7.8s cubic-bezier(.2,.8,.2,1) forwards}
+.play .half.left{animation:paperIn 1.6s 7.8s cubic-bezier(.2,.8,.2,1) forwards, tearL 1.5s 12.8s cubic-bezier(.6,0,.2,1) forwards}
+.play .half.right{animation:paperIn 1.6s 7.8s cubic-bezier(.2,.8,.2,1) forwards, tearR 1.5s 12.8s cubic-bezier(.6,0,.2,1) forwards}
+.play .doll{animation:stand .7s cubic-bezier(.3,1.7,.5,1) forwards;animation-delay:calc(8.7s + var(--i) * .13s)}
+.play .xi text{animation:draw 2.2s 10s ease-in-out forwards, inkfill 1s 11.9s forwards}
+.play .flash{animation:flash .9s 12.7s ease-out forwards}
+.play .bride{animation:fadeIn .6s 12.8s forwards}
+.play .bride img{animation:push 9s 12.8s cubic-bezier(.2,.6,.2,1) forwards}
+.play .cn{animation:cnIn 1.6s 13.7s cubic-bezier(.2,.7,.2,1) forwards}
+.play .rule{animation:rule 1s 14.8s cubic-bezier(.7,0,.2,1) forwards}
+.play .en{animation:enIn 1.4s 15s cubic-bezier(.2,.7,.2,1) forwards}
+.play .sub{animation:fadeIn 1.2s 16s forwards}
+.play .foot{animation:fadeIn 1.2s 17s forwards}
+
+@keyframes fadeIn{to{opacity:1}}
+@keyframes fadeOut{to{opacity:0}}
+@keyframes word{to{opacity:1;transform:none;filter:none}}
+@keyframes spark{0%{opacity:1;box-shadow:0 0 0 0 #ffe2a6,0 0 0 0 #ffb860}60%{opacity:1;box-shadow:-14px -18px 0 -1px #ffe2a6,16px -12px 0 -1px #ffb860,-6px -26px 0 -1px #fff,10px -22px 0 -2px #ffd38a}100%{opacity:0;box-shadow:-20px -30px 0 -2px #ffe2a6,24px -20px 0 -2px #ffb860,-8px -40px 0 -2px #fff,14px -34px 0 -2px #ffd38a}}
+@keyframes ignite{from{transform:translate(-50%,-112%) scale(0)}to{transform:translate(-50%,-112%) scale(1)}}
+@keyframes flick{from{transform:translate(-50%,-112%) scale(1) skewX(-3deg)}to{transform:translate(-50%,-112%) scale(.94,1.06) skewX(3deg)}}
+@keyframes blowout{to{transform:translate(-50%,-112%) scale(0,.3);opacity:0}}
+@keyframes glowIn{to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@keyframes flicker{0%{transform:translate(-50%,-50%) scale(1);opacity:.85}40%{transform:translate(-50%,-50%) scale(1.04);opacity:1}100%{transform:translate(-50%,-50%) scale(.97);opacity:.8}}
+@keyframes thread{to{stroke-dashoffset:0}}
+@keyframes yank{0%{transform:none}25%{transform:translateX(-3%) scaleY(.6)}100%{transform:translateX(115%) scaleY(.05);opacity:0}}
+@keyframes mflash{0%{opacity:0}2%{opacity:1;transform:scale(1.04) translateX(-1%)}16%{opacity:1;transform:scale(1.06) translateX(1%)}17%{opacity:0}55%{opacity:0}56%{opacity:.75;transform:scale(1.1)}63%{opacity:.75}64%{opacity:0}100%{opacity:0}}
+@keyframes sway{from{transform:rotate(calc(var(--amp) * -1))}to{transform:rotate(var(--amp))}}
+@keyframes stand{from{transform:scaleY(0) skewX(24deg)}to{transform:scaleY(1) skewX(0)}}
+@keyframes paperIn{from{opacity:0;transform:scale(1.18)}to{opacity:1;transform:scale(1.04)}}
+@keyframes tearL{from{opacity:1;transform:scale(1.04)}to{opacity:1;transform:translateX(-62%) rotate(-5deg) scale(1.04)}}
+@keyframes tearR{from{opacity:1;transform:scale(1.04)}to{opacity:1;transform:translateX(62%) rotate(4deg) scale(1.04)}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes inkfill{to{fill:var(--mourning);stroke:var(--cinnabar)}}
+@keyframes flash{0%{opacity:0}20%{opacity:.55}100%{opacity:0}}
+@keyframes push{from{transform:scale(1.14)}to{transform:scale(1)}}
+@keyframes cnIn{from{opacity:0;transform:scale(1.25);filter:blur(14px);letter-spacing:.4em}to{opacity:1;transform:none;filter:none;letter-spacing:.06em}}
+@keyframes enIn{from{opacity:0;letter-spacing:1.2em}to{opacity:1;letter-spacing:.6em}}
+@keyframes rule{to{transform:scaleX(1)}}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-5%,3%)}40%{transform:translate(4%,-6%)}60%{transform:translate(-7%,-2%)}80%{transform:translate(3%,7%)}100%{transform:translate(0,0)}}
+
+/* reduced motion: land straight on the title frame */
+@media (prefers-reduced-motion: reduce){
+  .stage *{animation:none!important}
+  .candle,.half,.mirror{opacity:0!important}
+  .bride,.cn,.en,.sub,.foot{opacity:1!important}
+  .rule{transform:none!important}
+}
+
+/* ================= cinematic deck: 1920×1080 frame, letterboxed, scaled to window ================= */
+@property --r{syntax:'<percentage>';inherits:false;initial-value:0%}
+#deck{position:fixed;inset:0;z-index:3;background:var(--ink);visibility:hidden}
+#deck.show{visibility:visible}
+#frame{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform:translate(-50%,-50%) scale(var(--s,1));overflow:hidden;background:var(--ink)}
+.slide{position:absolute;inset:0;overflow:hidden;background:var(--ink);color:var(--mourning);display:none;--t0:0s}
+.slide.active{display:block}
+.slide img{max-width:none}
+.full{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.layer2{position:absolute;inset:0}
+.vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,transparent 35%,rgba(11,6,7,.55) 75%,rgba(11,6,7,.95) 100%)}
+.shade-l{position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,6,7,.94) 0%,rgba(11,6,7,.7) 36%,transparent 70%)}
+.shade-b{position:absolute;inset:0;background:linear-gradient(to top,rgba(11,6,7,.9) 0%,rgba(11,6,7,.3) 30%,transparent 55%)}
+
+/* letterbox, film chrome */
+#bars{position:absolute;inset:0;pointer-events:none;z-index:8}
+#bars::before,#bars::after{content:"";position:absolute;left:0;right:0;height:96px;background:#000}
+#bars::before{top:0}#bars::after{bottom:0}
+#chrome{position:absolute;inset:0;z-index:9;pointer-events:none}
+#kick{position:absolute;left:96px;top:38px;font:20px/1 var(--display-en);letter-spacing:.34em;color:var(--ash);transition:opacity .6s}
+#kick b{color:var(--cinnabar);font-weight:400}
+#pn{position:absolute;right:96px;top:38px;font:20px/1 var(--display-en);letter-spacing:.3em;color:var(--ash);font-variant-numeric:tabular-nums}
+#fx{position:absolute;inset:0;width:100%;height:100%;z-index:7;pointer-events:none}
+#tx{position:absolute;inset:0;z-index:10;pointer-events:none;opacity:0}
+#curtain{position:absolute;inset:0;z-index:10;pointer-events:none}
+#curtain i{position:absolute;top:0;bottom:0;width:51%;background:repeating-linear-gradient(90deg,#8f0d14 0 36px,#a3101a 36px 60px,#7e0a11 60px 90px);box-shadow:0 0 60px rgba(0,0,0,.7)}
+#curtain i:first-child{left:0;transform:translateX(-101%)}
+#curtain i:last-child{right:0;transform:translateX(101%)}
+#curtain.go i:first-child{animation:curL 1.5s cubic-bezier(.7,0,.3,1)}
+#curtain.go i:last-child{animation:curR 1.5s cubic-bezier(.7,0,.3,1)}
+@keyframes curL{0%{transform:translateX(-101%)}42%,56%{transform:translateX(0)}100%{transform:translateX(-101%)}}
+@keyframes curR{0%{transform:translateX(101%)}42%,56%{transform:translateX(0)}100%{transform:translateX(101%)}}
+.grain2{position:absolute;inset:-50%;z-index:9;pointer-events:none;opacity:.08;mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");animation:grain 1s steps(6) infinite}
+
+/* ---- transitions between slides ---- */
+.slide.in-dissolve{animation:inDis 1.5s cubic-bezier(.3,.6,.2,1) both}
+.slide.out-dissolve{animation:outDis 1.5s ease both}
+@keyframes inDis{from{opacity:0;filter:blur(14px) brightness(1.4);transform:scale(1.08)}to{opacity:1;filter:none;transform:none}}
+@keyframes outDis{to{opacity:0;transform:scale(1.03)}}
+.slide.in-fade{animation:inFade 1.8s ease both}
+.slide.out-fade{animation:outFade .8s ease both}
+@keyframes inFade{0%,40%{opacity:0}100%{opacity:1}}
+@keyframes outFade{to{opacity:0;filter:brightness(.3)}}
+.slide.in-whip{animation:inWhip 1.05s cubic-bezier(.75,0,.2,1) both}
+.slide.out-whip{animation:outWhip 1.05s cubic-bezier(.75,0,.2,1) both}
+@keyframes inWhip{from{transform:translateX(100%);filter:blur(40px)}60%{filter:blur(10px)}to{transform:none;filter:none}}
+@keyframes outWhip{to{transform:translateX(-45%);filter:blur(40px);opacity:.3}}
+.slide.in-burn{animation:inBurn 2s cubic-bezier(.5,0,.3,1) both;-webkit-mask-image:radial-gradient(circle at 50% 62%,#000 var(--r),transparent calc(var(--r) + 14%));mask-image:radial-gradient(circle at 50% 62%,#000 var(--r),transparent calc(var(--r) + 14%))}
+.slide.out-burn{animation:outFade 2s ease both}
+@keyframes inBurn{from{--r:0%}to{--r:130%}}
+.slide.in-ink{animation:inInk 1.4s cubic-bezier(.7,0,.2,1) both}
+.slide.out-ink{animation:outDis 1.4s ease both}
+@keyframes inInk{from{clip-path:circle(0% at 50% 50%)}to{clip-path:circle(80% at 50% 50%)}}
+.slide.in-curtain{animation:inStep 1.5s linear both}
+.slide.out-curtain{animation:outStep 1.5s linear both}
+@keyframes inStep{0%,48%{opacity:0}49%,100%{opacity:1}}
+@keyframes outStep{0%,48%{opacity:1}49%,100%{opacity:0}}
+.slide.in-flash{animation:inStep .5s linear both}
+.slide.out-flash{animation:outStep .5s linear both}
+.slide.in-blinds{animation:inBlinds 1.4s cubic-bezier(.7,0,.2,1) both}
+.slide.out-blinds{animation:outFade 1.4s ease both}
+@keyframes inBlinds{from{clip-path:polygon(0 0,0 0,0 100%,0 100%, 20% 0,20% 0,20% 100%,20% 100%)}to{clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}}
+
+/* ---- element entrances (delay = slide start + own delay) ---- */
+.slide [data-a]{opacity:0}
+.slide.on [data-a]{animation-fill-mode:both;animation-delay:calc(var(--t0) + var(--d,0s))}
+.slide.on [data-a="up"]{animation-name:aUp;animation-duration:1.1s;animation-timing-function:cubic-bezier(.2,.7,.2,1)}
+.slide.on [data-a="fade"]{animation-name:aFade;animation-duration:1.4s}
+.slide.on [data-a="slowfade"]{animation-name:aFade;animation-duration:3s}
+.slide.on [data-a="left"]{animation-name:aLeft;animation-duration:1.3s;animation-timing-function:cubic-bezier(.2,.7,.2,1)}
+.slide.on [data-a="right"]{animation-name:aRight;animation-duration:1.3s;animation-timing-function:cubic-bezier(.2,.7,.2,1)}
+.slide.on [data-a="spread"]{animation-name:aSpread;animation-duration:2s;animation-timing-function:cubic-bezier(.2,.7,.2,1)}
+.slide.on [data-a="cnin"]{animation-name:cnIn;animation-duration:2s;animation-timing-function:cubic-bezier(.2,.7,.2,1)}
+.slide.on [data-a="ghost"]{animation-name:aGhost;animation-duration:3s;animation-timing-function:ease-out}
+.slide.on [data-a="rule"]{animation-name:aRule;animation-duration:1.1s;animation-timing-function:cubic-bezier(.7,0,.2,1)}
+.slide.on [data-a="flicker"]{animation-name:aFlicker;animation-duration:2.4s;animation-timing-function:linear}
+.slide.on [data-a="door"]{animation-name:aDoor;animation-duration:2.2s;animation-timing-function:cubic-bezier(.3,.7,.2,1)}
+.slide.on [data-a="swing"]{animation-name:aSwingIn;animation-duration:1.6s;animation-timing-function:cubic-bezier(.3,1.4,.5,1)}
+.slide.on [data-a="riseL"]{animation-name:aRiseL;animation-duration:2.2s;animation-timing-function:cubic-bezier(.2,.7,.2,1)}
+.slide.on [data-a="riseR"]{animation-name:aRiseR;animation-duration:2.2s;animation-timing-function:cubic-bezier(.2,.7,.2,1)}
+.slide.on [data-a="clip"]{animation-name:aClip;animation-duration:1.1s;animation-timing-function:cubic-bezier(.7,0,.2,1)}
+.slide.on [data-a="light"]{animation-name:aLight;animation-duration:1.6s;animation-timing-function:ease-out}
+.slide.on [data-a="splitL"]{animation-name:aSplitL;animation-duration:1.6s;animation-timing-function:cubic-bezier(.7,0,.2,1)}
+.slide.on [data-a="splitR"]{animation-name:aSplitR;animation-duration:1.6s;animation-timing-function:cubic-bezier(.7,0,.2,1)}
+.slide.on [data-a="slam"]{animation-name:aSlam;animation-duration:.8s;animation-timing-function:cubic-bezier(.2,1.4,.4,1)}
+@keyframes aUp{from{opacity:0;transform:translateY(40px);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+@keyframes aFade{to{opacity:1}}
+@keyframes aLeft{from{opacity:0;transform:translateX(-90px);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
+@keyframes aRight{from{opacity:0;transform:translateX(90px);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
+@keyframes aSpread{from{opacity:0;letter-spacing:1.1em;filter:blur(10px)}to{opacity:1;filter:none}}
+@keyframes aGhost{0%{opacity:0;transform:scale(1.15)}100%{opacity:1;transform:none}}
+@keyframes aRule{from{opacity:1;transform:scaleX(0)}to{opacity:1;transform:scaleX(1)}}
+@keyframes aFlicker{0%{opacity:0}4%{opacity:.9}6%{opacity:.1}10%{opacity:.9}12%{opacity:.2}20%,100%{opacity:1}}
+@keyframes aDoor{from{opacity:0;transform:perspective(1400px) rotateY(-100deg)}20%{opacity:1}to{opacity:1;transform:perspective(1400px) rotateY(0)}}
+@keyframes aSwingIn{from{opacity:0;transform:translateY(-110%) rotate(-10deg)}to{opacity:1;transform:none}}
+@keyframes aRiseL{from{opacity:0;transform:translate(-160px,60px) scale(1.06);filter:blur(12px) brightness(2)}to{opacity:1;transform:none;filter:none}}
+@keyframes aRiseR{from{opacity:0;transform:translate(160px,60px) scale(1.06);filter:blur(12px) brightness(2)}to{opacity:1;transform:none;filter:none}}
+@keyframes aClip{from{opacity:1;clip-path:inset(0 100% 0 0)}to{opacity:1;clip-path:inset(0 0 0 0)}}
+@keyframes aLight{from{opacity:1;filter:brightness(.08) saturate(0)}to{opacity:1;filter:none}}
+@keyframes aSplitL{from{opacity:1;transform:translateX(-60%)}to{opacity:1;transform:none}}
+@keyframes aSplitR{from{opacity:1;transform:translateX(60%)}to{opacity:1;transform:none}}
+@keyframes aSlam{from{opacity:0;transform:scale(2.2);filter:blur(10px)}to{opacity:1;transform:none;filter:none}}
+/* camera moves on images */
+.slide.on .push{animation:kPush 18s cubic-bezier(.2,.5,.3,1) both;animation-delay:var(--t0)}
+.slide.on .pull{animation:kPull 18s cubic-bezier(.2,.5,.3,1) both;animation-delay:var(--t0)}
+.slide.on .driftL{animation:kDriftL 20s linear both;animation-delay:var(--t0)}
+.slide.on .driftR{animation:kDriftR 20s linear both;animation-delay:var(--t0)}
+@keyframes kPush{from{transform:scale(1.02)}to{transform:scale(1.16)}}
+@keyframes kPull{from{transform:scale(1.18)}to{transform:scale(1.02)}}
+@keyframes kDriftL{from{transform:scale(1.12) translateX(3%)}to{transform:scale(1.12) translateX(-3%)}}
+@keyframes kDriftR{from{transform:scale(1.12) translateX(-3%)}to{transform:scale(1.12) translateX(3%)}}
+.bob{animation:bob 6s ease-in-out infinite alternate}
+@keyframes bob{from{transform:translateY(-8px)}to{transform:translateY(10px)}}
+
+/* ---- type ---- */
+.ttl{position:absolute;font:400 120px/1 var(--display-en);letter-spacing:.14em;color:var(--mourning);text-shadow:0 6px 40px rgba(0,0,0,.7);margin:0;white-space:nowrap}
+.ttl em{color:var(--cinnabar);font-style:normal}
+.cnghost{position:absolute;font-family:var(--display-cn);color:var(--cinnabar);opacity:.22;line-height:1;pointer-events:none;white-space:nowrap;text-shadow:0 0 40px rgba(200,20,28,.4)}
+.lab{position:absolute;font:22px/1 var(--display-en);letter-spacing:.4em;color:var(--ash)}
+.lab b{color:var(--cinnabar);font-weight:400}
+.subt{position:absolute;left:0;right:0;bottom:132px;text-align:center;font:italic 42px/1.35 var(--body);color:var(--mourning);text-shadow:0 2px 14px #000,0 0 40px rgba(0,0,0,.9);padding:0 180px;text-wrap:balance}
+.subt em{color:#e8525a}
+.words .w{display:inline-block;opacity:0;transform:translateY(.35em);filter:blur(6px)}
+.slide.on .words .w{animation:word .9s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--t0) + var(--d,0s) + var(--i) * .11s)}
+.para{position:absolute;font:34px/1.5 var(--body);color:var(--mourning);text-shadow:0 2px 12px #000;margin:0;text-wrap:pretty}
+.para em{color:#e8525a}
+
+/* S1 reel */
+.shot{position:absolute;inset:0;opacity:0}
+.shot img{width:100%;height:100%;object-fit:cover}
+.slide.on .shot{animation:reel 21s linear infinite;animation-delay:calc(var(--t0) + var(--k) * 3.5s)}
+@keyframes reel{0%{opacity:0;transform:scale(1.14)}5%{opacity:1}28%{opacity:1}34%{opacity:0;transform:scale(1)}100%{opacity:0}}
+.credits{position:absolute;left:0;right:0;top:720px;display:flex;justify-content:center;gap:34px;font:44px/1 var(--display-cn);color:var(--mourning)}
+.credits span{opacity:0;text-shadow:0 2px 14px #000}
+.slide.on .credits span{animation:aUp .9s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--t0) + 2.6s + var(--i) * .18s)}
+.credits span:nth-child(1){color:var(--cinnabar)}
+
+/* S2 red/white */
+.wash-w{position:absolute;inset:0 50% 0 0;background:linear-gradient(90deg,rgba(239,233,223,.42),rgba(239,233,223,.06));mix-blend-mode:screen}
+.wash-r{position:absolute;inset:0 0 0 50%;background:linear-gradient(270deg,rgba(200,20,28,.55),rgba(200,20,28,.06));mix-blend-mode:multiply}
+.doorbox{position:absolute;left:820px;top:330px;width:280px;height:324px;transform-origin:0 50%;box-shadow:0 30px 80px rgba(0,0,0,.8);border:3px solid rgba(239,233,223,.25)}
+.doorbox img{width:100%;height:100%;object-fit:cover}
+
+/* S3 effigies */
+.hang{position:absolute;transform-origin:50% -120px}
+.hang .str{position:absolute;left:50%;top:-140px;width:2px;height:140px;background:rgba(239,233,223,.5)}
+.hang .pic{width:100%;height:100%;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.8);border:3px solid rgba(239,233,223,.18)}
+.hang .pic img{width:100%;height:100%;object-fit:cover}
+.sway{animation:sway2 4.5s ease-in-out infinite alternate}
+@keyframes sway2{from{transform:rotate(-2.4deg)}to{transform:rotate(2.4deg)}}
+.filmstrip{position:absolute;left:0;bottom:100px;height:200px;width:100%;overflow:hidden;background:#000;border-top:12px dashed #1a1112;border-bottom:12px dashed #1a1112}
+.filmstrip .track{display:flex;gap:14px;height:100%;width:max-content;animation:strip 30s linear infinite}
+.filmstrip img{height:100%;width:auto;filter:sepia(.3) brightness(.85)}
+@keyframes strip{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* S4 */
+.tabs{position:absolute;left:120px;top:770px;display:flex;gap:16px;align-items:flex-end}
+.tabs i{display:block;width:46px;height:104px;background:#4a050a;border-radius:5px 5px 0 0;box-shadow:inset 0 0 0 10px #2b0407}
+.tabs i.p{background:var(--mourning);box-shadow:inset 0 0 0 2px rgba(0,0,0,.3);height:76px;opacity:.9}
+.tabs span{font:18px/1.4 var(--display-en);letter-spacing:.16em;color:var(--ash);margin-left:16px;max-width:300px}
+.glowpulse{position:absolute;inset:0;background:radial-gradient(ellipse at 72% 40%,rgba(47,154,132,.35),transparent 45%);mix-blend-mode:screen;animation:gp 3.2s ease-in-out infinite alternate}
+@keyframes gp{from{opacity:.3}to{opacity:1}}
+
+/* S5 */
+.portrait{position:absolute;top:150px;width:330px;height:500px;overflow:hidden;filter:grayscale(1) contrast(1.1);box-shadow:0 30px 70px #000}
+.portrait img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.portrait::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(11,6,7,.8))}
+.cases{position:absolute;left:520px;right:520px;top:300px;display:grid;gap:46px}
+.case{display:grid;grid-template-columns:240px 1fr;gap:30px;align-items:baseline;border-top:1px solid rgba(200,20,28,.6);padding-top:20px}
+.case .big{font:76px/1 var(--body);color:var(--mourning);font-variant-numeric:tabular-nums;white-space:nowrap}
+.case .big small{font-size:28px;color:var(--ash)}
+.case .yr{font:18px/1 var(--display-en);letter-spacing:.3em;color:var(--cinnabar);margin-bottom:10px}
+.case p{font:26px/1.4 var(--body);margin:0;opacity:.9}
+
+/* S6 red → white sweep */
+.sweepR{filter:sepia(.5) saturate(2.4) hue-rotate(-18deg) brightness(.85)}
+.sweepW{filter:grayscale(1) brightness(1.35) contrast(.9);clip-path:inset(0 100% 0 0)}
+.slide.on .sweepW{animation:sweep 4s cubic-bezier(.6,0,.3,1) both;animation-delay:calc(var(--t0) + 2.4s)}
+@keyframes sweep{to{clip-path:inset(0 0 0 0)}}
+.rw-word{position:absolute;top:150px;font:84px/1 var(--display-en);letter-spacing:.2em}
+
+/* S7 panorama */
+.pan{position:absolute;left:0;top:96px;height:888px;width:auto}
+.slide.on .pan{animation:panMove 20s cubic-bezier(.65,0,.35,1) both;animation-delay:calc(var(--t0) + .3s)}
+@keyframes panMove{0%,16%{transform:translateX(var(--p0))}25%,41%{transform:translateX(var(--p1))}50%,66%{transform:translateX(var(--p2))}75%,100%{transform:translateX(var(--p3))}}
+.cap{position:absolute;left:0;right:0;bottom:132px;text-align:center;font:italic 42px/1.3 var(--body);text-shadow:0 2px 14px #000,0 0 30px #000;opacity:0}
+.slide.on .cap{animation:capIn 5s ease both;animation-delay:calc(var(--t0) + .3s + var(--k) * 5s)}
+.cap.last{}
+.slide.on .cap.last{animation-name:capLast}
+@keyframes capIn{0%,8%{opacity:0;transform:translateY(16px)}20%,74%{opacity:1;transform:none}86%,100%{opacity:0}}
+@keyframes capLast{0%,8%{opacity:0;transform:translateY(16px)}20%,100%{opacity:1;transform:none}}
+
+/* S8 two brides */
+.twinL,.twinR{position:absolute;bottom:96px;height:820px;width:auto;-webkit-mask-image:linear-gradient(to top,transparent 0%,#000 22%);mask-image:linear-gradient(to top,transparent 0%,#000 22%)}
+.twinL{left:60px;filter:drop-shadow(0 0 40px rgba(239,233,223,.35))}
+.twinR{right:60px;filter:drop-shadow(0 0 40px rgba(200,20,28,.6))}
+.lightW{position:absolute;inset:0 50% 0 0;background:radial-gradient(ellipse at 30% 40%,rgba(239,233,223,.22),transparent 60%)}
+.lightR{position:absolute;inset:0 0 0 50%;background:radial-gradient(ellipse at 70% 40%,rgba(200,20,28,.4),transparent 60%)}
+.nameblk{position:absolute;top:300px;width:260px}
+.nameblk .n{font:64px/1 var(--display-en);letter-spacing:.1em}
+.nameblk .c{font:900 48px/1 var(--xi);margin:14px 0 20px}
+.nameblk p{font:italic 28px/1.4 var(--body);margin:0}
+.nameblk .eye{margin-top:26px;height:84px;overflow:hidden;border:2px solid currentColor}
+.nameblk .eye img{width:100%;height:100%;object-fit:cover}
+.seam{position:absolute;left:50%;top:96px;bottom:96px;width:2px;background:linear-gradient(var(--mourning),var(--cinnabar));transform-origin:50% 0}
+
+/* S9 */
+.ghostkid{position:absolute;opacity:0;mix-blend-mode:screen}
+.slide.on .ghostkid{animation:ghostKid 9s ease-in-out both;animation-delay:calc(var(--t0) + var(--d))}
+@keyframes ghostKid{0%{opacity:0;transform:translateY(30px)}30%{opacity:.75}60%{opacity:.55}100%{opacity:.7;transform:none}}
+.subl{position:absolute;inset:0;opacity:0;z-index:5}
+.subl img{width:100%;height:100%;object-fit:cover;filter:contrast(1.3) brightness(.9)}
+.slide.on .subl{animation:subl 20s linear both;animation-delay:calc(var(--t0) + var(--d))}
+@keyframes subl{0%{opacity:0}.6%{opacity:.85}1.3%{opacity:0}100%{opacity:0}}
+
+/* S10 strips */
+.strips{position:absolute;left:0;right:0;top:96px;bottom:96px;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;background:#000}
+.strip{position:relative;overflow:hidden}
+.strip img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.08) saturate(0)}
+.slide.on .strip img{animation:stripLight 1.8s ease-out both,kPull 16s ease-out both;animation-delay:calc(var(--t0) + 1.6s + var(--k) * .7s),calc(var(--t0))}
+@keyframes stripLight{to{filter:brightness(.9) saturate(1)}}
+.strip::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(11,6,7,.95) 0%,transparent 45%)}
+.strip .lb{position:absolute;left:0;right:0;bottom:60px;text-align:center;z-index:2;padding:0 20px}
+.strip .lb b{display:block;font:24px/1 var(--display-en);letter-spacing:.3em;color:#e8525a;margin-bottom:12px}
+.strip .lb span{font:italic 24px/1.35 var(--body)}
+.s10title{position:absolute;left:0;right:0;top:96px;padding:50px 0 120px;text-align:center;z-index:3;background:linear-gradient(rgba(11,6,7,.92),rgba(11,6,7,.6) 55%,transparent)}
+
+/* S11 split face */
+.splitwrap{position:absolute;right:140px;top:130px;width:660px;height:820px}
+.splitwrap .hl,.splitwrap .hr{position:absolute;inset:0;overflow:hidden}
+.splitwrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%}
+.splitwrap .hl{clip-path:inset(0 50% 0 0)}
+.splitwrap .hr{clip-path:inset(0 0 0 50%)}
+.vm2{position:absolute;left:120px;top:640px;width:900px;display:grid;grid-template-columns:1fr 1fr;gap:50px}
+.vm2 h3{font:26px/1 var(--display-en);letter-spacing:.3em;margin:0 0 14px}
+.vm2 p{font:28px/1.45 var(--body);margin:0;text-shadow:0 2px 10px #000}
+
+/* S12 */
+.coldside{position:absolute;inset:96px 50% 96px 0;background:radial-gradient(ellipse at 40% 40%,#2c3a44,#0f1519 75%)}
+.coldside::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.02) 0 2px,transparent 2px 5px)}
+.warmside{position:absolute;inset:96px 0 96px 50%;overflow:hidden}
+.cmpbox{position:absolute;top:300px;width:720px}
+.cmpbox .tag{font:22px/1 var(--display-en);letter-spacing:.34em}
+.cmpbox .q{font:italic 62px/1.1 var(--body);margin:22px 0 22px;text-shadow:0 2px 14px #000}
+.cmpbox p{font:28px/1.45 var(--body);margin:0;text-shadow:0 2px 10px #000}
+
+/* S13 tear */
+.tL,.tR{position:absolute;inset:0;background:var(--cinnabar)}
+.tL{clip-path:polygon(0 0,51% 0,48% 9%,52% 18%,47% 27%,51% 36%,48% 45%,53% 54%,47% 63%,51% 72%,48% 81%,52% 90%,49% 100%,0 100%)}
+.tR{clip-path:polygon(51% 0,100% 0,100% 100%,49% 100%,52% 90%,48% 81%,51% 72%,47% 63%,53% 54%,48% 45%,51% 36%,47% 27%,52% 18%,48% 9%)}
+.tL b,.tR b{position:absolute;inset:0;display:grid;place-items:center;font:900 520px/1 var(--xi);color:var(--mourning)}
+.slide.on .tL{animation:t13L 1.6s cubic-bezier(.6,0,.2,1) both;animation-delay:calc(var(--t0) + 1.4s)}
+.slide.on .tR{animation:t13R 1.6s cubic-bezier(.6,0,.2,1) both;animation-delay:calc(var(--t0) + 1.4s)}
+@keyframes t13L{to{transform:translateX(-64%) rotate(-5deg)}}
+@keyframes t13R{to{transform:translateX(64%) rotate(4deg)}}
+.quote2{position:absolute;left:0;right:0;bottom:150px;text-align:center;font:italic 78px/1.15 var(--body);text-shadow:0 4px 30px #000}
+.quote2 em{display:block;color:var(--cinnabar)}
+
+/* S14 */
+.srcs2{position:absolute;left:120px;right:120px;bottom:120px;columns:2;column-gap:80px;font:18px/1.6 var(--body);color:var(--ash)}
+.srcs2 b{display:block;font:16px/1 var(--display-en);letter-spacing:.3em;color:var(--mourning);margin-bottom:10px;column-span:all}
+
+/* nav + notes */
+#nav{position:fixed;z-index:12;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));display:flex;gap:6px;align-items:center;opacity:.35;transition:opacity .3s}
+#nav:hover,#nav:focus-within{opacity:1}
+#nav button{font:12px/1 var(--display-en);letter-spacing:.2em;color:var(--ash);background:rgba(11,6,7,.6);border:1px solid rgba(156,143,134,.3);padding:8px 11px 7px;cursor:pointer}
+#nav button:hover,#nav button:focus-visible{color:var(--mourning);border-color:var(--cinnabar);outline:none}
+#count{font:12px/1 var(--display-en);letter-spacing:.24em;color:var(--ash);padding:0 8px;font-variant-numeric:tabular-nums}
+#notes{position:fixed;z-index:12;left:calc(16px + env(safe-area-inset-left,0px));right:calc(260px + env(safe-area-inset-right,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));
+  background:rgba(11,6,7,.94);border-left:3px solid var(--cinnabar);padding:14px 20px;font:17px/1.5 var(--body);color:var(--mourning);max-height:40vh;overflow:auto}
+#notes b{font:12px/1 var(--display-en);letter-spacing:.24em;color:var(--cinnabar);display:block;margin-bottom:6px}
+.stage{transition:opacity 1.4s ease}
+.stage.leaving{opacity:0}
+@media (prefers-reduced-motion: reduce){
+  .slide *, .slide{animation:none!important;transition:none!important}
+  .slide [data-a],.words .w,.shot:first-child,.cap.last,.credits span{opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important}
+  .tL,.tR,.sweepW,.subl{display:none}
+}
+
+/* start gate + music */
+#gate{position:fixed;inset:0;z-index:30;background:#000;display:grid;place-items:center;cursor:pointer}
+#gate[hidden]{display:none!important}
+#gate .g{display:grid;gap:18px;justify-items:center;text-align:center}
+#gate .g b{font:400 22px/1 var(--display-en);letter-spacing:.5em;padding-left:.5em;color:var(--mourning);animation:gpulse 2.4s ease-in-out infinite}
+#gate .g span{font:16px/1 var(--display-en);letter-spacing:.3em;color:var(--ash)}
+#gate .g i{width:10px;height:10px;border-radius:50%;background:var(--cinnabar);box-shadow:0 0 18px var(--cinnabar);animation:gpulse 2.4s ease-in-out infinite}
+@keyframes gpulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+</style>
+
+<div class="stage play" id="stage" role="img" aria-label="Opening animation for a presentation on the game Paper Bride: a candle is lit, a red thread runs through three lines of text, a red paper-cut world with paper dolls and the character 囍 tears open to reveal a ghost bride and the title 纸嫁衣, Paper Bride.">
+  <div class="layer bride"><img class="cover" src="img/bride.jpg" alt=""></div>
+
+  <div class="layer half left" id="halfL">
+    <img class="cover" src="img/tree.jpg" alt="">
+    <svg class="bells" viewBox="0 0 1600 400" preserveAspectRatio="xMidYMin slice"></svg>
+    <svg class="dolls" viewBox="0 0 1600 300" preserveAspectRatio="xMidYMax slice"></svg>
+    <div class="xi"><svg viewBox="0 0 220 230"><text x="10" y="196">囍</text></svg></div>
+  </div>
+  <div class="layer half right" id="halfR">
+    <img class="cover" src="img/tree.jpg" alt="">
+    <svg class="bells" viewBox="0 0 1600 400" preserveAspectRatio="xMidYMin slice"></svg>
+    <svg class="dolls" viewBox="0 0 1600 300" preserveAspectRatio="xMidYMax slice"></svg>
+    <div class="xi"><svg viewBox="0 0 220 230"><text x="10" y="196">囍</text></svg></div>
+  </div>
+
+  <div class="layer flash"></div>
+  <canvas id="coins"></canvas>
+
+  <div class="layer candle">
+    <div class="glow"></div>
+    <svg class="thread" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice"><path pathLength="1" d="M-60,270 C160,190 290,370 480,320 S740,210 860,350 S1120,520 1250,430 S1480,260 1680,390"/></svg>
+    <div class="lines">
+      <div class="line l1 red" data-text="In China, a wedding is red."></div>
+      <div class="line l2 white" data-text="A funeral is white."></div>
+      <div class="line l3 both" data-text="SOME BRIDES WEAR BOTH."></div>
+    </div>
+    <div class="stick"></div>
+    <div class="flame"></div>
+    <div class="spark"></div>
+  </div>
+  <div class="layer mirror"><img class="cover" src="img/mirror.jpg" alt=""></div>
+
+  <div class="layer title">
+    <div class="cn" lang="zh">纸嫁衣</div>
+    <div class="rule"></div>
+    <div class="en">Paper Bride</div>
+    <div class="sub">Ghost marriage, paper effigies, and the custom that makes the monster</div>
+  </div>
+  <div class="foot">SOCIALLY CONSTRUCTED MONSTERS · FALL 2026</div>
+
+  <div class="layer grain"></div>
+  <button class="replay" id="replay" type="button">REPLAY ↺</button>
+</div>
+
+<script>
+(() => {
+  const stage = document.getElementById('stage');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const NS = 'http://www.w3.org/2000/svg';
+  const mk = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+
+  // split each opening line into words for the staggered reveal
+  document.querySelectorAll('.line').forEach(l => {
+    l.innerHTML = l.dataset.text.split(' ').map((w, i) =>
+      `<span class="w" style="--i:${i}">${w}</span>`).join(' ');
+  });
+
+  // hanging red bells and paper babies that sway in the tree (same in both halves so the tear matches)
+  const bellSpec = [[150,120,.9],[420,70,1.1],[700,150,.8],[1010,90,1],[1290,140,.9],[1500,60,1.15]];
+  const dollXs = [120,290,450,1150,1310,1470,980];
+  document.querySelectorAll('.half').forEach(half => {
+    const bells = half.querySelector('.bells');
+    bellSpec.forEach(([x, len, s], i) => {
+      const g = mk('g', { class:'bell', style:`--dur:${1.6 + (i % 3) * .45}s;--off:${-i * .37}s;--amp:${6 + (i % 2) * 4}deg` }, bells);
+      mk('line', { x1:x, y1:0, x2:x, y2:len, stroke:'#efe9df', 'stroke-width':2.5, opacity:.8 }, g);
+      if (i % 2) { // paper baby
+        mk('circle', { cx:x, cy:len + 22, r:20, fill:'#efe9df' }, g);
+        mk('path', { d:`M${x-26},${len+44} L${x+26},${len+44} L${x+18},${len+94} L${x-18},${len+94}Z`, fill:'#efe9df' }, g);
+        mk('path', { d:`M${x-26},${len+50} L${x-46},${len+74} M${x+26},${len+50} L${x+46},${len+74}`, stroke:'#efe9df', 'stroke-width':10, 'stroke-linecap':'round' }, g);
+      } else {    // bell + diamond tassel
+        mk('path', { d:`M${x-30*s},${len+56*s} Q${x-26*s},${len+6} ${x},${len} Q${x+26*s},${len+6} ${x+30*s},${len+56*s}Z`, fill:'#efe9df' }, g);
+        mk('rect', { x:x-36*s, y:len+52*s, width:72*s, height:8*s, fill:'#c8141c' }, g);
+        for (let k = 0; k < 3; k++) mk('rect', { x:x-9, y:len+70*s + k*30, width:18, height:18, fill:'#efe9df', transform:`rotate(45 ${x} ${len+79*s + k*30})` }, g);
+      }
+    });
+    // white paper-cut figures that stand up from the ground
+    const dolls = half.querySelector('.dolls');
+    dollXs.forEach((x, i) => {
+      const h = 0.78 + ((i * 37) % 10) / 30, by = 300;
+      const g = mk('g', { class:'doll', style:`--i:${i}` }, dolls);
+      const sc = (v) => v * h;
+      mk('circle', { cx:x, cy:by - sc(190), r:sc(26), fill:'#efe9df' }, g);
+      mk('path', { d:`M${x-sc(14)},${by-sc(168)} L${x+sc(14)},${by-sc(168)} L${x+sc(46)},${by-sc(40)} L${x-sc(46)},${by-sc(40)}Z`, fill:'#efe9df' }, g);
+      mk('path', { d:`M${x-sc(16)},${by-sc(150)} L${x-sc(52)},${by-sc(92)} L${x-sc(40)},${by-sc(86)} L${x-sc(8)},${by-sc(130)}Z M${x+sc(16)},${by-sc(150)} L${x+sc(52)},${by-sc(92)} L${x+sc(40)},${by-sc(86)} L${x+sc(8)},${by-sc(130)}Z`, fill:'#e2dbcf' }, g);
+      mk('rect', { x:x-sc(30), y:by-sc(42), width:sc(22), height:sc(42), fill:'#efe9df' }, g);
+      mk('rect', { x:x+sc(8), y:by-sc(42), width:sc(22), height:sc(42), fill:'#efe9df' }, g);
+      mk('circle', { cx:x-sc(9), cy:by-sc(184), r:sc(4.5), fill:'#c8141c' }, g);
+      mk('circle', { cx:x+sc(9), cy:by-sc(184), r:sc(4.5), fill:'#c8141c' }, g);
+    });
+  });
+
+  // one jagged seam shared by both halves, so the tear lines up
+  function tear() {
+    const pts = []; const n = 22;
+    for (let i = 0; i <= n; i++) {
+      const y = i / n * 100;
+      const x = 50 + (Math.random() - .5) * 7 + (i % 2 ? 1.5 : -1.5);
+      pts.push([x, y]);
+    }
+    const seam = pts.map(([x, y]) => `${x.toFixed(2)}% ${y.toFixed(2)}%`);
+    document.getElementById('halfL').style.clipPath = `polygon(0 0, ${seam.join(',')}, 0 100%)`;
+    document.getElementById('halfR').style.clipPath = `polygon(100% 0, ${seam.join(',')}, 100% 100%)`;
+  }
+
+  // falling paper coins (纸钱): round white cut-outs with a square hole
+  const cv = document.getElementById('coins'), ctx = cv.getContext('2d');
+  let W, H, coins = [], t0 = 0, raf;
+  const T_WORLD = 7.8, T_TEAR = 12.8;
+  function size() {
+    const r = Math.min(devicePixelRatio || 1, 2);
+    W = cv.width = innerWidth * r; H = cv.height = innerHeight * r;
+  }
+  function spawn() {
+    const s = (8 + Math.random() * 16) * (W / innerWidth);
+    return { x: Math.random() * W, y: -s * 2, s,
+      vy: (0.5 + Math.random() * 1.1) * (W / innerWidth), vx: (Math.random() - .5) * .6,
+      rot: Math.random() * 6.28, vr: (Math.random() - .5) * .05,
+      flip: Math.random() * 6.28, vf: .03 + Math.random() * .05,
+      red: Math.random() < .22 };
+  }
+  function drawCoin(c) {
+    ctx.save(); ctx.translate(c.x, c.y); ctx.rotate(c.rot);
+    ctx.scale(Math.cos(c.flip), 1);
+    ctx.beginPath(); ctx.arc(0, 0, c.s, 0, Math.PI * 2);
+    const h = c.s * .34; ctx.rect(h, -h, -2 * h, 2 * h);
+    ctx.fillStyle = c.red ? 'rgba(200,20,28,.9)' : 'rgba(239,233,223,.88)';
+    ctx.fill('evenodd'); ctx.restore();
+  }
+  function loop(ts) {
+    if (!t0) t0 = ts;
+    const el = (ts - t0) / 1000;
+    ctx.clearRect(0, 0, W, H);
+    const target = el < T_WORLD ? 0 : el < T_TEAR ? 26 : 60;
+    while (coins.length < target) coins.push(spawn());
+    for (const c of coins) {
+      c.y += c.vy * (el > T_TEAR && el < T_TEAR + 1 ? 3 : 1); c.x += c.vx + Math.sin(c.flip) * .4;
+      c.rot += c.vr; c.flip += c.vf;
+      if (c.y > H + c.s * 2) Object.assign(c, spawn());
+      drawCoin(c);
+    }
+    raf = requestAnimationFrame(loop);
+  }
+
+  function play() {
+    tear();
+    stage.classList.remove('play'); void stage.offsetWidth; stage.classList.add('play');
+    coins = []; t0 = 0;
+    cancelAnimationFrame(raf);
+    if (!reduce) raf = requestAnimationFrame(loop);
+  }
+
+  addEventListener('resize', size); size();
+  document.getElementById('replay').addEventListener('click', e => { e.stopPropagation(); window.__replayAll ? window.__replayAll() : play(); });
+  window.__opening = {
+    play() { stage.style.visibility = 'visible'; play(); },
+    stop() { cancelAnimationFrame(raf); ctx.clearRect(0, 0, W, H); stage.classList.remove('play'); stage.style.visibility = 'hidden'; }
+  };
+})();
+</script>
+
+<div id="deck" aria-live="polite"><div id="frame">
+
+<!-- 01 · WHAT IS PAPER BRIDE -->
+<section class="slide" data-tr="dissolve" data-fx="ash" data-kick="<b>ACT I</b> · THE WORLD" data-notes="Paper Bride is a Chinese horror puzzle game. You click around old houses, solve puzzles, and slowly uncover what happened. There are nine games since 2021. Each one tells its own story, but almost all of them come back to one village: Zangling, and the cult that runs it.">
+  <div class="shot" style="--k:0"><img src="img/m_trio.jpg" alt=""></div>
+  <div class="shot" style="--k:1"><img src="img/m_redwhite.jpg" alt=""></div>
+  <div class="shot" style="--k:2"><img src="img/m_cave.jpg" alt=""></div>
+  <div class="shot" style="--k:3"><img src="img/m_buddha.jpg" alt=""></div>
+  <div class="shot" style="--k:4"><img src="img/m_mirror.jpg" alt=""></div>
+  <div class="shot" style="--k:5"><img src="img/m_rail.jpg" alt=""></div>
+  <div class="vig"></div><div class="shade-b"></div>
+  <div class="layer2" style="background:rgba(11,6,7,.35)"></div>
+  <div class="cnghost" data-a="ghost" style="--d:.6s;left:0;right:0;top:250px;text-align:center;font-size:330px">纸嫁衣</div>
+  <h2 class="ttl" data-a="spread" style="--d:.4s;left:0;right:0;top:420px;text-align:center;font-size:140px">PAPER BRIDE</h2>
+  <div class="lab" data-a="fade" style="--d:1.8s;left:0;right:0;top:600px;text-align:center">A CHINESE FOLK-HORROR PUZZLE SERIES · SINCE 2021</div>
+  <div class="credits"><span style="--i:0">纸嫁衣</span><span style="--i:1">奘铃村</span><span style="--i:2">鸳鸯债</span><span style="--i:3">红丝缠</span><span style="--i:4">来生戏</span><span style="--i:5">千秋魇</span><span style="--i:6">卿不负</span><span style="--i:7">千子树</span><span style="--i:8">罗浮梦</span></div>
+  <p class="subt words" style="--d:4.6s">Nine games. One cursed village.</p>
+</section>
+
+<!-- 02 · RED & WHITE -->
+<section class="slide" data-tr="curtain" data-fx="coins" data-kick="<b>ACT I</b> · RED &amp; WHITE" data-notes="In China, red means a wedding: joy, luck, new life. White means a funeral. These two colors should never be in the same room. Paper Bride puts them together on purpose. Look at this door: the character for double happiness, painted on the door of a dead house. That clash is where the fear comes from.">
+  <img class="full driftR" src="img/rw_girls.jpg" alt="">
+  <div class="wash-w" data-a="slowfade" style="--d:.2s"></div>
+  <div class="wash-r" data-a="slowfade" style="--d:.2s"></div>
+  <div class="vig"></div>
+  <div class="rw-word" data-a="left" style="--d:.6s;left:120px;color:var(--mourning)">WHITE</div>
+  <div class="lab" data-a="fade" style="--d:1s;left:126px;top:256px;color:var(--mourning)">FUNERALS · MOURNING · THE DEAD</div>
+  <div class="rw-word" data-a="right" style="--d:.8s;right:120px;color:#e8525a">RED</div>
+  <div class="lab" data-a="fade" style="--d:1.2s;right:120px;top:256px;color:#f2b3b6">WEDDINGS · LUCK · NEW LIFE</div>
+  <div class="doorbox" data-a="door" style="--d:1.8s"><img src="img/rw_door.jpg" alt=""></div>
+  <p class="subt words" style="--d:3.6s">Paper Bride puts them <em>in the same room.</em></p>
+</section>
+
+<!-- 03 · PAPER EFFIGIES -->
+<section class="slide" data-tr="burn" data-fx="embers" data-kick="<b>ACT I</b> · 纸扎 ZHĀZHǏ" data-notes="At Chinese funerals, families burn paper houses, paper money, paper servants, so the dead can use them in the afterlife. This is called zhazhi. In the games, paper figures are everywhere: hanging in temples, standing on stage, carrying the bridal sedan. They look almost human, but not quite. That is the uncanny valley.">
+  <img class="full push" src="img/ef_stage.jpg" alt="">
+  <div class="shade-l"></div><div class="vig"></div>
+  <div class="cnghost" data-a="ghost" style="--d:.4s;left:60px;top:130px;font-size:260px">纸扎</div>
+  <h2 class="ttl" data-a="spread" style="--d:.5s;left:120px;top:260px;font-size:96px">PAPER<br><em>EFFIGIES</em></h2>
+  <p class="para words" style="--d:1.6s;left:124px;top:500px;width:640px">Paper houses. Paper servants. Paper brides. Burned so the dead can use them.</p>
+  <div class="hang" data-a="swing" style="--d:1s;left:1010px;top:180px;width:330px;height:440px"><div class="sway" style="width:100%;height:100%;transform-origin:50% -120px"><div class="str"></div><div class="pic"><img src="img/ef_dizang.jpg" alt=""></div></div></div>
+  <div class="hang" data-a="swing" style="--d:1.4s;left:1420px;top:220px;width:380px;height:342px"><div class="sway" style="width:100%;height:100%;transform-origin:50% -120px;animation-delay:-1.7s"><div class="str"></div><div class="pic"><img src="img/ef_statue.jpg" alt=""></div></div></div>
+  <div class="filmstrip" data-a="fade" style="--d:2.4s"><div class="track">
+    <img src="img/ef_sedan.jpg" alt=""><img src="img/ef_masks.jpg" alt=""><img src="img/m_lion.jpg" alt=""><img src="img/m_opera.jpg" alt=""><img src="img/m_moon.jpg" alt="">
+    <img src="img/ef_sedan.jpg" alt=""><img src="img/ef_masks.jpg" alt=""><img src="img/m_lion.jpg" alt=""><img src="img/m_opera.jpg" alt=""><img src="img/m_moon.jpg" alt="">
+  </div></div>
+  <div class="lab" data-a="fade" style="--d:2.8s;left:124px;top:690px">ALMOST HUMAN. NEVER HUMAN.</div>
+</section>
+
+<!-- NEW · PLAYING THE RITUAL -->
+<section class="slide" data-tr="whip" data-fx="dust" data-kick="<b>ACT I</b> · GAMEPLAY &amp; SOUND" data-notes="How do you actually play Paper Bride? You don't fight the ghost. You perform the ritual. The puzzles are built on the customs themselves: setting up a mourning shrine, reading a dream-interpretation book, following feng shui and the eight trigrams, staging a shadow-puppet play. So the player is not outside the custom. The player has to carry it out, step by step. The sound works the same way. The series leans on opera singing and folk music, and its song Unresolved Love, Yuanyang Zhai, passed fifteen million views on Bilibili.">
+  <img class="full push" src="img/ef_stage.jpg" alt="" style="filter:brightness(.3) saturate(.8)">
+  <div class="shade-l"></div><div class="vig"></div>
+  <div class="cnghost" data-a="ghost" style="--d:.4s;left:60px;top:120px;font-size:240px">解谜</div>
+  <h2 class="ttl" data-a="spread" style="--d:.5s;left:120px;top:250px;font-size:88px">PLAYING<br>THE <em>RITUAL</em></h2>
+  <p class="para words" style="--d:1.6s;left:124px;top:490px;width:760px;font-style:italic;font-size:40px">You don't fight the ghost. <em>You perform the ritual.</em></p>
+  <p class="para words" style="--d:3s;left:124px;top:630px;width:760px;font-size:30px">Set up the mourning shrine. Read the dream book. Follow the feng shui. Stage the shadow play.</p>
+  <div class="lab" data-a="fade" style="--d:4.6s;left:124px;top:790px;line-height:1.7;width:760px;letter-spacing:.24em">SOUND · OPERA SINGING &amp; FOLK MUSIC<br><b>鸳鸯债 “UNRESOLVED LOVE”</b> · 15M+ VIEWS ON BILIBILI</div>
+  <div style="position:absolute;left:1010px;top:250px;width:380px;rotate:-6deg;--d:.6s" data-a="riseL"><div class="pic" style="box-shadow:0 30px 70px #000;border:3px solid rgba(239,233,223,.2)"><img src="img/dreambook.jpg" alt="" style="width:100%;display:block"></div></div>
+  <div data-a="riseR" style="--d:.9s;position:absolute;left:1440px;top:130px;width:390px;height:744px;border-radius:42px;background:#0c0c0e;padding:14px;box-shadow:0 40px 90px #000,inset 0 0 0 2px #333">
+    <div style="width:100%;height:100%;border-radius:30px;overflow:hidden"><img src="img/ui_puzzle.jpg" alt="" style="width:100%;height:100%;object-fit:cover;object-position:50% 30%"></div>
+  </div>
+</section>
+
+<!-- 04 · GHOST MARRIAGE -->
+<section class="slide" data-tr="fade" data-fx="dust" data-kick="<b>ACT I</b> · 冥婚 MÍNGHŪN" data-notes="A ghost marriage is a wedding where the bride, the groom, or both are already dead. It goes back to the Han dynasty. Why? In the traditional family system, a daughter who died unmarried could not be placed on her own family's altar. She only got a temporary paper tablet by the door. Nobody would worship her. Marriage was the only way to give her a place in a family, even after death.">
+  <img class="full" src="img/gm_temple.jpg" alt="" style="filter:blur(30px) brightness(.4);transform:scale(1.2)">
+  <div style="position:absolute;right:0;top:0;width:1100px;height:1080px;overflow:hidden"><img class="full push" src="img/gm_temple.jpg" alt="" style="object-position:50% 40%;transform-origin:50% 55%"></div>
+  <div class="glowpulse"></div>
+  <div class="shade-l"></div><div class="vig"></div>
+  <div class="cnghost" data-a="ghost" style="--d:.6s;left:60px;top:120px;font-size:260px">冥婚</div>
+  <h2 class="ttl" data-a="spread" style="--d:.8s;left:120px;top:250px;font-size:96px">GHOST<br><em>MARRIAGE</em></h2>
+  <p class="para words" style="--d:2s;left:124px;top:490px;width:800px;font-style:italic;font-size:38px">A wedding where the bride, the groom, or both are dead.</p>
+  <p class="para words" style="--d:3.4s;left:124px;top:600px;width:780px;font-size:30px">An unmarried daughter could not be placed on her own family's altar. Marriage was her only way into a family, even after death.</p>
+  <div class="tabs">
+    <i data-a="up" style="--d:5.4s"></i><i data-a="up" style="--d:5.55s"></i><i data-a="up" style="--d:5.7s"></i><i data-a="up" style="--d:5.85s"></i>
+    <i class="p" data-a="flicker" style="--d:6.4s"></i><span data-a="fade" style="--d:6.8s">HER PLACE: A PAPER TABLET BY THE DOOR</span>
+  </div>
+</section>
+
+<!-- 05 · IT STILL HAPPENS -->
+<section class="slide" data-tr="fade" data-fx="ash" data-kick="<b>CONTENT NOTE</b> · REAL CASES" data-notes="This is not only history. In 2013, four men in northwest China were jailed for digging up the bodies of ten women and selling them as ghost brides. In 2016, in Henan, traffickers drugged a living woman and sold her as a corpse bride for 32,000 yuan. Guests heard knocking from inside the coffin. By 2019, some graveyards in Henan were putting in cameras and concrete coffins to stop women's bodies from being stolen.">
+  <img class="full push" src="img/m_rail.jpg" alt="" style="filter:brightness(.32) saturate(.7)">
+  <div class="vig"></div>
+  <div class="portrait" data-a="slowfade" style="--d:.4s;left:110px"><img class="bob" src="img/rc_f.jpg" alt=""></div>
+  <div class="portrait" data-a="slowfade" style="--d:.9s;right:110px"><img class="bob" src="img/rc_m.jpg" alt="" style="animation-delay:-3s"></div>
+  <h2 class="ttl" data-a="spread" style="--d:.6s;left:0;right:0;top:150px;text-align:center;font-size:84px">IT STILL <em>HAPPENS</em></h2>
+  <div class="cases">
+    <div class="case" data-a="up" style="--d:2s"><div class="big"><span class="count" data-to="10" data-at="2600">0</span> <small>bodies</small></div><div><div class="yr">2013 · NORTHWEST CHINA</div><p>Four men jailed for digging up women's corpses and selling them as ghost brides.</p></div></div>
+    <div class="case" data-a="up" style="--d:4.2s"><div class="big">¥<span class="count" data-to="32000" data-at="4800">0</span></div><div><div class="yr">2016 · HENAN</div><p>A living woman, drugged and sold as a corpse bride. Guests heard knocking from inside the coffin.</p></div></div>
+    <div class="case" data-a="up" style="--d:6.4s"><div class="big">CCTV</div><div><div class="yr">2019 · HENAN</div><p>Graveyards add cameras and concrete coffins to stop women's bodies being stolen.</p></div></div>
+  </div>
+</section>
+
+<!-- 06 · THE WEDDING -->
+<section class="slide" data-tr="ink" data-fx="coins" data-kick="<b>ACT II</b> · PAPER BRIDE 1 · 纸嫁衣" data-notes="Now our main case: the first game. Ning Zifu marries Nie Moqi, the bride his parents promised him before they were born. In the middle of the ceremony, the bride in red turns into a bride in white. Then every guest disappears. Remember our opening line: some brides wear both.">
+  <div style="position:absolute;left:0;right:0;top:96px;height:888px;overflow:hidden">
+    <img class="full push sweepR" src="img/wd_twins.jpg" alt="">
+    <img class="full push sweepW" src="img/wd_twins.jpg" alt="">
+  </div>
+  <div class="vig"></div><div class="shade-b"></div>
+  <h2 class="ttl" data-a="spread" style="--d:.8s;left:0;right:0;top:170px;text-align:center;font-size:110px">THE <em>WEDDING</em></h2>
+  <div class="rw-word" data-a="left" style="--d:2.2s;left:150px;top:520px;color:#e8525a;font-size:64px">RED</div>
+  <div class="rw-word" data-a="right" style="--d:5.2s;right:150px;top:520px;color:var(--mourning);font-size:64px">WHITE</div>
+  <p class="subt words" style="--d:3s">Ning Zifu marries Nie Moqi. During the ceremony, <em>the bride in red becomes a bride in white.</em> Then every guest is gone.</p>
+</section>
+
+<!-- 07 · THE TWINS -->
+<section class="slide" data-tr="whip" data-fx="petals" data-kick="<b>ACT II</b> · ZANGLING VILLAGE · 奘铃村" data-notes="Ning Zifu follows the clues back to Moqi's home village, Zangling. Here is the secret. Moqi was a twin. When the girls were born, the village shaman said twins were unlucky and would ruin the village's fortune. Only one could stay. So the parents left the older sister, Moli, at the City God temple. These paper-cut scenes are from Paper Bride 8, which retells the same twins.">
+  <img class="pan" src="img/tw_pan.jpg" alt="" style="--p0:-20px;--p1:-1979px;--p2:-3939px;--p3:-5899px">
+  <div class="shade-b"></div>
+  <h2 class="ttl" data-a="spread" style="--d:.3s;left:120px;top:150px;font-size:80px">THE <em>TWINS</em></h2>
+  <div class="lab" data-a="fade" style="--d:1s;left:124px;top:250px">ILLUSTRATIONS · PAPER BRIDE 8</div>
+  <p class="cap" style="--k:0">A shaman says twins will bring the village bad luck.</p>
+  <p class="cap" style="--k:1">Only one daughter may stay.</p>
+  <p class="cap" style="--k:2">The elder sister, Moli, is left at the City God temple.</p>
+  <p class="cap last" style="--k:3">What is left behind: an empty basket.</p>
+</section>
+
+<!-- 08 · TWO BRIDES -->
+<section class="slide" data-tr="flash" data-fx="coins" data-kick="<b>ACT II</b> · TWO BRIDES" data-notes="So who are the two brides? The white bride is Nie Moqi. Her soul was pulled out of her body. The red bride is Nie Moli, the sister who was thrown away. She grew up full of hate, teamed up with a Taoist priest, and put on the red dress to take her sister's place. Same face, same birthday, two very different lives.">
+  <img class="full pull" src="img/br_bg.jpg" alt="" style="filter:blur(18px) brightness(.35)">
+  <div class="lightW" data-a="slowfade" style="--d:.2s"></div><div class="lightR" data-a="slowfade" style="--d:.2s"></div>
+  <div class="seam" data-a="rule" style="--d:.3s;transform-origin:50% 0"></div>
+  <img class="twinL" src="img/moqi.png" alt="" data-a="riseL" style="--d:.5s">
+  <img class="twinR" src="img/moli.png" alt="" data-a="riseR" style="--d:.9s">
+  <div class="nameblk" style="right:calc(50% + 30px);width:260px;text-align:right;color:var(--mourning)">
+    <div class="n" data-a="left" style="--d:1.6s">MOQI</div><div class="c" data-a="left" style="--d:1.8s">聂莫琪</div>
+    <p data-a="up" style="--d:2s">The white bride. Her soul is pulled from her body.</p>
+    <div class="eye" data-a="clip" style="--d:2.4s"><img src="img/moqi_eye.jpg" alt=""></div>
+  </div>
+  <div class="nameblk" style="left:calc(50% + 30px);width:260px;color:#e8525a">
+    <div class="n" data-a="right" style="--d:2.2s">MOLI</div><div class="c" data-a="right" style="--d:2.4s">聂莫黎</div>
+    <p data-a="up" style="--d:2.6s">The red bride. The sister who was thrown away.</p>
+    <div class="eye" data-a="clip" style="--d:3s"><img src="img/moli_eye.jpg" alt=""></div>
+  </div>
+  <div class="lab" data-a="spread" style="--d:3.8s;left:0;right:0;top:170px;text-align:center;font-size:26px;color:var(--mourning)">SOME BRIDES WEAR BOTH.</div>
+</section>
+
+<!-- 09 · THOUSAND-CHILDREN TREE -->
+<section class="slide" data-tr="dissolve" data-fx="petals" data-kick="<b>ECHO</b> · PAPER BRIDE 8 · 千子树" data-notes="The eighth game goes back to the same twins and the same village. The villagers worship a tree they call the Thousand-Children Tree. They pray to it for children. But the tree is actually feeding on the souls of babies. Put the two games together and the logic is clear: in this village, a daughter can be thrown away, and a child is something you can trade for luck.">
+  <img class="full push" src="img/tr_tree.jpg" alt="" style="transform-origin:50% 30%">
+  <div class="shade-l"></div><div class="vig"></div>
+  <img class="ghostkid" src="img/blindfold.png" alt="" style="--d:3s;right:120px;bottom:96px;height:640px">
+  <img class="ghostkid" src="img/patchdoll.png" alt="" style="--d:5.5s;right:620px;bottom:96px;height:420px;opacity:0">
+  <div class="cnghost" data-a="ghost" style="--d:.5s;left:60px;top:120px;font-size:240px">千子树</div>
+  <h2 class="ttl" data-a="spread" style="--d:.6s;left:120px;top:260px;font-size:78px">THE <em>THOUSAND-</em><br><em>CHILDREN</em> TREE</h2>
+  <p class="para words" style="--d:2s;left:124px;top:500px;width:720px;font-style:italic;font-size:38px">The village prays to it for children. <em>It feeds on the souls of infants.</em></p>
+  <p class="para words" style="--d:4.4s;left:124px;top:690px;width:700px;font-size:30px">Same twins. Same village. A daughter can be thrown away, and a child can be traded for luck.</p>
+  <div class="subl" style="--d:8s"><img src="img/tr_room.jpg" alt=""></div>
+  <div class="subl" style="--d:8.4s"><img src="img/tr_dolls.jpg" alt=""></div>
+</section>
+
+<!-- 10 · THE PATTERN -->
+<section class="slide" data-tr="blinds" data-fx="none" data-kick="<b>ACT III</b> · THE PATTERN" data-notes="Here is the pattern. In game one, Moli takes her sister's place in red. In game two, Tao Mengyan is captured to be a paper bride. In game three, a paper bride tries to come back through Wang Jiaotong's body. In game four, Cui Qianshu is married into the Zheng family as a sacrifice. In game five, Tao Mengyan is pushed to accept being a paper bride. Every game, another bride. When a story repeats this many times, it is not an accident. It is a structure.">
+  <div class="strips">
+    <div class="strip" style="--k:0"><img src="img/pt_1.jpg" alt=""><div class="lb" data-a="up" style="--d:2.4s"><b>01 · REPLACED</b><span>Moli takes her sister's place in red.</span></div></div>
+    <div class="strip" style="--k:1"><img src="img/pt_2.jpg" alt=""><div class="lb" data-a="up" style="--d:3.1s"><b>02 · CAPTURED</b><span>Tao Mengyan is taken to be a paper bride.</span></div></div>
+    <div class="strip" style="--k:2"><img src="img/pt_3.jpg" alt=""><div class="lb" data-a="up" style="--d:3.8s"><b>03 · POSSESSED</b><span>A paper bride tries to return through Wang Jiaotong.</span></div></div>
+    <div class="strip" style="--k:3"><img src="img/pt_4.jpg" alt=""><div class="lb" data-a="up" style="--d:4.5s"><b>04 · SACRIFICED</b><span>Cui Qianshu is married off as an offering.</span></div></div>
+    <div class="strip" style="--k:4"><img src="img/pt_5.jpg" alt=""><div class="lb" data-a="up" style="--d:5.2s"><b>05 · OFFERED</b><span>Tao Mengyan is pushed to become a paper bride.</span></div></div>
+  </div>
+  <div class="s10title"><h2 class="ttl" data-a="spread" style="--d:.3s;position:static;font-size:88px">EVERY GAME, <em>ANOTHER BRIDE</em></h2></div>
+</section>
+
+<!-- NEW · THE BRIDES FIGHT BACK -->
+<section class="slide" data-tr="burn" data-fx="embers" data-kick="<b>ACT III</b> · RESISTANCE" data-notes="But the brides in these games are not only victims. They fight back. In Paper Bride 2, Tao Mengyan escapes Zangling Village and reports the cult leader. In Paper Bride 3, Wang Jiaotong seals herself and the paper bride behind the Ghost Gate to end the curse. In Paper Bride 8, Moqi can choose to defy fate. And the love stories matter too. A ghost marriage is arranged by families. The couples in these games choose each other, sometimes across lifetimes. Love becomes the opposite of the custom.">
+  <img class="full pull" src="img/m_opera.jpg" alt="" style="filter:brightness(.42)">
+  <div class="vig"></div><div class="shade-b"></div>
+  <h2 class="ttl" data-a="spread" style="--d:.4s;left:0;right:0;top:150px;text-align:center;font-size:92px">THE BRIDES <em>FIGHT BACK</em></h2>
+  <div style="position:absolute;left:150px;right:150px;top:380px;display:grid;grid-template-columns:repeat(3,1fr);gap:60px">
+    <div data-a="up" style="--d:1.4s;border-top:2px solid var(--cinnabar);padding-top:22px"><div class="lab" style="position:static;margin-bottom:16px;letter-spacing:.2em;font-size:19px"><b>PAPER BRIDE 2</b> · TAO MENGYAN</div><p class="para" style="position:static;font-size:32px">Escapes Zangling Village and reports the cult leader.</p></div>
+    <div data-a="up" style="--d:2s;border-top:2px solid var(--cinnabar);padding-top:22px"><div class="lab" style="position:static;margin-bottom:16px;letter-spacing:.2em;font-size:19px"><b>PAPER BRIDE 3</b> · WANG JIAOTONG</div><p class="para" style="position:static;font-size:32px">Seals herself and the paper bride behind the Ghost Gate.</p></div>
+    <div data-a="up" style="--d:2.6s;border-top:2px solid var(--cinnabar);padding-top:22px"><div class="lab" style="position:static;margin-bottom:16px;letter-spacing:.2em;font-size:19px"><b>PAPER BRIDE 8</b> · NIE MOQI</div><p class="para" style="position:static;font-size:32px">Can choose to defy fate.</p></div>
+  </div>
+  <p class="subt words" style="--d:4s">A ghost marriage is arranged. <em>The love in these games is chosen.</em></p>
+</section>
+
+<!-- 11 · VICTIM OR MONSTER -->
+<section class="slide" data-tr="flash" data-fx="none" data-kick="<b>ACT III</b> · THE QUESTION" data-notes="So is Moli a victim or a monster? She steals her sister's soul and her wedding. That is monstrous. But before she was a monster, she was a baby left at a temple because one shaman said she was bad luck. Moli became a ghost. But who threw her away?">
+  <img class="full driftL" src="img/vm_mirror.jpg" alt="" style="filter:brightness(.4) saturate(.8)">
+  <div class="shade-l"></div><div class="vig"></div>
+  <div class="splitwrap">
+    <div class="hl" data-a="splitL" style="--d:.6s"><img src="img/vm_split.jpg" alt=""></div>
+    <div class="hr" data-a="splitR" style="--d:.6s"><img src="img/vm_split.jpg" alt=""></div>
+  </div>
+  <h2 class="ttl" data-a="spread" style="--d:1.6s;left:120px;top:230px;font-size:96px">VICTIM<br>OR <em>MONSTER</em>?</h2>
+  <p class="para words" style="--d:2.8s;left:124px;top:480px;width:820px;font-style:italic;font-size:40px">Moli became a ghost. <em>But who threw her away?</em></p>
+  <div class="vm2">
+    <div data-a="up" style="--d:4.2s"><h3 style="color:var(--mourning)">VICTIM</h3><p>Left at a temple as a baby, because a shaman called her bad luck.</p></div>
+    <div data-a="up" style="--d:4.8s"><h3 style="color:#e8525a">MONSTER</h3><p>Steals her sister's soul, her name, and her wedding.</p></div>
+  </div>
+</section>
+
+<!-- NEW · SCHOLARS DISAGREE -->
+<section class="slide" data-tr="dissolve" data-fx="ash" data-kick="<b>ACT III</b> · A COUNTERPOINT" data-notes="Not everyone reads the game this way. In a 2025 paper for DiGRA Australia, the game scholar Yue Cao looks at Paper Bride and argues that games like this use wedding and funeral customs mainly to build a horror atmosphere, not to criticize the customs. That is a fair point: the game is a horror product, and the customs are its scenery. But we think the stories go further. Moli is abandoned because of one shaman's word. A village prays to a tree that eats children. Bride after bride is taken. The game does not just decorate with the custom. It shows the custom hurting people.">
+  <img class="full driftR" src="img/vm_twins.jpg" alt="" style="filter:brightness(.3) saturate(.7)">
+  <div class="vig"></div>
+  <h2 class="ttl" data-a="spread" style="--d:.4s;left:0;right:0;top:150px;text-align:center;font-size:76px">BUT SOME SCHOLARS <em>DISAGREE</em></h2>
+  <div style="position:absolute;left:150px;width:760px;top:330px;--d:1s" data-a="left">
+    <div class="lab" style="position:static;margin-bottom:22px;color:#9fb3c2">YUE CAO · DIGRA AUSTRALIA 2025</div>
+    <p class="para" style="position:static;font-style:italic;font-size:40px;line-height:1.35">These games use wedding and funeral customs to build fear, not to criticize them.</p>
+  </div>
+  <div style="position:absolute;left:50%;top:330px;bottom:200px;width:2px;background:var(--cinnabar);transform-origin:50% 0;--d:1.6s" data-a="rule"></div>
+  <div style="position:absolute;left:1010px;width:760px;top:330px;--d:2s" data-a="right">
+    <div class="lab" style="position:static;margin-bottom:22px"><b>OUR ANSWER</b></div>
+    <p class="para" style="position:static;font-size:34px">The fear points at the custom. A shaman's word throws a baby away. A village worships a tree that eats children. <em>Bride after bride is taken.</em></p>
+  </div>
+  <p class="subt words" style="--d:3.6s">The game doesn't just decorate with the custom. <em>It shows the custom hurting people.</em></p>
+</section>
+
+<!-- 12 · EAST & WEST -->
+<section class="slide" data-tr="whip" data-fx="ash" data-kick="<b>ACT III</b> · EAST &amp; WEST" data-notes="Compare this with a ghost bride you all know: Tim Burton's Corpse Bride. Emily is killed by the man she loved, and she waits for a groom. She wants love. In Paper Bride, the brides are given away, sold, or sacrificed by their families and their village. In one story we fear the dead. In the other, we fear the rules of the living.">
+  <div class="coldside" data-a="slowfade" style="--d:.1s"></div>
+  <div class="warmside" data-a="slowfade" style="--d:.3s"><img class="full push" src="img/ew_moon.jpg" alt="" style="filter:brightness(.7)"><div class="vig"></div></div>
+  <div style="position:absolute;left:50%;top:96px;bottom:96px;width:2px;background:var(--cinnabar);transform-origin:50% 0" data-a="rule"></div>
+  <div class="cmpbox" style="left:120px">
+    <div class="tag" data-a="fade" style="--d:.8s;color:#9fb3c2">CORPSE BRIDE · 2005</div>
+    <div class="q" data-a="left" style="--d:1.1s">“The dead bride wants love.”</div>
+    <p data-a="up" style="--d:1.6s">Emily is killed by the man she trusted. She waits for a groom.</p>
+  </div>
+  <div class="cmpbox" style="left:1080px">
+    <div class="tag" data-a="fade" style="--d:2.4s;color:#e8525a">PAPER BRIDE · 2021</div>
+    <div class="q" data-a="right" style="--d:2.7s">“The living make the dead.”</div>
+    <p data-a="up" style="--d:3.2s">Daughters are given away, sold, or sacrificed by family and village rules.</p>
+  </div>
+  <p class="subt words" style="--d:4.4s">In one, we fear the dead. In the other, <em>we fear the rules of the living.</em></p>
+</section>
+
+<!-- 13 · CONCLUSION -->
+<section class="slide" data-tr="fade" data-fx="coins" data-kick="<b>CONCLUSION</b>" data-notes="Pause and let the image land. Then read the line slowly: She wasn't born a monster. The village made one. That is our answer. The monster in Paper Bride is not the ghost. It is the custom that keeps choosing which girls to throw away.">
+  <img class="full pull" src="img/end_shush.jpg" alt="" style="object-position:50% 25%">
+  <div class="vig"></div><div class="shade-b"></div>
+  <div class="tL"><b>囍</b></div><div class="tR"><b>囍</b></div>
+  <p class="quote2"><span class="words" style="--d:3s">She wasn't born a monster.</span><em data-a="up" style="--d:4.6s">The village made one.</em></p>
+</section>
+
+<!-- 14 · THANK YOU -->
+<section class="slide" data-tr="dissolve" data-fx="coins" data-kick="" data-notes="Thank you for listening. We're happy to take questions.">
+  <img class="full push" src="img/m_moon.jpg" alt="" style="filter:brightness(.35)">
+  <div class="vig"></div>
+  <div class="cnghost" data-a="cnin" style="--d:.3s;left:0;right:0;top:200px;text-align:center;font-size:220px;color:var(--mourning);opacity:1;text-shadow:0 0 30px rgba(200,20,28,.55),.04em .04em 0 var(--blood)">纸嫁衣</div>
+  <div data-a="rule" style="--d:1.4s;position:absolute;left:830px;top:470px;width:260px;height:1px;background:var(--cinnabar)"></div>
+  <h2 class="ttl" data-a="spread" style="--d:1.6s;left:0;right:0;top:500px;text-align:center;font-size:60px;letter-spacing:.5em">THANK YOU</h2>
+  <p class="para" data-a="up" style="--d:2.4s;left:0;right:0;top:600px;text-align:center;font-style:italic">Questions?</p>
+  <div class="srcs2" data-a="fade" style="--d:3s">
+    <b>SOURCES</b>
+    “Chinese ghost marriage.” Wikipedia.<br>
+    “Men jailed in China for ‘ghost marriage’ corpse bride trafficking.” The World, 2013.<br>
+    “Ghost marriage trafficking case in Henan.” Sixth Tone, 2016.<br>
+    “Ghost Marriage and Corpse Trading Crime in Rural China.” City University of Hong Kong.<br>
+    “Paper Bride.” Wikipedia.<br>
+    Cao, Yue. “From Fear to Parody.” Proceedings of DiGRA Australia, 2025.<br>
+    “Horror Series Becomes an Instant Hit with the Use of Cocos Creator.” Cocos, 2022.<br>
+    Plot summaries: 游侠手游, 游戏宝, PP助手, TapTap.<br>
+    Images: official art from the Paper Bride series.
+  </div>
+</section>
+
+<canvas id="fx"></canvas>
+<div class="grain2"></div>
+<div id="bars"></div>
+<div id="tx"></div>
+<div id="curtain"><i></i><i></i></div>
+<div id="chrome"><div id="kick"></div><div id="pn"></div></div>
+</div></div>
+
+
+<div id="gate" hidden role="button" tabindex="0" aria-label="Start the presentation"><div class="g"><i></i><b>CLICK TO BEGIN</b></div></div>
+<div id="notes" hidden></div>
+<div id="nav">
+  <button type="button" id="prev" aria-label="Previous slide">‹</button>
+  <span id="count">00 / 17</span>
+  <button type="button" id="next" aria-label="Next slide">›</button>
+  <button type="button" id="muteBtn" hidden>MUSIC ON</button>
+  <button type="button" id="noteBtn">NOTES</button>
+  <button type="button" id="fsBtn">FULL</button>
+</div>
+
+<script>
+(() => {
+  const deck = document.getElementById('deck');
+  const slides = Array.from(deck.querySelectorAll('.slide'));
+  const total = slides.length;
+  const notesEl = document.getElementById('notes'), countEl = document.getElementById('count');
+  const kick = document.getElementById('kick'), pn = document.getElementById('pn');
+  const tx = document.getElementById('tx'), curtain = document.getElementById('curtain');
+  const stageEl = document.getElementById('stage');
+  const OPENING_NOTES = 'Let the opening play. When the title settles, introduce the group and the topic: today we are talking about Paper Bride, and about a monster that is made by custom.';
+  // how long each transition hides the new slide before its own animations should start
+  const T0 = { dissolve:.3, fade:.8, whip:.5, burn:.4, ink:.4, curtain:.75, flash:.15, blinds:.4 };
+  const DUR = { dissolve:1500, fade:1800, whip:1050, burn:2000, ink:1400, curtain:1500, flash:500, blinds:1400 };
+  let cur = 0, showNotes = false, timers = [];
+  const bgm = { volume: 0, paused: true, loop: false, currentTime: 0, play() {}, pause() {} }, gate = document.getElementById('gate'), muteBtn = document.getElementById('muteBtn');
+  let muted = false, fadeRaf;
+  function fadeTo(target, ms, then) {
+    cancelAnimationFrame(fadeRaf);
+    const from = bgm.volume, t0 = performance.now();
+    const step = now => {
+      const p = Math.min((now - t0) / ms, 1);
+      bgm.volume = from + (target - from) * p;
+      if (p < 1) fadeRaf = requestAnimationFrame(step); else if (then) then();
+    };
+    fadeRaf = requestAnimationFrame(step);
+  }
+  function musicStart() {
+    if (muted) return;
+    cancelAnimationFrame(fadeRaf);
+    try { bgm.currentTime = 0; bgm.volume = 1; const p = bgm.play(); if (p) p.catch(() => {}); } catch (e) {}
+  }
+  const BED = 0.15;   // background level under the talking slides
+  bgm.loop = true;
+  function musicStop() { if (muted) return; if (bgm.paused) { const p = bgm.play(); if (p) p.catch(() => {}); } fadeTo(BED, 2500); }
+  muteBtn.addEventListener('click', () => {
+    muted = !muted; muteBtn.textContent = muted ? 'MUSIC OFF' : 'MUSIC ON';
+    if (muted) { cancelAnimationFrame(fadeRaf); bgm.pause(); }
+    else if (cur === 0) musicStart();
+    else { bgm.volume = 0; const p = bgm.play(); if (p) p.catch(() => {}); fadeTo(BED, 1200); }
+  });
+  window.__replayAll = () => { window.__opening && window.__opening.play(); musicStart(); };
+
+  // split subtitle-like text into words for the staggered reveal
+  deck.querySelectorAll('.words').forEach(el => {
+    const walk = (node, out) => {
+      node.childNodes.forEach(n => {
+        if (n.nodeType === 3) n.textContent.split(/(\s+)/).forEach(t => {
+          if (!t) return;
+          if (/^\s+$/.test(t)) out.appendChild(document.createTextNode(' '));
+          else { const s = document.createElement('span'); s.className = 'w'; s.textContent = t; out.appendChild(s); }
+        });
+        else { const c = n.cloneNode(false); out.appendChild(c); walk(n, c); }
+      });
+    };
+    const frag = document.createElement('div'); walk(el, frag);
+    el.innerHTML = ''; while (frag.firstChild) el.appendChild(frag.firstChild);
+    el.querySelectorAll('.w').forEach((w, i) => w.style.setProperty('--i', i));
+  });
+
+  function fit() {
+    const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+    document.documentElement.style.setProperty('--s', s);
+    sizeFx();
+  }
+
+  /* ---------- ambient particles ---------- */
+  const cv = document.getElementById('fx'), ctx = cv.getContext('2d');
+  let parts = [], mode = 'none', raf;
+  function sizeFx() { cv.width = 1920; cv.height = 1080; }
+  const R = (a, b) => a + Math.random() * (b - a);
+  function spawn(m, initial) {
+    const p = { m, x: R(0, 1920), y: initial ? R(0, 1080) : -30, rot: R(0, 6.28), vr: R(-.04, .04), flip: R(0, 6.28), vf: R(.02, .06), life: 1 };
+    if (m === 'coins') Object.assign(p, { s: R(7, 18), vy: R(.6, 1.6), vx: R(-.4, .4), red: Math.random() < .25 });
+    if (m === 'ash') Object.assign(p, { s: R(1.5, 4), vy: R(.25, .7), vx: R(-.3, .3), a: R(.2, .6) });
+    if (m === 'dust') Object.assign(p, { s: R(1, 2.6), vy: R(-.15, .15), vx: R(-.15, .15), a: R(.1, .5), y: R(0, 1080) });
+    if (m === 'embers') Object.assign(p, { s: R(1.5, 3.5), vy: R(-1.6, -.5), vx: R(-.4, .4), a: R(.5, 1), y: initial ? R(0, 1080) : 1110 });
+    if (m === 'petals') Object.assign(p, { s: R(6, 13), vy: R(.7, 1.5), vx: R(-.6, .2), red: true });
+    return p;
+  }
+  function setFx(m) {
+    mode = m || 'none';
+    const n = { coins: 46, ash: 90, dust: 80, embers: 70, petals: 40, none: 0 }[mode];
+    parts = parts.filter(p => p.m === mode).slice(0, n);
+    while (parts.length < n) parts.push(spawn(mode, true));
+  }
+  function loop() {
+    ctx.clearRect(0, 0, 1920, 1080);
+    for (const p of parts) {
+      p.x += p.vx + (p.m === 'coins' || p.m === 'petals' ? Math.sin(p.flip) * .5 : 0); p.y += p.vy; p.rot += p.vr; p.flip += p.vf;
+      if (p.m === 'embers') p.vx += R(-.05, .05);
+      const off = p.y > 1120 || p.y < -60 || p.x < -60 || p.x > 1980;
+      if (off) Object.assign(p, spawn(p.m, false), p.m === 'dust' ? {} : {});
+      ctx.save(); ctx.translate(p.x, p.y);
+      if (p.m === 'coins') {
+        ctx.rotate(p.rot); ctx.scale(Math.cos(p.flip), 1);
+        ctx.beginPath(); ctx.arc(0, 0, p.s, 0, 7); const h = p.s * .34; ctx.rect(h, -h, -2 * h, 2 * h);
+        ctx.fillStyle = p.red ? 'rgba(200,20,28,.85)' : 'rgba(239,233,223,.82)'; ctx.fill('evenodd');
+      } else if (p.m === 'petals') {
+        ctx.rotate(p.rot); ctx.scale(Math.cos(p.flip), 1);
+        ctx.beginPath(); ctx.moveTo(0, -p.s); ctx.lineTo(p.s * .7, 0); ctx.lineTo(0, p.s); ctx.lineTo(-p.s * .7, 0); ctx.closePath();
+        ctx.fillStyle = 'rgba(200,20,28,.8)'; ctx.fill();
+      } else if (p.m === 'embers') {
+        const g = ctx.createRadialGradient(0, 0, 0, 0, 0, p.s * 3);
+        g.addColorStop(0, `rgba(255,214,140,${p.a})`); g.addColorStop(.4, `rgba(232,82,40,${p.a * .6})`); g.addColorStop(1, 'rgba(232,82,40,0)');
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, p.s * 3, 0, 7); ctx.fill();
+      } else {
+        ctx.fillStyle = p.m === 'ash' ? `rgba(200,190,180,${p.a})` : `rgba(244,184,96,${p.a})`;
+        ctx.beginPath(); ctx.arc(0, 0, p.s, 0, 7); ctx.fill();
+      }
+      ctx.restore();
+    }
+    raf = requestAnimationFrame(loop);
+  }
+
+  function runCounters(sl, t0) {
+    sl.querySelectorAll('.count').forEach(c => {
+      const to = +c.dataset.to, start = performance.now() + t0 * 1000 + (+c.dataset.at || 0), dur = 1500;
+      c.textContent = '0';
+      const tick = now => {
+        const p = Math.min(Math.max((now - start) / dur, 0), 1);
+        c.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))).toLocaleString('en-US');
+        if (p < 1 && sl.classList.contains('on')) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+  }
+
+  function clean(sl) { sl.className = 'slide'; sl.style.zIndex = ''; sl.style.removeProperty('--t0'); }
+
+  function go(i, instant) {
+    i = Math.max(0, Math.min(total, i));
+    if (i === cur && !instant) { replay(); return; }
+    timers.forEach(clearTimeout); timers = [];
+    const from = cur; cur = i;
+    countEl.textContent = String(i).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
+    try { history.replaceState(null, '', '#s' + i); } catch (e) {}
+
+    if (i === 0) {
+      slides.forEach(clean); deck.classList.remove('show'); setFx('none');
+      stageEl.classList.remove('leaving');
+      window.__opening && window.__opening.play();
+      musicStart();
+      notesEl.innerHTML = '<b>NOTES · OPENING</b>' + OPENING_NOTES; notesEl.hidden = !showNotes;
+      return;
+    }
+    const inc = slides[i - 1];
+    const out = from > 0 ? slides[from - 1] : null;
+    const tr = instant ? 'none' : (from === 0 ? 'dissolve' : (i < from ? 'dissolve' : inc.dataset.tr || 'dissolve'));
+    const t0 = T0[tr] || 0, dur = DUR[tr] || 0;
+
+    deck.classList.add('show');
+    if (from === 0) musicStop();
+    if (from === 0 && !instant) {
+      stageEl.classList.add('leaving');
+      timers.push(setTimeout(() => window.__opening && window.__opening.stop(), 1400));
+    } else if (from === 0) { window.__opening && window.__opening.stop(); }
+
+    slides.forEach(s => { if (s !== inc && s !== out) clean(s); });
+    clean(inc); void inc.offsetWidth;
+    inc.style.setProperty('--t0', t0 + 's');
+    inc.classList.add('active', 'on'); if (tr !== 'none') inc.classList.add('in-' + tr);
+    inc.style.zIndex = 2;
+    if (out && out !== inc) {
+      out.classList.add('out-' + tr); out.style.zIndex = 1;
+      timers.push(setTimeout(() => clean(out), dur + 50));
+    }
+    timers.push(setTimeout(() => inc.classList.remove('in-' + tr), dur + 60));
+    if (tr === 'curtain') { curtain.classList.remove('go'); void curtain.offsetWidth; curtain.classList.add('go'); }
+    if (tr === 'flash' || tr === 'ink') {
+      tx.style.background = tr === 'flash' ? '#f6efe4' : 'radial-gradient(circle,rgba(200,20,28,.0) 30%,rgba(200,20,28,.75) 60%,rgba(110,10,16,.95))';
+      tx.animate([{ opacity: 0 }, { opacity: 1, offset: tr === 'flash' ? .25 : .35 }, { opacity: 0 }], { duration: tr === 'flash' ? 600 : 1300, easing: 'ease-out' });
+    }
+    kick.style.opacity = 0;
+    timers.push(setTimeout(() => { kick.innerHTML = inc.dataset.kick || ''; kick.style.opacity = 1; }, t0 * 1000 + 200));
+    pn.textContent = String(i).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
+    setFx(inc.dataset.fx);
+    runCounters(inc, t0);
+    notesEl.innerHTML = '<b>NOTES · ' + String(i).padStart(2, '0') + '</b>' + (inc.dataset.notes || '');
+    notesEl.hidden = !showNotes;
+  }
+  function replay() { if (cur === 0) { window.__replayAll(); return; } const c = cur; cur = -1; go(c, true); }
+  const next = () => go(cur + 1), prev = () => go(cur - 1);
+
+  addEventListener('keydown', e => {
+    if (!gate.hidden) { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); begin(); } return; }
+    if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(e.key)) { e.preventDefault(); next(); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); prev(); }
+    else if (e.key.toLowerCase() === 'r') replay();
+    
+    else if (e.key.toLowerCase() === 'n') { showNotes = !showNotes; notesEl.hidden = !showNotes; }
+    else if (e.key.toLowerCase() === 'f') toggleFs();
+    else if (e.key === 'Home') go(0);
+    else if (e.key === 'End') go(total);
+  });
+  document.addEventListener('click', e => { if (e.target.closest('button,#notes,#gate') || !gate.hidden) return; next(); });
+  document.getElementById('next').addEventListener('click', next);
+  document.getElementById('prev').addEventListener('click', prev);
+  document.getElementById('noteBtn').addEventListener('click', () => { showNotes = !showNotes; notesEl.hidden = !showNotes; });
+  function toggleFs() {
+    try { if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {}); else document.exitFullscreen().catch(() => {}); } catch (e) {}
+  }
+  document.getElementById('fsBtn').addEventListener('click', toggleFs);
+
+  addEventListener('resize', fit); fit();
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) loop();
+  const m = /^#s(\d+)$/.exec(location.hash);
+  const start = m ? +m[1] : 0;
+  function begin() { gate.hidden = true; cur = -1; go(0); cur = 0; }
+  gate.addEventListener('click', e => { e.stopPropagation(); begin(); });
+  if (start === 0) gate.hidden = false;
+  else (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => { cur = -1; go(start, true); });
+})();
+</script>
