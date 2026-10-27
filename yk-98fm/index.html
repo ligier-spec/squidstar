@@ -1,0 +1,996 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Yoru Kitchen FM</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Mochiy+Pop+One&family=Yomogi&family=Zen+Maru+Gothic:wght@500;700;900&display=swap">
+<style>
+/* Layout: one 1280×720 game screen scaled to the window. Heisei-era (2000s) Japanese homepage × DS cooking game.
+   Single deliberate look, so no dark-theme switch. */
+:root{
+  --pink:#f9cdd8; --berry:#e2577c; --hot:#ff5c8d; --cream:#fff8ef; --cocoa:#6b3a2c; --lav:#b9a3e3; --night:#2a2250; --butter:#ffe7a1; --mint:#bfe8d6; --sky:#bfe3ff;
+  --ink:#5a3328; --muted:#9a6f62;
+  --f-display:"Mochiy Pop One","Zen Maru Gothic","Hiragino Maru Gothic ProN",system-ui,sans-serif;
+  --f-body:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Arial Rounded MT Bold",system-ui,sans-serif;
+  --f-pixel:"DotGothic16","Courier New",monospace;
+  --f-hand:"Yomogi","Zen Maru Gothic","Comic Sans MS",cursive;
+  color-scheme:light;
+}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0}
+html,body{height:100%;overflow:hidden}
+body{background:#f7c3d0 url(assets/bg.jpg) center/420px repeat;color:var(--ink);font-family:var(--f-body)}
+#stage{position:fixed;left:50%;top:50%;width:1280px;height:720px;transform-origin:center;overflow:hidden;
+  background:url(assets/bg.jpg) center/512px repeat;border-radius:14px;box-shadow:0 0 0 6px var(--cocoa),0 0 0 12px #fff2f5,0 24px 60px rgba(107,58,44,.35)}
+#tint{position:absolute;inset:0;background:var(--tint,transparent);transition:background .9s ease;pointer-events:none}
+#stars{position:absolute;inset:0;opacity:0;transition:opacity .9s;pointer-events:none;background-image:radial-gradient(2px 2px at 8% 12%,#fff 50%,transparent 51%),radial-gradient(2px 2px at 22% 30%,#ffe7a1 50%,transparent 51%),radial-gradient(3px 3px at 37% 8%,#fff 50%,transparent 51%),radial-gradient(2px 2px at 54% 22%,#fff 50%,transparent 51%),radial-gradient(2px 2px at 71% 10%,#ffd6e4 50%,transparent 51%),radial-gradient(3px 3px at 88% 26%,#fff 50%,transparent 51%),radial-gradient(2px 2px at 95% 6%,#fff 50%,transparent 51%),radial-gradient(2px 2px at 14% 52%,#fff 50%,transparent 51%),radial-gradient(2px 2px at 62% 46%,#ffe7a1 50%,transparent 51%),radial-gradient(2px 2px at 82% 58%,#fff 50%,transparent 51%),radial-gradient(2px 2px at 30% 70%,#fff 50%,transparent 51%);animation:twinkle 3s steps(2) infinite}
+#stage.night #stars{opacity:1}
+@keyframes twinkle{50%{filter:brightness(.6)}}
+.page{position:absolute;inset:0;opacity:0;visibility:hidden}
+.page.active{opacity:1;visibility:visible}
+img{max-width:none;user-select:none;-webkit-user-drag:none}
+.abs{position:absolute}
+
+/* ---------- Heisei toolkit ---------- */
+.pop{position:absolute}
+.page.play .pop{animation:popIn .6s cubic-bezier(.34,1.56,.64,1) both;animation-delay:var(--d,0s)}
+@keyframes popIn{from{transform:scale(0) rotate(-14deg);opacity:0}to{transform:none;opacity:1}}
+.stk{display:block;width:100%;transform:rotate(var(--r,0deg));animation:bobS var(--bt,2.6s) ease-in-out infinite;animation-delay:var(--bd,0s);cursor:pointer;will-change:transform}
+@keyframes bobS{0%,100%{transform:rotate(var(--r,0deg)) translateY(0)}50%{transform:rotate(var(--r,0deg)) translateY(-8px)}}
+.stk:hover{animation:wig .42s ease-in-out infinite}
+@keyframes wig{0%,100%{transform:rotate(var(--r,0deg)) scale(1.06)}25%{transform:rotate(calc(var(--r,0deg) - 9deg)) scale(1.1)}75%{transform:rotate(calc(var(--r,0deg) + 9deg)) scale(1.1)}}
+.glit{font-family:var(--f-display);font-weight:400;line-height:1.05;margin:0;color:transparent;background:linear-gradient(90deg,#ff6f9f,#ffb347,#ffd84d,#7fd3ff,#b98cff,#ff6f9f);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;animation:shine 5s linear infinite;
+  filter:drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff) drop-shadow(3px 3px 0 var(--cocoa));text-wrap:balance}
+@keyframes shine{to{background-position:300% 0}}
+.gel{position:relative;isolation:isolate;font-family:var(--f-pixel);font-size:19px;color:#fff;letter-spacing:.04em;cursor:pointer;border:3px solid var(--cocoa);border-radius:999px;padding:7px 20px;
+  background:linear-gradient(#ffc6d6 0%,#ff86a8 48%,#ff5c8d 52%,#ff8fb2 100%);text-shadow:-2px 0 #b8325c,2px 0 #b8325c,0 -2px #b8325c,0 2px #b8325c,2px 2px #b8325c,-2px 2px #b8325c;box-shadow:inset 0 -3px 0 #e04677,0 4px 0 var(--cocoa);white-space:nowrap}
+.gel::after{content:"";position:absolute;left:12%;right:12%;top:3px;height:40%;border-radius:999px;background:linear-gradient(#fffb,#fff0);pointer-events:none;z-index:-1}
+.gel:hover{filter:brightness(1.06) saturate(1.1)}
+.gel:active{transform:translateY(3px);box-shadow:inset 0 -3px 0 #e04677,0 1px 0 var(--cocoa)}
+.gel:focus-visible{outline:3px dashed #fff;outline-offset:-9px}
+.gel.blue{background:linear-gradient(#d6f0ff 0%,#8fd0ff 48%,#5cb8ff 52%,#9ad7ff 100%);text-shadow:-2px 0 #2b6f9f,2px 0 #2b6f9f,0 -2px #2b6f9f,0 2px #2b6f9f,2px 2px #2b6f9f,-2px 2px #2b6f9f;box-shadow:inset 0 -3px 0 #3d9ae0,0 4px 0 var(--cocoa)}
+.gel.white{background:linear-gradient(#fff 0%,#fff 48%,#ffe8ef 52%,#fff 100%);color:var(--cocoa);text-shadow:none;box-shadow:inset 0 -3px 0 #f7c7d5,0 4px 0 var(--cocoa)}
+.new{display:inline-block;font-family:var(--f-pixel);font-size:12px;color:#fff;background:#ff3b6b;border-radius:4px;padding:0 4px;margin-left:6px;animation:blink .8s steps(1) infinite;vertical-align:middle}
+@keyframes blink{50%{opacity:0}}
+.burst{position:absolute;display:grid;place-items:center;text-align:center;font-family:var(--f-display);color:#fff;background:var(--hot);clip-path:polygon(50% 0,61% 14%,79% 7%,80% 25%,98% 30%,88% 46%,100% 60%,82% 68%,85% 87%,66% 84%,56% 100%,44% 86%,26% 94%,22% 76%,3% 72%,12% 55%,0 40%,18% 32%,15% 13%,34% 16%);animation:spin 12s linear infinite;line-height:1.05}
+.burst span{animation:spin 12s linear infinite reverse;display:block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hand{font-family:var(--f-hand)}
+.win{position:absolute;background:var(--cream);border:4px solid var(--cocoa);border-radius:20px;box-shadow:7px 7px 0 rgba(107,58,44,.22);overflow:hidden;display:flex;flex-direction:column}
+.win-head{flex:none;height:40px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--berry);color:#fff;font-family:var(--f-pixel);font-size:17px;letter-spacing:.08em;border-bottom:4px solid var(--cocoa);
+  background-image:radial-gradient(circle,#ffffff40 2px,transparent 2.5px);background-size:14px 14px}
+.win-head .dots{display:flex;gap:6px}.win-head .dots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--cocoa);background:#fff}
+.win-head .dots i:nth-child(2){background:var(--butter)}.win-head .dots i:nth-child(3){background:#9fe0b8}
+.squid{display:block;overflow:visible}
+
+/* ---------- ticker, wipe, bar, fx ---------- */
+#ticker{position:absolute;left:0;right:0;top:0;height:34px;z-index:25;overflow:hidden;border-bottom:3px solid var(--cocoa);background:repeating-linear-gradient(-45deg,#ff8fb0 0 14px,#ffb7cb 14px 28px);transition:transform .4s}
+#ticker.hide{transform:translateY(-40px)}
+#ticker div{position:absolute;top:4px;white-space:nowrap;font-family:var(--f-pixel);font-size:18px;color:#fff;text-shadow:2px 2px 0 var(--cocoa);animation:tick 38s linear infinite}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+#wipe{position:absolute;inset:0;z-index:60;display:grid;grid-template-columns:repeat(16,1fr);grid-template-rows:repeat(9,1fr);pointer-events:none}
+#wipe i{display:grid;place-items:center;transform:scale(0);background:#ff8fb0;color:#fff;font-style:normal;font-size:30px;border-radius:6px}
+#wipe i:nth-child(odd){background:#ffd0dd;color:#ff8fb0}
+#fx{position:absolute;inset:0;pointer-events:none;z-index:50}
+.star{position:absolute;font-size:24px;line-height:1;color:var(--butter);-webkit-text-stroke:2px var(--cocoa);paint-order:stroke fill}
+.trail{position:absolute;font-size:16px;line-height:1;pointer-events:none}
+.note{position:absolute;font-family:var(--f-pixel);font-size:30px;color:var(--berry)}
+#bar{position:absolute;left:24px;right:24px;bottom:12px;height:54px;display:flex;align-items:center;gap:14px;z-index:30}
+#bar .gel{font-size:17px;padding:6px 16px}
+#timeBar{flex:1;height:30px;display:flex;align-items:center;gap:10px;background:#fff;border:4px solid var(--cocoa);border-radius:999px;padding:0 6px 0 4px}
+#timeBar .lbl{font-family:var(--f-pixel);font-size:15px;color:#fff;background:var(--berry);border-radius:999px;padding:1px 10px;white-space:nowrap}
+#track{flex:1;height:12px;border-radius:999px;background:#ffe3eb;overflow:hidden}
+#fill{height:100%;width:0;background:linear-gradient(90deg,#ffe07a,#f5a36b,#f07a95,#a98ad8,#2a2250);background-size:1100px 100%;transition:width .5s ease}
+#pageNo{font-family:var(--f-pixel);font-size:16px;color:var(--cocoa);min-width:62px;text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---------- title / opening ---------- */
+#plate{position:absolute;left:150px;top:280px;width:900px}
+#fork{position:absolute;left:62px;top:300px;width:64px;transform:rotate(-8deg)}
+#knife{position:absolute;left:0;top:0;width:70px;transform:translate(1080px,290px) rotate(8deg);z-index:6;pointer-events:none}
+#roll{position:absolute;left:220px;top:269px;width:760px;height:363px;transform:rotate(-7deg);cursor:pointer;z-index:4}
+#roll .strip{position:absolute;top:0;height:363px;background:url(assets/roll.png) no-repeat;background-size:760px 363px}
+#roll.idle{animation:bob 1.8s ease-in-out infinite}
+#roll.idle:hover{animation:jiggle .5s ease-in-out infinite}
+@keyframes bob{50%{transform:rotate(-7deg) translateY(-6px)}}
+@keyframes jiggle{0%,100%{transform:rotate(-7deg) scale(1,1)}30%{transform:rotate(-7deg) scale(1.04,.95)}60%{transform:rotate(-7deg) scale(.97,1.04)}}
+#hint{position:absolute;left:820px;top:170px;z-index:7;background:#fff;border:4px solid var(--cocoa);border-radius:18px;padding:10px 18px;font-family:var(--f-pixel);font-size:21px;color:var(--berry);box-shadow:5px 5px 0 rgba(107,58,44,.2);animation:hop 1s steps(2) infinite}
+#hint::after{content:"";position:absolute;left:34px;bottom:-18px;border:9px solid transparent;border-top:12px solid var(--cocoa)}
+#hint small{display:block;font-size:15px;color:var(--muted)}
+@keyframes hop{50%{transform:translateY(-6px)}}
+#gameTag{position:absolute;left:28px;top:24px;font-family:var(--f-pixel);font-size:18px;color:var(--cocoa);background:#fff8;border:3px solid var(--cocoa);border-radius:12px;padding:6px 14px;letter-spacing:.06em;transition:opacity .4s}
+.done #gameTag{opacity:0}
+.slice{position:absolute;width:110px;transform:translate(-50%,-100%);z-index:5;cursor:pointer;opacity:0;pointer-events:none;background:none;border:0;padding:0}
+.slice img{width:100%;display:block;filter:drop-shadow(0 4px 0 rgba(107,58,44,.18))}
+.slice.on{opacity:1;pointer-events:auto}
+.slice.on:hover img,.slice.on:focus-visible img{animation:jiggle2 .45s ease-in-out infinite}
+.slice:focus-visible{outline:3px dashed var(--berry);outline-offset:4px;border-radius:12px}
+@keyframes jiggle2{30%{transform:scale(1.08,.94) translateY(2px)}60%{transform:scale(.96,1.06) translateY(-6px)}}
+.slabel{position:absolute;transform:translateX(-50%);font-family:var(--f-pixel);font-size:15px;background:#fff;border:3px solid var(--cocoa);border-radius:999px;padding:2px 10px;white-space:nowrap;z-index:6;opacity:0;transition:opacity .4s}
+.done .slabel{opacity:1}
+#titleWrap{position:absolute;left:0;right:0;top:34px;text-align:center;z-index:8;opacity:0;pointer-events:none}
+#logo{font-family:var(--f-display);font-size:76px;white-space:nowrap;line-height:1;color:#fff;-webkit-text-stroke:10px var(--cocoa);paint-order:stroke fill;text-shadow:0 8px 0 var(--berry);margin:0}
+#logo em{font-style:normal;color:var(--butter)}
+#logoSub{margin-top:14px;display:inline-flex;gap:12px;align-items:center;font-family:var(--f-pixel);font-size:22px;color:var(--cocoa);background:#fff;border:3px solid var(--cocoa);border-radius:999px;padding:6px 20px}
+#logoSub b{color:var(--berry);font-weight:400}
+#tagline{position:absolute;left:0;right:0;top:248px;text-align:center;font-weight:900;font-size:22px;color:var(--cocoa);z-index:8;opacity:0}
+#radio{position:absolute;left:0;top:0;width:290px;z-index:7;transform:translate(1400px,330px)}
+#lcd{position:absolute;left:1100px;top:300px;z-index:8;background:#3b2730;color:#ffd6e4;font-family:var(--f-pixel);font-size:22px;padding:4px 14px;border:3px solid var(--cocoa);border-radius:10px;opacity:0;letter-spacing:.06em;box-shadow:0 0 0 3px #fff inset}
+#startBtn{position:absolute;left:545px;top:574px;transform:translateX(-50%);z-index:9;opacity:0;pointer-events:none}
+#startBtn:active{transform:translateX(-50%) translateY(3px)}
+#sliceHint{position:absolute;left:545px;top:528px;transform:translateX(-50%);z-index:8;font-family:var(--f-pixel);font-size:17px;color:var(--cocoa);background:#fffc;padding:3px 14px;border-radius:999px;opacity:0;transition:opacity .4s}
+.done #sliceHint{opacity:1}
+
+/* ---------- 1 homepage ---------- */
+.hp{left:40px;top:50px;width:1200px;height:588px}
+.hp .win-head{background:linear-gradient(#8fd0ff,#5cb8ff);background-image:none;color:#fff;text-shadow:1px 1px 0 #2b6f9f}
+.hp-body{flex:1;display:grid;grid-template-columns:200px 1fr 230px;min-height:0;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Ctext x='8' y='26' font-size='16' fill='%23ffd6e4'%3E%E2%99%A1%3C/text%3E%3C/svg%3E")}
+.side{border-right:4px dotted #ffb7cb;padding:16px 14px;display:flex;flex-direction:column;gap:10px;background:#fff9fbcc}
+.side .menu-t{font-family:var(--f-pixel);font-size:15px;color:#fff;background:var(--berry);text-align:center;border-radius:8px;padding:3px}
+.side a{font-family:var(--f-pixel);font-size:16px;color:var(--cocoa);text-decoration:none;display:block;padding:4px 8px;border-radius:8px;background:linear-gradient(90deg,#ffeaf1,#fff)}
+.side a::before{content:"♡ ";color:var(--berry)}
+.side a:hover{background:var(--butter)}
+.hp-main{position:relative;padding:18px 24px;min-width:0}
+.welcome{font-size:36px}
+.prof{margin-top:12px;border-collapse:separate;border-spacing:0 6px;font-size:16px;width:480px}
+.prof th{font-family:var(--f-pixel);font-weight:400;font-size:14px;color:#fff;background:var(--hot);border-radius:8px 0 0 8px;padding:4px 10px;text-align:left;white-space:nowrap;width:130px}
+.prof td{background:#fff3f7;border:2px dashed #ffb7cb;border-left:0;border-radius:0 8px 8px 0;padding:4px 12px;line-height:1.35}
+.counter{display:flex;align-items:center;gap:8px;font-family:var(--f-pixel);font-size:15px;color:var(--cocoa)}
+.counter b{display:flex;gap:2px}
+.counter b i{font-style:normal;width:22px;height:30px;display:grid;place-items:center;background:#222;color:#7dff9b;border-radius:3px;font-size:20px;box-shadow:inset 0 -14px 0 #ffffff10}
+.blinkies{padding:16px 14px;display:flex;flex-direction:column;gap:10px;align-items:center;border-left:4px dotted #ffb7cb;background:#fff9fbcc}
+.bk{width:176px;height:44px;border:3px solid var(--cocoa);border-radius:6px;display:grid;place-items:center;font-family:var(--f-pixel);font-size:16px;color:#fff;text-shadow:1px 1px 0 var(--cocoa)}
+.bk.a{background:repeating-linear-gradient(90deg,#ff7aa8 0 8px,#ff9cbd 8px 16px);animation:blink 1s steps(1) infinite}
+.bk.b{background:linear-gradient(90deg,#7fd3ff,#b98cff)}
+.bk.c{background:#fff;color:var(--berry);text-shadow:none}
+.bk.d{background:linear-gradient(#ffe07a,#ffb347)}
+.bk.e{background:#2a2250;color:#ffd6e4}
+.puriframe{position:absolute;right:26px;top:96px;width:210px;height:250px;border-radius:18px;padding:12px;background:repeating-linear-gradient(45deg,#ff9cbd 0 10px,#ffd0dd 10px 20px);border:4px solid var(--cocoa);transform:rotate(4deg)}
+.puriframe .in{width:100%;height:100%;border-radius:10px;background:radial-gradient(circle at 50% 40%,#fff,#ffe9f1 60%,#d9f1ff);position:relative;overflow:hidden;display:grid;place-items:center}
+.puriframe .doodle{position:absolute;font-family:var(--f-hand);color:var(--hot);font-size:20px;text-shadow:2px 2px 0 #fff}
+
+/* ---------- 2 purikura ---------- */
+.puri{position:absolute;width:262px;height:360px;background:#fff;border:4px solid var(--cocoa);border-radius:14px;padding:10px;box-shadow:6px 6px 0 rgba(107,58,44,.2)}
+.puri .ph{position:relative;height:215px;border-radius:8px;overflow:hidden;border:6px solid;border-image:repeating-linear-gradient(45deg,#ff8fb0 0 8px,#fff 8px 16px) 6}
+.puri .ph img{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:150px}
+.puri .ph .dd{position:absolute;font-family:var(--f-hand);font-size:19px;color:var(--hot);text-shadow:2px 0 #fff,-2px 0 #fff,0 2px #fff,0 -2px #fff;white-space:nowrap}
+.puri h3{margin:10px 0 4px;font-family:var(--f-display);font-weight:400;font-size:18px;line-height:1.15}
+.puri p{margin:0;font-size:15px;line-height:1.4}
+.page.play .puri .ph{animation:print 1s steps(10) both;animation-delay:var(--d,0s)}
+@keyframes print{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0)}}
+.bubble{position:absolute;background:#fff;border:4px solid var(--cocoa);border-radius:22px;padding:12px 18px;font-size:16px;line-height:1.45;box-shadow:5px 5px 0 rgba(107,58,44,.2)}
+
+/* ---------- 3 CD ---------- */
+.cd{position:absolute;width:250px;height:250px;border-radius:50%;border:4px solid var(--cocoa);background:radial-gradient(circle,#fff 0 13%,var(--cocoa) 13.5% 15%,#e9e9f2 15.5% 19%,transparent 19.5%),conic-gradient(from 0deg,#ffd6e8,#d6f0ff,#fff6c2,#e5d6ff,#d6ffef,#ffd6e8);animation:spin 4s linear infinite;box-shadow:6px 6px 0 rgba(107,58,44,.2)}
+.cd.fast{animation-duration:.6s}
+.cd .lab{position:absolute;left:50%;top:22%;transform:translateX(-50%);font-family:var(--f-pixel);font-size:14px;color:var(--cocoa);white-space:nowrap}
+.cd.night{background:radial-gradient(circle,#fff 0 13%,#120d2a 13.5% 15%,#d4cff0 15.5% 19%,transparent 19.5%),conic-gradient(from 0deg,#2a2250,#5a4796,#ff7aa8,#2a2250,#7fd3ff,#2a2250)}
+.cd.night .lab{color:#fff}
+.liner{position:absolute;background:#fff;border:4px solid var(--cocoa);border-radius:16px;padding:14px 18px;box-shadow:6px 6px 0 rgba(107,58,44,.2)}
+.liner ol{margin:6px 0 0;padding:0 0 0 22px;font-size:16px;line-height:1.6}
+.liner li::marker{font-family:var(--f-pixel);color:var(--berry)}
+.liner.dk{background:#2f2756;color:#fdf1e6;border-color:#120d2a}
+.eq{position:absolute;display:flex;gap:6px;align-items:flex-end;height:90px}
+.eq i{width:14px;background:linear-gradient(#ff7aa8,#ffd84d,#7fd3ff);border:2px solid var(--cocoa);border-radius:4px 4px 0 0;animation:eq var(--t) ease-in-out infinite alternate}
+@keyframes eq{from{height:12%}to{height:100%}}
+.eq.fast i{animation-duration:.18s}
+
+/* ---------- 4 notebook ---------- */
+.note-pg{position:absolute;left:250px;top:50px;width:780px;height:588px;border:4px solid var(--cocoa);border-radius:10px 22px 22px 10px;box-shadow:7px 7px 0 rgba(107,58,44,.22);
+  background:linear-gradient(90deg,transparent 78px,#ff9cbd 78px 81px,transparent 81px),repeating-linear-gradient(#fffdf6 0 41px,#c9dcf5 41px 43px);padding:26px 40px 20px 106px}
+.note-pg::before{content:"";position:absolute;left:24px;top:30px;bottom:30px;width:24px;background:radial-gradient(circle,#f9cdd8 8px,var(--cocoa) 9px 10px,transparent 11px) 0 0/24px 64px repeat-y}
+.note-pg h2{font-size:36px}
+.rules{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:18px;counter-reset:r}
+.rules li{counter-increment:r;position:relative;font-family:var(--f-hand);font-size:21px;line-height:1.55;padding-right:70px}
+.rules li::before{content:counter(r) ".";position:absolute;left:-36px;font-family:var(--f-display);color:var(--berry)}
+.hl{background:linear-gradient(transparent 55%,#fff27a 55%) no-repeat;background-size:0 100%}
+.page.play .hl{animation:hl .6s ease-out both;animation-delay:var(--d,0s)}
+@keyframes hl{to{background-size:100% 100%}}
+.stamp{position:absolute;right:0;top:-6px;width:62px;height:62px;border-radius:50%;border:4px solid #e0344f;color:#e0344f;font-family:var(--f-display);font-size:16px;display:grid;place-items:center;transform:rotate(-14deg);background:#fff8}
+.page.play .stamp{animation:stampIn .35s cubic-bezier(.5,0,.6,1.6) both;animation-delay:var(--d,0s)}
+@keyframes stampIn{from{transform:scale(3) rotate(-30deg);opacity:0}to{transform:scale(1) rotate(-14deg);opacity:1}}
+.nobig{position:absolute;font-family:var(--f-display);font-size:26px;color:#fff;background:#e0344f;border:4px solid var(--cocoa);border-radius:12px;padding:2px 12px;transform:rotate(-10deg)}
+
+/* ---------- 5 stage select ---------- */
+.map{position:absolute;left:30px;top:48px;width:1220px;height:592px;border:5px solid var(--cocoa);border-radius:26px;overflow:hidden;
+  background:linear-gradient(90deg,#fff3c4 0%,#ffe0c8 22%,#ffd0dc 40%,#dff2d0 55%,#f3c79e 68%,#a58ad6 82%,#2a2250 100%)}
+.map::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,#ffffff18 0 4px,transparent 4px 8px);pointer-events:none}
+.map h2{position:absolute;left:0;right:0;top:18px;text-align:center;font-size:48px}
+.map .sub{position:absolute;left:0;right:0;top:80px;text-align:center;font-family:var(--f-pixel);font-size:18px;color:var(--cocoa)}
+.map svg.path{position:absolute;inset:0}
+.page.play .map svg.path path{animation:dash 2.2s ease-out both}
+@keyframes dash{from{stroke-dashoffset:1400}to{stroke-dashoffset:0}}
+.node{position:absolute;width:150px;transform:translate(-50%,-50%);text-align:center;cursor:pointer;background:none;border:0;padding:0;font:inherit;color:inherit}
+.node .ped{position:relative;margin:0 auto;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 50% 38%,#fff,#ffe3eb 70%);border:4px solid var(--cocoa);box-shadow:0 6px 0 var(--cocoa);display:grid;place-items:center}
+.node .ped img{width:86px;transition:transform .2s}
+.node:hover .ped img,.node:focus-visible .ped img{animation:jiggle2 .45s infinite}
+.node:focus-visible{outline:3px dashed #fff;outline-offset:4px;border-radius:16px}
+.node .st{position:absolute;left:50%;top:-14px;transform:translateX(-50%);font-family:var(--f-pixel);font-size:14px;color:#fff;background:var(--hot);border:3px solid var(--cocoa);border-radius:999px;padding:0 10px;white-space:nowrap}
+.node .nm{margin-top:12px;font-family:var(--f-display);font-size:16px;line-height:1.15;color:var(--cocoa);background:#fff;border:3px solid var(--cocoa);border-radius:12px;padding:4px 8px}
+.node .tm{display:block;font-family:var(--f-pixel);font-size:13px;color:var(--berry)}
+.node.dk .nm{background:#2f2756;color:#fff;border-color:#120d2a}
+.sun{position:absolute;width:90px;height:90px;border-radius:50%;background:#ffd84d;border:4px solid var(--cocoa);box-shadow:0 0 0 10px #ffd84d55,0 0 0 22px #ffd84d33;animation:spin 14s linear infinite}
+.sun::before{content:"";position:absolute;inset:-26px;border-radius:50%;background:repeating-conic-gradient(#ffd84d 0 10deg,transparent 10deg 30deg);z-index:-1;-webkit-mask:radial-gradient(circle,transparent 52%,#000 53%);mask:radial-gradient(circle,transparent 52%,#000 53%)}
+.moon{position:absolute;width:80px;height:80px;border-radius:50%;box-shadow:-18px 10px 0 4px #fff3b0;transform:rotate(-20deg)}
+#hopper{position:absolute;width:64px;transition:left .35s cubic-bezier(.3,1.5,.6,1),top .35s cubic-bezier(.3,1.5,.6,1);z-index:5;pointer-events:none;animation:hopY .6s ease-in-out infinite alternate}
+@keyframes hopY{to{translate:0 -8px}}
+
+/* ---------- program pages ---------- */
+.scene{position:absolute;left:24px;top:46px;width:752px;height:594px;border:6px solid var(--cocoa);border-radius:28px;overflow:hidden;box-shadow:7px 7px 0 rgba(107,58,44,.22)}
+.scene .tag{position:absolute;left:16px;top:14px;z-index:20;font-family:var(--f-pixel);font-size:16px;color:#fff;background:var(--cocoa);border-radius:999px;padding:3px 14px}
+.scene .stitle{position:absolute;left:16px;top:44px;z-index:20;font-size:40px;max-width:520px}
+.seg{position:absolute;z-index:20;font-family:var(--f-pixel);font-size:14px;background:#fff;border:3px solid var(--cocoa);border-radius:10px;padding:2px 10px;box-shadow:3px 3px 0 rgba(107,58,44,.25)}
+.status{left:790px;top:46px;width:466px;height:594px}
+.status .win-body{flex:1;min-height:0;padding:14px 20px 16px;display:flex;flex-direction:column;gap:10px}
+.status h2{font-size:30px}
+.status .jp{font-family:var(--f-pixel);font-size:16px;color:var(--muted);margin-top:4px}
+.status p{margin:0;font-size:15.5px;line-height:1.5}
+.row{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:start;font-size:15px;line-height:1.42}
+.row .k{font-family:var(--f-pixel);font-size:13px;color:#fff;background:var(--berry);border-radius:999px;text-align:center;padding:2px 0;margin-top:1px}
+.row .ad{display:block;margin-top:4px;font-size:14px;font-style:italic;color:var(--muted)}
+.row ol{margin:0;padding:0 0 0 18px}
+.row li::marker{font-family:var(--f-pixel);color:var(--berry)}
+.row i.ar{font-style:normal;color:var(--muted)}
+.yt{color:inherit;text-decoration:none;border-bottom:2px dotted #ff9cbd}
+.yt:hover{background:#fff27a66;border-bottom-color:var(--hot)}
+.yt:focus-visible{outline:2px dashed var(--hot);outline-offset:2px}
+.ytb{display:inline-grid;place-items:center;width:20px;height:15px;border-radius:4px;background:#ff3b3b;color:#fff;font-size:9px;vertical-align:1px;box-shadow:0 2px 0 #a32020}
+.liner.dk .yt{border-bottom-color:#7f6ac9}
+.dark .yt{border-bottom-color:#7f6ac9}
+.ythint{font-family:var(--f-pixel);font-size:12px;color:var(--berry);margin-left:6px}
+.dark .status{background:#342b5c;color:#fdf1e6;border-color:#120d2a}
+.dark .status .win-head{background-color:#5a4796;border-color:#120d2a}
+.dark .status .jp,.dark .row .ad,.dark .row i.ar{color:#c9bde9}
+
+/* scene 1 bento */
+.sc1{background:linear-gradient(#fff6c8,#ffe0ec)}
+.film{position:absolute;left:0;top:118px;height:118px;width:100%;background:#3b2730;border-block:4px solid var(--cocoa);overflow:hidden}
+.film::before,.film::after{content:"";position:absolute;left:0;right:0;height:10px;background:repeating-linear-gradient(90deg,transparent 0 10px,#fff8 10px 20px);z-index:2}
+.film::before{top:3px}.film::after{bottom:3px}
+.film .reel{position:absolute;top:17px;display:flex;gap:16px;animation:tick 30s linear infinite}
+.film .reel img{height:84px;width:auto}
+.box{position:absolute;left:150px;top:300px;width:440px;height:240px;border:6px solid var(--cocoa);border-radius:28px;background:#ff9cbd;box-shadow:0 8px 0 var(--cocoa);cursor:pointer}
+.box .in{position:absolute;inset:14px;border-radius:16px;background:#fff;display:grid;grid-template-columns:1.3fr 1fr;grid-template-rows:1fr 1fr;gap:8px;padding:8px;border:4px solid var(--cocoa)}
+.box .in i{border-radius:10px;background:#fff1c9;border:3px dashed #f4b3c6}
+.box .in i:first-child{grid-row:span 2;background:#fffaf2}
+.drop{position:absolute;z-index:6}
+.timer{position:absolute;right:20px;top:20px;z-index:20;font-family:var(--f-pixel);font-size:28px;color:var(--cocoa);background:#fff;border:4px solid var(--cocoa);border-radius:14px;padding:2px 14px;font-variant-numeric:tabular-nums}
+.timer small{display:block;font-size:12px;color:var(--berry);text-align:center}
+
+/* scene 2 grocery */
+.sc2{background:linear-gradient(#ffe9d6,#ffd9c4)}
+.shelf{position:absolute;left:0;right:0;top:150px;height:220px;background:repeating-linear-gradient(90deg,#fff3e6 0 120px,#f7dcc5 120px 124px)}
+.shelf::after{content:"";position:absolute;left:0;right:0;bottom:0;height:16px;background:#c98a4b;border-block:3px solid var(--cocoa)}
+.sign{position:absolute;transform-origin:50% -30px;animation:swing 2.4s ease-in-out infinite alternate}
+.sign::before{content:"";position:absolute;left:50%;top:-30px;height:30px;border-left:3px solid var(--cocoa)}
+@keyframes swing{from{transform:rotate(-5deg)}to{transform:rotate(5deg)}}
+.belt{position:absolute;left:0;right:0;top:446px;height:120px;background:repeating-linear-gradient(90deg,#5a5560 0 30px,#6b6670 30px 60px);border-block:5px solid var(--cocoa);overflow:hidden;animation:beltMove 1.2s linear infinite}
+@keyframes beltMove{to{background-position:-60px 0}}
+.belt .reel{position:absolute;top:-34px;display:flex;gap:28px;align-items:flex-end;animation:tick 26s linear infinite;height:150px}
+.belt .reel img{height:118px;width:auto;cursor:pointer;transition:transform .15s}
+.belt .reel img:hover{transform:translateY(-10px) rotate(-6deg)}
+.belt .reel img.gone{visibility:hidden}
+.belt-wrap{position:absolute;left:0;right:0;top:400px;height:170px;overflow:hidden;z-index:4}
+.belt-wrap .belt{top:46px}
+.belt-wrap .reel2{position:absolute;top:0;display:flex;gap:28px;align-items:flex-end;animation:tick 26s linear infinite;height:150px}
+.belt-wrap .reel2 img{height:118px;width:auto;cursor:pointer;transition:transform .15s;filter:none}
+.belt-wrap .reel2 img:hover{transform:translateY(-10px) rotate(-6deg)}
+.belt-wrap .reel2 img.gone{visibility:hidden}
+.meter{position:absolute;left:470px;top:300px;z-index:8;width:250px;background:#fff;border:4px solid var(--cocoa);border-radius:14px;padding:8px 12px;font-family:var(--f-pixel);font-size:16px}
+.meter .mb{height:14px;border:3px solid var(--cocoa);border-radius:999px;margin-top:4px;overflow:hidden;background:#ffe3eb}
+.meter .mb i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffd84d,#ff7aa8);transition:width .4s}
+.complete{position:absolute;left:376px;top:190px;transform:translate(-50%,-50%) rotate(-10deg);z-index:30;font-family:var(--f-display);font-size:44px;color:#fff;background:#e0344f;border:5px solid var(--cocoa);border-radius:18px;padding:6px 20px;opacity:0;pointer-events:none}
+.ptxt{position:absolute;z-index:40;font-family:var(--f-display);font-size:22px;color:var(--hot);text-shadow:2px 0 #fff,-2px 0 #fff,0 2px #fff,0 -2px #fff;pointer-events:none}
+
+/* scene 3 map */
+.sc3{background:#fdf3e1}
+.streets{position:absolute;inset:0;background:linear-gradient(90deg,transparent 0 160px,#fff 160px 186px,transparent 186px 420px,#fff 420px 446px,transparent 446px),linear-gradient(transparent 0 250px,#fff 250px 276px,transparent 276px 430px,#fff 430px 456px,transparent 456px),repeating-linear-gradient(45deg,#f9e7cc 0 2px,transparent 2px 14px)}
+.park{position:absolute;left:470px;top:150px;width:250px;height:250px;border-radius:30px;background:radial-gradient(circle at 20% 30%,#7cc576 0 12px,transparent 13px),radial-gradient(circle at 70% 25%,#7cc576 0 14px,transparent 15px),radial-gradient(circle at 40% 70%,#7cc576 0 16px,transparent 17px),radial-gradient(circle at 80% 75%,#7cc576 0 12px,transparent 13px),#a8dd98;border:4px solid var(--cocoa)}
+.park span,.campus span{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);font-family:var(--f-pixel);font-size:14px;background:#fff;border:2px solid var(--cocoa);border-radius:999px;padding:0 8px;white-space:nowrap}
+.pond{position:absolute;left:530px;top:200px;width:90px;height:50px;border-radius:50%;background:#8fd0ff;border:3px solid var(--cocoa)}
+.campus{position:absolute;left:200px;top:290px;width:200px;height:120px;background:repeating-linear-gradient(90deg,#ffd0dd 0 22px,#fff 22px 26px);border:4px solid var(--cocoa);border-radius:8px}
+.pin{position:absolute;transform:translate(-50%,-100%);z-index:6;cursor:pointer}
+.pin .bub{width:96px;height:96px;border-radius:50%;background:#fff;border:4px solid var(--cocoa);display:grid;place-items:center;overflow:hidden;box-shadow:0 4px 0 var(--cocoa)}
+.pin .bub img{width:86px}
+.pin::after{content:"";display:block;margin:-2px auto 0;width:0;border:12px solid transparent;border-top:18px solid var(--cocoa)}
+.page.play .pin{animation:pinDrop .7s cubic-bezier(.3,1.6,.5,1) both;animation-delay:var(--d)}
+@keyframes pinDrop{from{transform:translate(-50%,-300%);opacity:0}to{transform:translate(-50%,-100%);opacity:1}}
+.pin .tip{position:absolute;left:50%;bottom:calc(100% + 6px);transform:translateX(-50%) scale(0);transform-origin:bottom;background:#fff;border:3px solid var(--cocoa);border-radius:12px;padding:6px 10px;font-size:14px;white-space:nowrap;transition:transform .2s cubic-bezier(.3,1.6,.5,1);text-align:center;line-height:1.35}
+.pin:hover .tip,.pin:focus-within .tip{transform:translateX(-50%) scale(1)}
+.pin .tip b{font-family:var(--f-display);font-weight:400;display:block}
+.walker{position:absolute;left:0;top:0;width:54px;z-index:7;offset-path:path("M 120 520 L 173 520 L 173 263 L 433 263 L 433 443 L 600 443 L 600 263 L 700 263");offset-rotate:0deg;animation:walk 14s linear infinite alternate}
+@keyframes walk{from{offset-distance:0%}to{offset-distance:100%}}
+
+/* scene 4 zine */
+.sc4{background:#dff2d0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Crect width='12' height='12' fill='%23ffffff66'/%3E%3Crect x='12' y='12' width='12' height='12' fill='%23ffffff66'/%3E%3C/svg%3E")}
+.zine{position:absolute;left:40px;top:92px;width:672px;height:476px;background:#fffdf8;border:4px solid var(--cocoa);border-radius:6px;box-shadow:8px 8px 0 rgba(107,58,44,.25);transform:rotate(-1.5deg);transform-origin:left center}
+.page.play .zine{animation:flip .8s ease-out both}
+@keyframes flip{from{transform:perspective(900px) rotateY(-70deg) rotate(-1.5deg);opacity:0}to{transform:perspective(900px) rotateY(0) rotate(-1.5deg);opacity:1}}
+.mast{position:absolute;left:18px;top:8px;font-size:58px;letter-spacing:-.01em}
+.vol{position:absolute;left:22px;top:76px;font-family:var(--f-pixel);font-size:15px;color:var(--berry);background:#fff0f5;padding:1px 8px;border-radius:4px}
+.zhead{position:absolute;font-family:var(--f-display);font-size:20px;color:var(--cocoa);background:var(--butter);border:3px solid var(--cocoa);padding:2px 10px;border-radius:6px;transform:rotate(-3deg)}
+.jelly{animation:jelly 1.4s ease-in-out infinite!important}
+@keyframes jelly{0%,100%{transform:scale(1,1)}15%{transform:scale(1.08,.9)}30%{transform:scale(.93,1.08)}45%{transform:scale(1.04,.96)}60%{transform:scale(1,1)}}
+.gnews{position:absolute;background:#fff;border:3px solid var(--cocoa);border-radius:10px;padding:6px;box-shadow:4px 4px 0 rgba(107,58,44,.25)}
+.gnews b{display:block;font-family:var(--f-pixel);font-weight:400;font-size:12px;color:#fff;background:#5cb8ff;border-radius:4px;text-align:center;margin-bottom:4px}
+.gnews img{display:block;width:120px}
+
+/* scene 5 home */
+.sc5{background:linear-gradient(#ffe2c4,#f7c79a)}
+.tiles{position:absolute;left:0;right:0;top:0;height:330px;background:linear-gradient(90deg,#e8c39d 2px,transparent 2px) 0 0/60px 60px,linear-gradient(#e8c39d 2px,transparent 2px) 0 0/60px 60px,#fff6ea}
+.counterTop{position:absolute;left:0;right:0;top:330px;bottom:0;background:linear-gradient(#d9965a,#c27d43);border-top:6px solid var(--cocoa)}
+.steam{position:absolute;width:26px;height:90px;border-radius:50%;background:radial-gradient(#ffffffcc,#ffffff00 70%);filter:blur(2px);animation:steam 2.6s ease-out infinite;animation-delay:var(--sd)}
+@keyframes steam{from{transform:translateY(20px) scaleX(.6);opacity:0}30%{opacity:.9}to{transform:translateY(-110px) scaleX(1.4);opacity:0}}
+.phone{position:absolute;width:150px;z-index:9}
+.phone .top{height:150px;border:4px solid var(--cocoa);border-radius:22px 22px 8px 8px;background:linear-gradient(#ffb3c9,#ff8fb0);padding:12px 10px}
+.phone .scr{height:100%;border:3px solid var(--cocoa);border-radius:8px;background:#dff6ff;padding:6px;font-family:var(--f-pixel);font-size:12.5px;line-height:1.35;color:#2a2250;overflow:hidden}
+.phone .hinge{height:12px;margin:0 16px;background:#e2577c;border:3px solid var(--cocoa);border-radius:6px}
+.phone .bot{height:120px;border:4px solid var(--cocoa);border-radius:8px 8px 22px 22px;background:linear-gradient(#ffb3c9,#ff8fb0);display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:10px 14px}
+.phone .bot i{border-radius:6px;background:#fff;border:2px solid var(--cocoa)}
+.phone.ring{animation:ring .12s linear infinite}
+@keyframes ring{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+.phone .ans{position:absolute;left:50%;bottom:-48px;transform:translateX(-50%);font-size:15px;padding:4px 14px}
+.slam{position:absolute;z-index:15}
+.page.play .slam{animation:slam .4s cubic-bezier(.5,0,.6,1.6) both;animation-delay:var(--d)}
+@keyframes slam{from{transform:scale(3) rotate(var(--r));opacity:0}to{transform:scale(1) rotate(var(--r));opacity:1}}
+
+/* scene 6 study */
+.sc6{background:radial-gradient(circle at 70% 20%,#c9b6f2,#8c74c9 70%)}
+.crt{position:absolute;left:170px;top:120px;width:410px;height:340px;background:#e9e1d1;border:6px solid var(--cocoa);border-radius:30px;padding:20px 20px 50px;box-shadow:8px 8px 0 rgba(42,34,80,.4);z-index:3}
+.crt::after{content:"● ● ●";position:absolute;left:24px;bottom:12px;font-size:12px;color:#ff7aa8;letter-spacing:4px}
+.crt .glass{position:relative;width:100%;height:100%;border:4px solid var(--cocoa);border-radius:14px;overflow:hidden;background:#000}
+.crt .glass img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .3s steps(4)}
+.crt .glass img.on{opacity:1}
+.crt .glass::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(#0000 0 2px,#0002 2px 4px)}
+.focus{position:absolute;left:600px;top:120px;z-index:4;width:130px;text-align:center;background:#fff;border:4px solid var(--cocoa);border-radius:16px;padding:6px 6px 8px}
+.focus b{display:block;font-family:var(--f-pixel);font-weight:400;font-size:32px;color:var(--cocoa);font-variant-numeric:tabular-nums}
+.focus small{font-family:var(--f-pixel);font-size:12px;color:var(--berry)}
+.focus .tb{height:12px;border:3px solid var(--cocoa);border-radius:999px;overflow:hidden;margin-top:4px}
+.focus .tb i{display:block;height:100%;background:linear-gradient(90deg,#ff7aa8,#ffd84d)}
+.score{position:absolute;left:600px;top:250px;z-index:4;width:130px;text-align:center;background:var(--butter);border:4px solid var(--cocoa);border-radius:16px;padding:6px;font-family:var(--f-pixel);font-size:13px}
+.score b{display:block;font-size:30px;font-weight:400;color:var(--hot)}
+.rank{position:absolute;left:600px;top:370px;z-index:4;width:130px;background:#fff;border:4px solid var(--cocoa);border-radius:16px;padding:6px 8px;font-size:13px;line-height:1.5}
+.rank b{font-family:var(--f-pixel);font-weight:400;font-size:12px;color:#fff;background:var(--berry);display:block;text-align:center;border-radius:6px;margin-bottom:2px}
+.fall{position:absolute;top:-120px;width:84px;z-index:8;cursor:pointer}
+.desk{position:absolute;left:0;right:0;bottom:0;height:90px;background:#5a4796;border-top:6px solid #2a2250}
+
+/* scene 7 midnight */
+.sc7{background:radial-gradient(circle at 80% 15%,#4b3f86,#1b1538 70%)}
+.noren{position:absolute;left:60px;top:0;width:620px;display:flex;gap:6px;z-index:6}
+.noren i{flex:1;height:118px;background:linear-gradient(#2c4a8a,#203a70);border:4px solid #0e0a24;border-top:0;border-radius:0 0 8px 8px;display:grid;place-items:center;font-style:normal;font-family:var(--f-display);font-size:36px;color:#fff;transform-origin:top;animation:sway 3s ease-in-out infinite alternate;animation-delay:var(--sd)}
+.noren::before{content:"";position:absolute;left:-20px;right:-20px;top:-6px;height:12px;background:#c98a4b;border:3px solid #0e0a24;border-radius:6px;z-index:2}
+@keyframes sway{from{transform:skewX(-3deg)}to{transform:skewX(3deg)}}
+.lantern{position:absolute;left:40px;top:160px;width:80px;transform-origin:50% -40px;animation:swing 2.6s ease-in-out infinite alternate;z-index:7}
+.lantern::before{content:"";position:absolute;left:50%;top:-40px;height:40px;border-left:3px solid #0e0a24}
+.lantern .b{height:110px;border-radius:40%;background:repeating-linear-gradient(#e0344f 0 14px,#c92a43 14px 16px);border:4px solid #0e0a24;display:grid;place-items:center;font-family:var(--f-display);font-size:24px;color:#fff;writing-mode:vertical-rl;box-shadow:0 0 30px 10px #ff6a4d66;animation:glow 2s ease-in-out infinite alternate}
+.lantern::after{content:"";position:absolute;left:18px;right:18px;bottom:-8px;height:10px;background:#0e0a24;border-radius:3px}
+@keyframes glow{to{box-shadow:0 0 50px 20px #ff6a4d88}}
+.wood{position:absolute;left:0;right:0;bottom:0;height:150px;background:repeating-linear-gradient(90deg,#a8693c 0 90px,#9a5e34 90px 94px);border-top:8px solid #5a3220}
+.moon2{position:absolute;right:60px;top:150px;width:70px;height:70px;border-radius:50%;box-shadow:-16px 8px 0 4px #fff3b0}
+.mail{position:absolute;left:560px;top:150px}
+.mail .scr{font-size:12px}
+
+/* ---------- 12 sound + 13 bye ---------- */
+.roll-wrap{position:absolute;left:640px;top:60px;width:560px;height:560px;overflow:hidden;-webkit-mask:linear-gradient(transparent,#000 14%,#000 86%,transparent);mask:linear-gradient(transparent,#000 14%,#000 86%,transparent)}
+.staff{position:absolute;left:0;right:0;top:100%;text-align:center;color:#fdf1e6}
+.page.play .staff{animation:staff 24s linear infinite}
+.staff h4{margin:22px 0 2px;font-family:var(--f-pixel);font-weight:400;font-size:15px;letter-spacing:.14em;color:#ffb8cc}
+.staff p{margin:0;font-size:18px;line-height:1.4}
+.staff .big{font-family:var(--f-display);font-size:30px;margin-top:10px}
+@keyframes staff{to{transform:translateY(calc(-100% - 600px))}}
+.zzz{position:absolute;font-family:var(--f-pixel);color:#fff;font-size:24px;animation:zz 2.4s ease-out infinite;animation-delay:var(--sd)}
+@keyframes zz{from{transform:translate(0,0);opacity:0}30%{opacity:1}to{transform:translate(20px,-60px);opacity:0}}
+
+
+/* ---------- tape deck (YouTube player, works on the website) ---------- */
+#deck{position:absolute;inset:0;z-index:70;display:grid;place-items:center;background:rgba(90,40,60,.55)}
+#deck .shell{width:660px;background:linear-gradient(#ffc6d6,#ff9cbd);border:5px solid var(--cocoa);border-radius:28px;padding:14px 18px 18px;box-shadow:10px 10px 0 rgba(107,58,44,.35);position:relative}
+#deck .lab{display:flex;justify-content:space-between;align-items:center;font-family:var(--f-pixel);font-size:17px;color:#fff;text-shadow:2px 2px 0 var(--cocoa);margin-bottom:10px}
+#deck .vid{position:relative;width:100%;aspect-ratio:16/9;max-width:100%;background:#1b1538;border:4px solid var(--cocoa);border-radius:12px;overflow:hidden}
+#deck iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+#deck .reels{display:flex;justify-content:center;align-items:center;gap:22px;margin-top:12px}
+#deck .reels i{width:54px;height:54px;border-radius:50%;border:4px solid var(--cocoa);background:repeating-conic-gradient(#fff 0 30deg,#ffd0dd 30deg 60deg);animation:spin 1.6s linear infinite}
+#deck .ttl{font-family:var(--f-display);font-size:16px;color:var(--cocoa);background:#fff;border:3px solid var(--cocoa);border-radius:999px;padding:3px 14px;white-space:nowrap;max-width:300px;overflow:hidden;text-overflow:ellipsis}
+#deck .out{display:block;text-align:center;margin-top:8px;font-family:var(--f-pixel);font-size:13px;color:var(--cocoa)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+
+</head>
+<body>
+<div id="stage">
+  <div id="tint"></div><div id="stars"></div>
+  <div id="pages"></div>
+  <div id="ticker" class="hide"><div></div></div>
+  <div id="fx"></div>
+  <div id="deck" hidden><div class="shell" role="dialog" aria-label="Now playing">
+    <div class="lab"><span>♡ YORU TAPE DECK · NOW PLAYING ♡</span><button class="gel white" id="deckClose" style="font-size:15px;padding:4px 14px">✕ close</button></div>
+    <div class="vid"></div>
+    <div class="reels"><i></i><span class="ttl"></span><i></i></div>
+    <a class="out" target="_blank" rel="noopener">can't play here? open it on YouTube ↗</a>
+  </div></div>
+  <div id="wipe"></div>
+  <div id="bar">
+    <button class="gel white" id="prev">◀ back</button>
+    <div id="timeBar"><span class="lbl">♡ TIME</span><div id="track"><div id="fill"></div></div><span id="pageNo">01 / 14</span></div>
+    <button class="gel blue" id="bgmBtn" aria-pressed="true">♫ BGM on</button>
+    <button class="gel blue" id="mute" aria-pressed="false">♪ on</button>
+    <button class="gel" id="next">next ▶</button>
+  </div>
+</div>
+
+<script>
+(()=>{
+const SHOWS=[
+ {name:"Good Morning Bento",jp:"おはよう弁当",time:"7:00 – 10:00 AM",short:"7–10 AM",tint:"rgba(255,244,190,.28)",
+  pitch:"Breakfast you can make in five minutes, before your 8 AM class. Every morning DJ Squid packs one bento that fits in your bag, and plays one song to wake you up.",
+  seg:["5-Minute Bento","What's in your bag? (call-in)"],
+  host:"DJ Squid, with Emerson students who call in to show their breakfast.",
+  who:"Students who woke up late again and have ten minutes to eat.",
+  sp:"Muji",ad:"“This morning is brought to you by Muji. Simple boxes for not-so-simple mornings.”",
+  songs:[["Sakuranbo","Ai Otsuka","2003"],["JOY","YUKI","2005"],["Polyrhythm","Perfume","2007"]]},
+ {name:"Grocery Diary",jp:"お買い物日記",time:"10:00 AM – 12:00 PM",short:"10–12",tint:"rgba(255,214,180,.24)",
+  pitch:"A slow walk through H Mart and the little shops in Chinatown. How to eat well on a student budget, one ingredient at a time.",
+  seg:["Treasure of the Week","$20 Basket Challenge"],
+  host:"DJ Squid, with a Chinatown shop owner as guest each week.",
+  who:"People with no class on a weekday morning and an empty fridge.",
+  sp:"H Mart",ad:"“Grocery Diary is brought to you by H Mart. The snack aisle is calling you.”",
+  songs:[["Twiggy Twiggy","Pizzicato Five","1991"],["Sugarless GiRL","Capsule","2007"],["Star Fruits Surf Rider","Cornelius","1997"]]},
+ {name:"Lunch Map Boston",jp:"ランチマップ",time:"12:00 – 3:00 PM",short:"12–3 PM",tint:"rgba(255,190,205,.2)",
+  pitch:"Cheap and good lunch spots near Emerson and Boston Common. We rate every place in onigiri, from one to five.",
+  seg:["Lunch Scout Report","Under $15 Club"],
+  host:"DJ Squid, with a new Emerson “lunch scout” every week.",
+  who:"Hungry people between classes, phone in one hand, coffee in the other.",
+  sp:"Uber Eats",ad:"“Lunch Map is brought to you by Uber Eats, for the days you can't walk to the spot we just told you about.”",
+  songs:[["Sobakasu","Judy and Mary","1996"],["Asia no Junshin","Puffy","1996"],["Shangri-La","Chatmonchy","2006"]]},
+ {name:"Tea Time Zine",jp:"おやつマガジン",time:"3:00 – 5:00 PM",short:"3–5 PM",tint:"rgba(205,232,190,.22)",
+  pitch:"Desserts and afternoon tea, talked about like a page in a Japanese girls' magazine: the packaging, the plating, every little detail.",
+  seg:["Cake of the Day","Cute Packaging Award"],
+  host:"DJ Squid, with pastry chef Joanne Chang of Flour Bakery as dream guest.",
+  who:"Anyone who needs sugar at 3 PM. So, everyone.",
+  sp:"Gong Cha",ad:"“Tea Time Zine is brought to you by Gong Cha. Less ice, more boba.”",
+  songs:[["Traveling","Hikaru Utada","2001"],["Seasons","Ayumi Hamasaki","2000"],["Fragile","Every Little Thing","2001"]]},
+ {name:"Home Taste",jp:"ふるさとの味",time:"5:00 – 8:00 PM",short:"5–8 PM",tint:"rgba(232,150,90,.24)",
+  pitch:"Listeners call in and tell the story of one dish from home. Then we try to cook it together, live, with whatever is in a dorm kitchen.",
+  seg:["Mom's Recipe Hotline","Cook-Along"],
+  host:"DJ Squid, with chef Ming Tsai (Simply Ming) as dream guest.",
+  who:"International students missing home, and anyone cooking dinner alone.",
+  sp:"Kewpie",ad:"“Home Taste is brought to you by Kewpie mayo. A little squeeze of home.”",
+  songs:[["Qi Li Xiang 七里香","Jay Chou","2004"],["Red Bean 红豆","Faye Wong","1998"],["First Love","Hikaru Utada","1999"]]},
+ {name:"Study Snack Club",jp:"夜食クラブ",time:"8:00 – 11:00 PM",short:"8–11 PM",tint:"rgba(120,96,190,.38)",night:true,
+  pitch:"Midterm season survival. Snack rankings, 25-minute focus timers with music, and a lot of encouragement for whoever is still working.",
+  seg:["Snack Power Ranking","25-Minute Focus Timer"],
+  host:"DJ Squid, with a different tired student on the line every night.",
+  who:"Students at library tables and dorm desks with an essay due tomorrow.",
+  sp:"Pocky & Nissin",ad:"“Three minutes of break, then back to the essay. Study Snack Club is brought to you by Pocky and Nissin Cup Noodles.”",
+  songs:[["Chocolate Disco","Perfume","2007"],["Rewrite","Asian Kung-Fu Generation","2004"],["Ikenai Taiyou","Orange Range","2007"]]},
+ {name:"Midnight Diner Talk",jp:"深夜食堂",time:"11:00 PM – 2:00 AM",short:"11 PM–2 AM",tint:"rgba(22,16,52,.74)",dark:true,night:true,
+  pitch:"Like the little diner in Shinya Shokudō. You send a letter about your day, and DJ Squid tells you what you should eat tonight.",
+  seg:["Letters to the Kitchen","Tonight's Dish"],
+  host:"DJ Squid alone. No guest. The listeners are the guests.",
+  who:"Night owls, the sad, the sleepless, and the last-train people.",
+  sp:"7-Eleven",ad:"“Midnight Diner Talk is brought to you by 7-Eleven, the only light still on at 1 AM.”",
+  songs:[["Midnight Pretenders","Tomoko Aran","1983"],["Plastic Love","Mariya Takeuchi","1984"],["Ride on Time","Tatsuro Yamashita","1980"]]}
+];
+const SL=i=>`assets/slice${i+1}.png`;
+const VID={"Sakuranbo":"upODO6OuOOk","JOY":"ge9XkXUfzbE","Polyrhythm":"KbiSxunJatM","Twiggy Twiggy":"NcdrTlNlSds","Sugarless GiRL":"ibN26Zkkl0Q","Star Fruits Surf Rider":"8x_XUZ3n1xc","Sobakasu":"8iSG4jIUkcU","Asia no Junshin":"EO4tRtPBq30","Shangri-La":"NEb9MTNk3y4","Traveling":"4j2ZJAgdrGE","Seasons":"388RThHSPhw","Fragile":"sxLN3E3jigg","Qi Li Xiang 七里香":"7CKOG-qQKJY","Red Bean 红豆":"-zSknxs4lM8","First Love":"o1sUaVJUeB0","Chocolate Disco":"1WTy2yqKI4w","Rewrite":"omkKMzR_vZY","Ikenai Taiyou":"UzeKDH29TW0","Midnight Pretenders":"CZlbD6uLRTg","Plastic Love":"T_lC2O1oIew","Ride on Time":"Vfnwbn69zN0"};
+const YT=(t,a)=>VID[t]?"https://www.youtube.com/watch?v="+VID[t]:"https://www.youtube.com/results?search_query="+encodeURIComponent(a+" "+t);
+const YA=(t,a,extra="")=>`<a class="yt" href="${YT(t,a)}" target="_blank" rel="noopener" data-vid="${VID[t]||""}" data-title="${(a+" – "+t).replace(/"/g,"")}">${extra}<span class="ytb">▶</span></a>`;
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+let seed=7;const rnd=()=>((seed=(seed*9301+49297)%233280)/233280);
+/* sticker helper: name, x, y, width, {d:delay, r:rot, cls, ic, z} */
+const S=(n,x,y,w,o={})=>`<div class="pop ${o.cls||""}" style="left:${x}px;top:${y}px;width:${w}px;--d:${o.d??0}s;${o.z?`z-index:${o.z};`:""}"><img class="stk ${o.ic||""}" src="stk/${n}.webp" alt="" style="--r:${o.r??0}deg;--bd:${(rnd()*2).toFixed(2)}s;--bt:${(2.2+rnd()*1.4).toFixed(2)}s"></div>`;
+const SQUID=(w=90,extra="")=>`<svg class="squid" width="${w}" viewBox="0 0 100 124" ${extra} aria-hidden="true">
+ <g stroke="#6b3a2c" stroke-linecap="round" fill="none">
+  ${[26,38,50,62,74].map((x,i)=>`<path d="M${x} 66 q ${i%2?5:-5} 14 0 26 q ${i%2?-5:5} 12 0 22" stroke-width="11"/><path d="M${x} 66 q ${i%2?5:-5} 14 0 26 q ${i%2?-5:5} 12 0 22" stroke="#ff9cbd" stroke-width="6"/>`).join("")}
+ </g>
+ <path d="M30 26 L8 38 L28 44Z M70 26 L92 38 L72 44Z" fill="#ff9cbd" stroke="#6b3a2c" stroke-width="3" stroke-linejoin="round"/>
+ <path d="M50 4 C72 20 82 42 80 70 L20 70 C18 42 28 20 50 4Z" fill="#ffb7cb" stroke="#6b3a2c" stroke-width="3.5" stroke-linejoin="round"/>
+ <path d="M22 44 C22 6 78 6 78 44" stroke="#e2577c" stroke-width="5" fill="none"/>
+ <rect x="13" y="38" width="13" height="20" rx="5" fill="#fff" stroke="#6b3a2c" stroke-width="3"/><rect x="74" y="38" width="13" height="20" rx="5" fill="#fff" stroke="#6b3a2c" stroke-width="3"/>
+ <circle cx="41" cy="51" r="5" fill="#6b3a2c"/><circle cx="59" cy="51" r="5" fill="#6b3a2c"/><circle cx="42.6" cy="49.2" r="1.8" fill="#fff"/><circle cx="60.6" cy="49.2" r="1.8" fill="#fff"/>
+ <ellipse cx="33" cy="59" rx="5" ry="3" fill="#ff7aa5"/><ellipse cx="67" cy="59" rx="5" ry="3" fill="#ff7aa5"/>
+ <path d="M45 58 q 2.5 3 5 0 q 2.5 3 5 0" stroke="#6b3a2c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+</svg>`;
+const status=(s,i)=>`<div class="win status">
+  <div class="win-head"><span>♡ STATUS · STAGE ${i+1}</span><span class="dots"><i></i><i></i><i></i></span></div>
+  <div class="win-body">
+   <div><h2 class="glit">${s.name}</h2><div class="jp">${s.jp} · ${s.time}</div></div>
+   <p>${s.pitch}</p>
+   <div class="row"><span class="k">HOST</span><span>${s.host}</span></div>
+   <div class="row"><span class="k">LISTENERS</span><span>${s.who}</span></div>
+   <div class="row"><span class="k">SPONSOR</span><span><b>${esc(s.sp)}</b><span class="ad">${s.ad}</span></span></div>
+   <div class="row"><span class="k">PLAYLIST<br><span style="font-size:10px">▶ = YouTube</span></span><ol>${s.songs.map(t=>`<li>${YA(t[0],t[1],`${t[0]} <i class="ar">· ${t[1]}, ${t[2]}</i> `)}</li>`).join("")}</ol></div>
+  </div></div>`;
+const segs=(s,pos)=>s.seg.map((g,k)=>`<span class="seg" style="${pos[k]}">♡ ${esc(g)}</span>`).join("");
+const sceneHead=(s,i,col="")=>`<span class="tag">STAGE ${i+1} · ${s.time}</span><h2 class="glit stitle" ${col}>${s.name}</h2>`;
+
+/* ---------------- pages ---------------- */
+const pages=[];
+pages.push({key:"title",html:`
+  <div id="gameTag">♡ YORU KITCHEN · おいしいラジオ ♡</div>
+  <img id="fork" src="assets/fork.png" alt="">
+  <img id="plate" src="assets/plate.png" alt="A pink lace-edged serving plate">
+  <div id="roll" class="idle" role="button" tabindex="0" aria-label="Touch the roll cake to start"></div>
+  <img id="knife" src="assets/knife.png" alt="">
+  ${SHOWS.map((s,i)=>`<button class="slice" data-i="${i}" aria-label="${esc(s.name)}, ${s.short}"><img src="${SL(i)}" alt=""></button><div class="slabel">${s.short}</div>`).join("")}
+  <div id="hint">touch the cake! ♡<small>ケーキにタッチしてね</small></div>
+  <div id="titleWrap"><h1 id="logo">Yoru <em>Kitchen</em> FM</h1><div id="logoSub">夜食ラジオ <b>♡</b> FM 98.1 <b>♡</b> Boston</div></div>
+  <div id="tagline">Good food, soft songs, until the last train.</div>
+  <img id="radio" src="assets/radio.png" alt="A pink retro radio">
+  <div id="lcd">FM 87.9</div>
+  <div id="sliceHint">one slice = one show · tap a slice to tune in</div>
+  <button class="gel" id="startBtn">start the broadcast ▶</button>`});
+
+/* 1 · homepage */
+pages.push({key:"station",tint:"rgba(255,240,200,.15)",html:`
+ <div class="win hp">
+  <div class="win-head"><span>♡ Yoru Kitchen FM ☆ official homepage ♡</span><span class="dots"><i></i><i></i><i></i></span></div>
+  <div class="hp-body">
+   <nav class="side"><div class="menu-t">MENU</div>
+    <a href="#p2">TOP</a><a href="#p2">PROFILE<span class="new">NEW!</span></a><a href="#p3">LISTENERS</a><a href="#p6">TIME TABLE<span class="new">NEW!</span></a><a href="#p4">MUSIC</a><a href="#p5">RULES</a><a href="#p14">BBS</a>
+    <div class="menu-t" style="margin-top:auto;background:#5cb8ff">LINK FREE ♡</div>
+    <div style="font-family:var(--f-pixel);font-size:13px;text-align:center;line-height:1.4">since 2026.10<br>リンクはご自由に</div>
+   </nav>
+   <div class="hp-main">
+    <h2 class="glit welcome">Welcome to Yoru Kitchen FM ☆</h2>
+    <div style="font-family:var(--f-pixel);font-size:15px;color:var(--berry);margin-top:6px">ようこそ！夜食ラジオへ ♡ 管理人: DJ Squid</div>
+    <table class="prof">
+     <tr><th>📻 STATION</th><td>Yoru Kitchen FM · FM 98.1, Boston</td></tr>
+     <tr><th>⏰ ON AIR</th><td>7 AM – 2 AM, every day</td></tr>
+     <tr><th>🦑 DJ</th><td>DJ Squid (that's me, Ziyan)</td></tr>
+     <tr><th>🍙 FORMAT</th><td>Food tips, listener letters, call-ins, and songs that taste like 2000s Tokyo</td></tr>
+     <tr><th>✨ MOOD</th><td>A DS cooking game in the morning. <i>Midnight Diner</i> after dark.</td></tr>
+     <tr><th>🍰 CONCEPT</th><td>The day is one roll cake. Every show is one slice, from sweet morning to dark-chocolate night.</td></tr>
+    </table>
+    <div class="counter" style="position:absolute;left:24px;bottom:16px">あなたは <b id="hits">${"000000".split("").map(c=>`<i>${c}</i>`).join("")}</b> 人目のリスナーです ♡</div>
+    <div class="puriframe pop" style="--d:.3s"><div class="in">${SQUID(130)}<span class="doodle" style="left:8px;top:6px">DJ Squid♡</span><span class="doodle" style="right:8px;bottom:6px;font-size:16px">on air!</span></div></div>
+   </div>
+   <div class="blinkies">
+    <div class="bk a">● NOW ON AIR ●</div><div class="bk b">FM 98.1 ☆ Boston</div><div class="bk c">I ♡ ONIGIRI</div><div class="bk d">★ 24h snack ok ★</div><div class="bk e">♪ city pop @ night</div>
+    <div style="position:relative;width:100%;flex:1">${S("masc_01",0,6,74,{d:.5})}${S("masc_02",76,0,74,{d:.6})}${S("masc_04",30,84,80,{d:.7})}${S("masc_05",116,82,76,{d:.8})}</div>
+   </div>
+  </div>
+ </div>
+ ${S("oni_04",1100,560,120,{d:.9,r:8,z:5})}${S("retro_09",14,520,80,{d:1,r:-8,z:5})}`});
+
+/* 2 · purikura listeners */
+const persona=[["lowpoly_06","The 2 AM essay writer","Has a deadline, a cup noodle, and nobody else awake. Tunes in so the room is not so quiet.","2AM♡ がんばれ","deadline!!"],
+ ["cn_xlb1","The homesick international student","Misses one dish from home so much. Calls Home Taste so we can cook it together.","ママの味♡","miss home…"],
+ ["oni_04","The broke foodie","Wants good food near Boston Common for under $15. Writes down every Lunch Map spot.","$15以下!","おなかすいた"],
+ ["retro_09","The early-senioritis wanderer","Skipped class to walk around the Common for a week. Needs snacks and a soundtrack.","サボり中♡","♪♪♪"]];
+pages.push({key:"audience",tint:"rgba(255,240,200,.1)",html:`
+ <h2 class="glit abs" style="left:40px;top:50px;font-size:46px">Who's tuning in?</h2>
+ <div class="abs" style="left:44px;top:110px;font-family:var(--f-pixel);font-size:17px;color:var(--cocoa)">リスナーのみなさん · college kids in Boston, mostly international, always hungry</div>
+ ${persona.map((p,k)=>`<div class="puri" style="left:${44+k*296}px;top:${150+(k%2)*18}px;transform:rotate(${[-3,2,-2,3][k]}deg);--d:${.2+k*.35}s">
+   <div class="ph" style="background:${["linear-gradient(#d9ccf2,#fff)","linear-gradient(#ffe2c4,#fff)","linear-gradient(#ffd0dc,#fff)","linear-gradient(#cdeedd,#fff)"][k]}"><img src="stk/${p[0]}.webp" alt=""><span class="dd" style="left:8px;top:6px">${p[3]}</span><span class="dd" style="right:8px;bottom:6px;font-size:16px">${p[4]}</span><span class="dd" style="right:10px;top:8px;font-size:14px;color:#5cb8ff">2026.10.29</span></div>
+   <h3>${p[1]}</h3><p>${p[2]}</p></div>`).join("")}
+ <div class="bubble pop" style="left:300px;top:556px;width:800px;--d:1.8s"><b>Why radio and not TikTok?</b> Radio talks to you while your hands are busy: cooking, typing, walking. It feels like somebody is in the kitchen with you.</div>
+ <img class="abs pop" src="assets/radio.png" alt="" style="left:110px;top:530px;width:170px;--d:1.6s">`});
+
+/* 3 · sound */
+pages.push({key:"sound",tint:"rgba(255,240,200,.08)",html:`
+ <h2 class="glit abs" style="left:0;right:0;text-align:center;top:46px;font-size:44px">The sound of 98.1 ♪</h2>
+ <div class="cd" style="left:70px;top:130px"><span class="lab">YORU MIX vol.1 ☀</span></div>
+ <div class="cd night" style="left:960px;top:130px"><span class="lab">YORU MIX vol.2 ☾</span></div>
+ <div class="liner" style="left:40px;top:400px;width:420px"><b class="glit" style="font-size:24px">By day · 2000s J-pop</b><div style="font-size:15px;margin-top:4px">Bright, fast, a little bit silly. The music of girls' magazines and DS menus.</div><ol>${[["Sakuranbo","Ai Otsuka"],["Polyrhythm","Perfume"],["Twiggy Twiggy","Pizzicato Five"]].map(([t,a])=>`<li>${YA(t,a,`${a} – ${t} `)}</li>`).join("")}</ol></div>
+ <div class="liner dk" style="left:820px;top:400px;width:420px"><b style="font-family:var(--f-display);font-weight:400;font-size:24px;color:#ffd6e4">After dark · 80s City Pop</b><div style="font-size:15px;margin-top:4px">Slow and shiny. A taxi window at night, a konbini bag on your lap.</div><ol>${[["Midnight Pretenders","Tomoko Aran"],["Plastic Love","Mariya Takeuchi"],["Ride on Time","Tatsuro Yamashita"]].map(([t,a])=>`<li>${YA(t,a,`${a} – ${t} `)}</li>`).join("")}</ol></div>
+ <img class="abs" id="sndRadio" src="assets/radio.png" alt="" style="left:490px;top:150px;width:300px">
+ <div class="eq" id="eq" style="left:520px;top:400px">${Array.from({length:14},(_,k)=>`<i style="--t:${(.3+((k*37)%10)/22).toFixed(2)}s"></i>`).join("")}</div>
+ <button class="gel abs" id="jingleBtn" style="left:640px;top:520px;transform:translateX(-50%)">▶ play our jingle</button>
+ <div class="abs" style="left:640px;top:580px;transform:translateX(-50%);font-family:var(--f-pixel);font-size:14px;color:var(--cocoa);background:#fffc;border-radius:999px;padding:2px 12px;white-space:nowrap">a tiny 8-bit station ID, played every hour</div>
+ ${S("masc_03",330,90,90,{d:.3,r:-8})}${S("masc_06",860,92,90,{d:.4,r:8})}`});
+
+/* 4 · rules notebook */
+pages.push({key:"rules",tint:"rgba(255,240,200,.08)",html:`
+ <div class="note-pg">
+  <h2 class="glit">スポンサーのおやくそく ✎</h2>
+  <div style="font-family:var(--f-pixel);font-size:16px;color:var(--berry);margin-top:4px">House rules: how we take ad money</div>
+  <ol class="rules">
+   <li><span class="hl" style="--d:.4s">Only food students can afford.</span> No $40 truffle oil. If it costs more than a lunch, we say no.<span class="stamp" style="--d:.7s">OK♡</span></li>
+   <li><span class="hl" style="--d:1s">DJ Squid tastes it first.</span> Every sponsor's food is tasted on air before the ad. If it's bad, the ad doesn't run.<span class="stamp" style="--d:1.3s">OK♡</span></li>
+   <li><span class="hl" style="--d:1.6s">No miracle food.</span> Nothing here will fix your heart, your grades or your life. Nobody sells a “Vitajex.”<span class="stamp" style="--d:1.9s">OK♡</span></li>
+   <li><span class="hl" style="--d:2.2s">The mic is always on.</span> We never say anything off air that we wouldn't say on air.<span class="stamp" style="--d:2.5s">OK♡</span></li>
+  </ol>
+  <div class="hand" style="position:absolute;left:106px;right:40px;bottom:22px;font-size:18px;color:var(--muted);border-top:3px dashed #ffb7cb;padding-top:8px">memo: lesson from <i>A Face in the Crowd</i>. The audience trusts the host more than the ad, so the host has to deserve it ♡</div>
+ </div>
+ ${S("retro_03",40,70,190,{d:.2,r:-6})}${S("retro_07",56,280,150,{d:.35,r:5})}${S("retro_05",30,470,200,{d:.5,r:-3})}
+ ${S("retro_02",1060,60,170,{d:.3,r:6})}${S("retro_06",1040,300,210,{d:.45,r:-4})}
+ <div class="pop" style="left:1080px;top:400px;width:140px;--d:2.8s">${S("lowpoly_10",0,0,110,{r:10}).replace('class="pop "','class="" style="position:relative"')}<span class="nobig" style="left:-6px;top:70px">NO! ✕</span></div>
+ <div class="burst" style="left:1110px;top:560px;width:120px;height:80px;font-size:15px"><span>miracle<br>food</span></div>`});
+
+/* 5 · stage select */
+const NODES=[[110,440],[280,300],[450,450],[620,300],[790,450],[960,300],[1120,430]];
+pages.push({key:"menu",tint:"transparent",html:`
+ <div class="map">
+  <div class="sun" style="left:40px;top:40px"></div><div class="moon" style="right:70px;top:46px"></div>
+  <h2 class="glit">STAGE SELECT</h2>
+  <div class="sub">本日のおしながき · 7 stages from bright morning to deep night · pick one!</div>
+  <svg class="path" viewBox="0 0 1220 592" aria-hidden="true"><path d="M${NODES.map(n=>`${n[0]-30} ${n[1]-48}`).join(" L ")}" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 22" style="stroke-dashoffset:0"/></svg>
+  ${NODES.map((n,i)=>`<button class="node ${i===6?"dk":""}" data-go="${i}" style="left:${n[0]-30}px;top:${n[1]-20}px"><div class="ped"><span class="st">STAGE ${i+1}</span><img src="${SL(i)}" alt=""></div><div class="nm"><span class="tm">${SHOWS[i].short}</span>${SHOWS[i].name}</div></button>`).join("")}
+  <div id="hopper" style="left:${NODES[0][0]-62}px;top:${NODES[0][1]-170}px">${SQUID(64)}</div>
+ </div>`});
+
+/* 6–12 · programs */
+const SCENES=[
+ // 1 bento
+ (s,i)=>`<div class="scene sc1">${sceneHead(s,i)}
+   <div class="timer"><small>COOK TIME</small><span class="tm">5:00</span></div>
+   <div class="film"><div class="reel">${[..."1,3,4,5,12,2,6,9,11,8".split(","),"c1","c2","c13","c15","c16","c17"].concat([..."1,3,4,5,12,2,6,9,11,8".split(","),"c1","c2","c13","c15","c16","c17"]).map(n=>`<img src="stk/${n[0]==="c"?"cbento_"+n.slice(1).padStart(2,"0"):"bento_"+n.padStart(2,"0")}.webp" alt="">`).join("")}</div></div>
+   <span class="seg" style="left:16px;top:250px;background:var(--butter)">♡ LISTENERS' BENTO GALLERY ↑</span>
+   <div class="box" id="bento"><div class="in"><i></i><i></i><i></i></div></div>
+   ${segs(s,["left:600px;top:300px;transform:rotate(4deg)","left:560px;top:350px;transform:rotate(-3deg)"])}
+   <div class="seg" style="left:590px;top:520px;background:#fff0f5">click the box ↺</div>
+   ${S("lowpoly_08",20,330,120,{d:.6,r:-8})}${S("oni_05",600,400,130,{d:.7,r:6})}
+ </div>`,
+ // 2 grocery
+ (s,i)=>`<div class="scene sc2">${sceneHead(s,i)}
+   <div class="shelf"></div>
+   <div class="sign" style="left:390px;top:96px">${`<img src="stk/retro_04.webp" alt="" style="width:200px;display:block">`}</div>
+   <div class="sign" style="left:600px;top:96px;animation-delay:-.8s"><img src="stk/retro_06.webp" alt="" style="width:130px;display:block"></div>
+   ${S("retro_08",30,170,170,{d:.3,r:-5})}<div class="burst" style="left:170px;top:150px;width:90px;height:90px;font-size:15px;z-index:3"><span>本日の<br>特売!</span></div>
+   ${S("lowpoly_07",300,190,150,{d:.4})}
+   <div class="meter"><span>🧺 BASKET <b class="amt">$0.00</b> / $20</span><div class="mb"><i></i></div><div style="font-size:12px;color:var(--berry);margin-top:4px">click snacks on the belt to shop!</div></div>
+   <div class="belt-wrap"><div class="belt"></div><div class="reel2">${(()=>{const L=["retro_10","retro_12","retro_13","retro_14","retro_15","retro_16","retro_17","retro_18","retro_19","retro_20","retro_21","retro_11","jfood_17"];return L.concat(L).map(n=>`<img src="stk/${n}.webp" alt="" data-snack>`).join("")})()}</div></div>
+   ${segs(s,["left:470px;top:250px;transform:rotate(-3deg)","left:24px;top:360px;transform:rotate(3deg)"])}
+   <div class="complete">COMPLETE ♡</div>
+ </div>`,
+ // 3 lunch map
+ (s,i)=>`<div class="scene sc3"><div class="streets"></div><div class="park"><div class="pond"></div><span>Boston Common</span></div><div class="campus"><span>Emerson ♡</span></div>
+   ${sceneHead(s,i)}
+   ${[["jfood_02",290,240,"Ramen Corner","🍙🍙🍙🍙🍙","$14 · rich broth"],["jfood_04",120,420,"Omurice Café","🍙🍙🍙🍙","$12 · ketchup heart"],["jfood_14",470,520,"Udon Stand","🍙🍙🍙🍙","$11 · fast & warm"],["lowpoly_04",640,560,"Takoyaki Cart","🍙🍙🍙","$8 · hot hot hot"],["oni_02",690,240,"Onigiri Bar","🍙🍙🍙🍙🍙","$6 · two for one"]].map((p,k)=>`<div class="pin" tabindex="0" style="left:${p[1]}px;top:${p[2]}px;--d:${.3+k*.18}s"><div class="tip"><b>${p[3]}</b>${p[4]}<br>${p[5]}</div><div class="bub"><img src="stk/${p[0]}.webp" alt=""></div></div>`).join("")}
+   <div class="walker">${SQUID(54)}</div>
+   ${segs(s,["left:16px;top:110px","left:16px;top:142px"])}
+   <span class="seg" style="right:16px;top:16px;background:var(--butter)">hover a pin ♡ rated in 🍙</span>
+ </div>`,
+ // 4 zine
+ (s,i)=>`<div class="scene sc4"><span class="tag">STAGE ${i+1} · ${s.time}</span>
+   <div class="zine">
+     <h2 class="glit mast">TEA TIME ZINE</h2>
+     <span class="vol">vol.04 · 2026 AUTUMN · おやつ特集号 ♡ 3–5 PM</span>
+     <span class="zhead" style="left:380px;top:110px">Cake of the Day!</span>
+     <span class="zhead" style="left:24px;top:352px;background:#d6f0ff;transform:rotate(2deg);z-index:3">Cute Packaging Award 🏆</span>
+     ${S("retro_10",250,120,150,{d:.5,ic:"jelly"})}
+     ${S("retro_09",30,110,110,{d:.6,r:-6})}${S("retro_11",130,140,100,{d:.7,r:5})}
+     ${S("cbento_05",400,150,140,{d:.8,r:4})}${S("cbento_06",540,130,120,{d:.9,r:-5})}${S("cbento_07",530,250,120,{d:1,r:6})}
+     ${S("cbento_04",390,280,140,{d:1.1,r:-4})}${S("cbento_11",260,290,120,{d:1.2,r:3})}
+     ${S("lowpoly_09",120,260,130,{d:1.3,r:-3})}${S("jfood_17",20,250,110,{d:1.4,r:6})}
+     ${S("retro_01",250,400,150,{d:1.5,r:-2})}${S("retro_19",420,385,70,{d:1.6,r:8})}
+     <div class="gnews pop" style="left:520px;top:368px;--d:1.7s;transform:rotate(3deg)"><b>GAME NEWS ♡</b><img src="stk/dsgame.webp" alt=""></div>
+     <div class="burst" style="left:560px;top:-10px;width:110px;height:110px;font-size:16px"><span>付録<br>つき!</span></div>
+   </div>
+   ${["masc_01","masc_02","masc_03","masc_04","masc_05","masc_06"].map((m,k)=>S(m,30+k*118,500,92,{d:1.8+k*.1,r:(k%2?6:-6),z:5})).join("")}
+ </div>`,
+ // 5 home
+ (s,i)=>`<div class="scene sc5"><div class="tiles"></div><div class="counterTop"></div>${sceneHead(s,i)}
+   <div class="abs" style="left:290px;top:250px;width:300px;height:10px"></div>
+   ${[0,1,2].map(k=>`<div class="steam" style="left:${380+k*40}px;top:220px;--sd:${k*.7}s;z-index:4"></div>`).join("")}
+   <img class="abs drop" id="noodle" src="stk/cn_noodle.webp" alt="" style="left:370px;top:240px;width:150px">
+   <img class="abs" src="stk/cn_bowl.webp" alt="" style="left:290px;top:270px;width:320px;z-index:5">
+   <img class="abs drop" id="naruto" src="stk/cn_naruto.webp" alt="" style="left:420px;top:262px;width:44px;z-index:6">
+   <img class="abs drop" id="negi" src="stk/cn_negi.webp" alt="" style="left:470px;top:262px;width:56px;z-index:6">
+   <img class="abs" id="hand" src="stk/cn_hand.webp" alt="" style="left:520px;top:150px;width:220px;z-index:7">
+   ${S("cn_xlb1",250,420,120,{d:.5,z:8})}${S("cn_xlb2",350,450,110,{d:.6,z:8})}${S("dumpling_face",470,430,150,{d:.7,z:8,r:-6})}${S("cn_gyoza",600,470,130,{d:.8,z:8})}
+   ${S("cn_pandaplate",24,470,120,{d:.4,z:8})}
+   <img class="slam" src="stk/cn_stamp.webp" alt="" style="left:640px;top:250px;width:80px;--r:12deg;--d:1.6s">
+   <div class="phone ring" id="momPhone" style="left:40px;top:100px"><div class="top"><div class="scr"><b>📞 着信中…</b><br>ママ ♡<br>Mom's Recipe<br>Hotline</div></div><div class="hinge"></div><div class="bot">${"<i></i>".repeat(9)}</div><button class="gel ans">answer ☎</button></div>
+   ${segs(s,["left:250px;top:110px;transform:rotate(-2deg)","left:470px;top:110px;transform:rotate(3deg)"])}
+ </div>`,
+ // 6 study
+ (s,i)=>`<div class="scene sc6">${sceneHead(s,i)}
+   <div class="crt"><div class="glass"><img src="stk/game1.webp" alt="" class="on"><img src="stk/game2.webp" alt=""><img src="stk/game3.webp" alt=""><img src="stk/game4.webp" alt=""></div></div>
+   <div class="focus"><small>FOCUS TIMER</small><b class="ft">25:00</b><div class="tb"><i></i></div></div>
+   <div class="score">SNACK POWER<b class="sc">0</b>click falling snacks!</div>
+   <div class="rank"><b>RANKING ♡</b>1. cup noodle<br>2. Pocky<br>3. takoyaki<br>4. toast</div>
+   <div class="desk"></div>
+   ${S("lowpoly_06",40,440,110,{d:.4,r:-6,z:4})}${S("lowpoly_01",620,500,90,{d:.5,r:4,z:4})}${S("lowpoly_11",160,490,100,{d:.6,r:3,z:4})}
+   ${segs(s,["left:16px;top:110px","left:16px;top:142px"])}
+   <div class="fallzone abs" style="inset:0;z-index:9;pointer-events:none"></div>
+ </div>`,
+ // 7 midnight
+ (s,i)=>`<div class="scene sc7">
+   <div class="noren">${"夜食ラジオ".split("").map((c,k)=>`<i style="--sd:${k*.3}s">${c}</i>`).join("")}</div>
+   <span class="tag" style="top:132px;background:#0e0a24">STAGE ${i+1} · ${s.time}</span><h2 class="glit stitle" style="top:160px">${s.name}</h2>
+   <div class="lantern" style="left:30px;top:250px"><div class="b">めし</div></div>
+   <div class="moon2"></div>
+   <div class="wood"></div>
+   ${[0,1,2].map(k=>`<div class="steam" style="left:${250+k*150}px;top:340px;--sd:${k*.8}s;z-index:4"></div>`).join("")}
+   ${S("jfood_02",190,400,150,{d:.4,z:5})}${S("jfood_04",340,420,170,{d:.5,z:5})}${S("jfood_14",500,410,140,{d:.6,z:5})}
+   <div class="phone mail" style="left:580px;top:150px;width:150px"><div class="top" style="height:190px"><div class="scr" id="mailScr"></div></div><div class="hinge"></div><div class="bot" style="height:80px">${"<i></i>".repeat(6)}</div></div>
+   ${segs(s,["left:130px;top:250px;background:#2f2756;color:#fff;border-color:#0e0a24","left:130px;top:284px;background:#2f2756;color:#fff;border-color:#0e0a24"])}
+ </div>`
+];
+SHOWS.forEach((s,i)=>pages.push({key:"show"+i,tint:s.tint,night:!!s.night,dark:!!s.dark,html:SCENES[i](s,i)+status(s,i)}));
+
+pages.push({key:"bye",tint:"rgba(18,12,44,.86)",night:true,html:`
+ <h2 class="glit abs" style="left:40px;top:60px;font-size:56px;width:580px">Thank you for listening ♡</h2>
+ <div class="abs" style="left:44px;top:200px;font-family:var(--f-pixel);font-size:22px;color:#ffd6e4">おやすみなさい · good night</div>
+ <p class="abs" style="left:44px;top:240px;width:560px;color:#fdf1e6;font-size:20px;line-height:1.55;margin:0">This was Yoru Kitchen FM 98.1. The last train is leaving soon. Eat something warm before you sleep.</p>
+ <div class="abs" style="left:44px;top:380px;display:flex;gap:6px;align-items:flex-end">${SHOWS.map((s,i)=>`<img src="${SL(i)}" alt="" style="width:74px;animation:snore 2.4s ease-in-out ${i*.3}s infinite">`).join("")}</div>
+ <div class="abs" style="left:560px;top:330px">${SQUID(80)}</div>
+ ${[0,1,2].map(k=>`<span class="zzz" style="left:${610+k*16}px;top:${310-k*10}px;--sd:${k*.8}s">z</span>`).join("")}
+ <div class="counter abs" style="left:44px;top:560px;color:#ffd6e4">あなたは <b>${"000982".split("").map(c=>`<i>${c}</i>`).join("")}</b> 人目のリスナーでした ♡</div>
+ <div class="roll-wrap"><div class="staff">
+  <p class="big">YORU KITCHEN FM 98.1</p><h4>— STAFF ROLL —</h4>
+  <h4>HOST · CONCEPT · WRITING</h4><p>Ziyan Wu (DJ Squid 🦑)</p>
+  <h4>PIXEL ART</h4><p>made with ChatGPT from Ziyan's prompts</p>
+  <h4>FOOD STICKERS & PHOTOS</h4><p>collected by Ziyan from Xiaohongshu collage sheets<br>(@ichii and others) · class use only</p>
+  <h4>GAME SCREENSHOTS</h4><p>2000s flash & DS cooking games, for nostalgia</p>
+  <h4>WEB BUILD</h4><p>Claude</p>
+  <h4>DREAM GUESTS & SPONSORS</h4><p>all imaginary bookings ♡</p>
+  <h4>MADE FOR</h4><p>Media Histories (VM-134-02)<br>Prof. David Stewart · Emerson College · Fall 2026</p>
+  <p class="big" style="margin-top:40px">THE END ♡</p><p>おつかれさまでした</p>
+ </div></div>
+ <style>@keyframes snore{50%{transform:translateY(-5px) scale(1.03,.97)}}</style>`});
+
+/* ---------------- render ---------------- */
+const stage=document.getElementById("stage"),host=document.getElementById("pages");
+host.innerHTML=pages.map((p,i)=>`<section class="page ${p.dark?"dark":""}" data-p="${i}">${p.html}</section>`).join("");
+const secs=[...host.children];
+function fit(){const s=Math.min(innerWidth/1300,innerHeight/740);stage.style.transform=`translate(-50%,-50%) scale(${s})`}
+addEventListener("resize",fit);fit();
+document.querySelector("#ticker div").textContent=("★ YORU KITCHEN FM 98.1 ★ NOW ON AIR ★ 今日もおいしいラジオ ♡ ★ request hotline open all night ★ tonight's dish: hot udon with an egg ★ キリ番 1000 を踏んだ人は BBS に書き込んでね ★ ").repeat(4);
+const wipe=document.getElementById("wipe");wipe.innerHTML="<i>♡</i>".repeat(144);const cells=[...wipe.children];
+
+/* ---------------- sound ---------------- */
+let ac=null,muted=false;
+const muteBtn=document.getElementById("mute");
+muteBtn.onclick=()=>{muted=!muted;muteBtn.textContent=muted?"♪ off":"♪ on";muteBtn.setAttribute("aria-pressed",muted);if(typeof BGM!=="undefined")BGM.refresh()};
+function A(){if(!ac){try{ac=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}if(ac)setTimeout(()=>BGM.kick(),0)}if(ac&&ac.state==="suspended")ac.resume();return ac}
+function tone(f,d,type="triangle",v=.15,to=null,at=0){const c=A();if(!c||muted)return;const t=c.currentTime+at,o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(to)o.frequency.exponentialRampToValueAtTime(to,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g).connect(c.destination);o.start(t);o.stop(t+d+.02)}
+function noise(d,v=.15,freq=2000,type="highpass",at=0){const c=A();if(!c||muted)return;const t=c.currentTime+at,b=c.createBuffer(1,Math.ceil(c.sampleRate*d),c.sampleRate),a=b.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=Math.random()*2-1;const s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();s.buffer=b;f.type=type;f.frequency.value=freq;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);s.connect(f).connect(g).connect(c.destination);s.start(t)}
+const sfx={
+ boing(){tone(180,.12,"sine",.25,520);tone(520,.25,"sine",.2,240,.12)},
+ chop(){noise(.07,.22,2500);tone(110,.08,"square",.08,60)},
+ poof(){tone(1318,.12,"triangle",.1);tone(1760,.14,"triangle",.08,null,.05)},
+ sparkle(){[1568,2093,2637,3136].forEach((f,i)=>tone(f,.18,"triangle",.07,null,i*.06))},
+ statik(){noise(1.4,.09,1800,"bandpass")},
+ blip(){tone(880,.07,"square",.05)},
+ coin(){tone(988,.08,"square",.07);tone(1319,.25,"square",.07,null,.08)},
+ thud(){tone(90,.2,"sine",.3,45);noise(.08,.15,600,"lowpass")},
+ ring(){for(let k=0;k<4;k++){tone(1320,.08,"square",.05,null,k*.18);tone(1660,.08,"square",.05,null,k*.18+.09)}},
+ drop(){tone(600,.15,"sine",.15,200)},
+ wipe(){[523,659,784,1047].forEach((f,i)=>tone(f,.09,"triangle",.05,null,i*.04))},
+ key(){tone(2200,.02,"square",.02)},
+ jingle(){const N={E5:659,G5:784,C6:1047,B5:988,A5:880};[["E5",0],["G5",.15],["C6",.3],["B5",.5],["G5",.65],["A5",.8],["G5",1.05]].forEach(([n,t])=>tone(N[n],.22,"square",.06,null,t));[[262,0],[392,.3],[349,.6],[392,.9]].forEach(([f,t])=>tone(f,.28,"triangle",.1,null,t))}
+};
+
+
+/* ---------------- original 8-bit BGM (Web Audio sequencer) ---------------- */
+const NOTE=n=>{const m=/^([A-G])(#|b)?(\d)$/.exec(n);if(!m)return 0;const b={C:0,D:2,E:4,F:5,G:7,A:9,B:11}[m[1]]+(m[2]==="#"?1:m[2]==="b"?-1:0);return 440*Math.pow(2,(b+12*(+m[3]+1)-69)/12)};
+const tok=s=>s.replace(/\|/g," ").trim().split(/\s+/);
+const SONGS={
+ home:{bpm:132,lead:["square",.03,"E5 ~ G5 C6 ~ B5 G5 ~ | A5 ~ F5 A5 C6 ~ A5 ~ | G5 ~ E5 G5 C6 ~ E6 ~ | D6 ~ B5 G5 C6 ~ ~ -"],bass:["triangle",.07,"C3 - C4 - C3 - C4 - | F2 - F3 - F2 - F3 - | C3 - C4 - A2 - A3 - | G2 - G3 - G2 - B2 -"],hat:"x.x.x.x.",kick:"x...x..."},
+ show0:{bpm:144,lead:["square",.03,"C5 F5 A5 C6 ~ A5 F5 ~ | Bb5 ~ A5 G5 F5 ~ G5 ~ | A5 C6 ~ A5 G5 ~ F5 ~ | G5 A5 G5 E5 F5 ~ ~ -"],bass:["triangle",.07,"F3 - C3 - F3 - C3 - | Bb2 - F3 - Bb2 - F3 - | F3 - C3 - D3 - A2 - | C3 - G2 - F3 - C3 -"],hat:"x.x.x.x.",kick:"x...x..."},
+ show1:{bpm:120,lead:["triangle",.06,"G5 B5 D6 B5 G5 - A5 - | B5 C6 B5 A5 G5 - - - | E5 G5 B5 G5 D5 - G5 - | A5 B5 A5 F#5 G5 - - -"],pluck:true,bass:["triangle",.07,"G2 - D3 - G2 - D3 - | C3 - G3 - C3 - G3 - | E3 - B2 - B2 - D3 - | D3 - A2 - G2 - - -"],hat:"..x...x.",kick:"x...x..."},
+ show2:{bpm:112,lead:["square",.025,"F#5 ~ A5 ~ D6 ~ A5 ~ | B5 ~ G5 ~ E5 ~ - - | F#5 ~ A5 ~ B5 A5 F#5 ~ | E5 ~ D5 ~ E5 F#5 D5 ~"],bass:["triangle",.07,"D3 - F#3 - A3 - F#3 - | G3 - B2 - E3 - G3 - | D3 - A2 - B2 - D3 - | A2 - C#3 - E3 - A2 -"],hat:"x.x.x.x.",kick:"x.......x......."},
+ show3:{bpm:100,lead:["sine",.06,"E6 ~ ~ G6 ~ E6 | D6 ~ ~ C6 ~ ~ | D6 ~ E6 F6 ~ D6 | E6 ~ ~ ~ ~ -"],pluck:true,bass:["triangle",.06,"C3 - E3 - G3 - | G2 - B2 - D3 - | F2 - A2 - C3 - | C3 - G3 - E3 -"],hat:"......",kick:"x....."},
+ show4:{bpm:96,lead:["triangle",.06,"E5 ~ G5 A5 G5 ~ E5 D5 | C5 ~ D5 E5 D5 ~ ~ - | E5 ~ G5 A5 C6 ~ A5 G5 | A5 G5 E5 D5 C5 ~ ~ -"],pluck:true,bass:["triangle",.07,"C3 - G3 - C3 - G3 - | A2 - E3 - A2 - E3 - | F2 - C3 - F2 - C3 - | G2 - D3 - C3 - G2 -"],hat:"....x...",kick:"x...x..."},
+ show5:{bpm:84,lead:["sine",.05,"- - E5 - G5 ~ ~ - | - - F5 - A5 ~ G5 - | - - D5 - F5 ~ E5 - | - - E5 ~ ~ ~ - -"],chords:[["A3","C4","E4","G4"],["D3","F3","A3","C4"],["G3","B3","D4","F4"],["C4","E4","G4","B4"]],bass:["triangle",.07,"A2 ~ ~ - A2 - E2 - | D2 ~ ~ - D2 - A2 - | G2 ~ ~ - G2 - D2 - | C3 ~ ~ - C3 - G2 -"],hat:"..x...x.",kick:"x....x.."},
+ show6:{bpm:92,lead:["triangle",.05,"A5 ~ G5 E5 ~ ~ C5 ~ | G5 ~ F5 D5 ~ ~ B4 ~ | F5 ~ E5 C5 ~ D5 E5 ~ | D5 ~ ~ ~ G5 ~ ~ -"],chords:[["F3","A3","C4","E4"],["E3","G3","B3","D4"],["D3","F3","A3","C4"],["G3","B3","D4","F4"]],bass:["triangle",.08,"F2 ~ - F3 - F2 C3 - | E2 ~ - E3 - E2 B2 - | D2 ~ - D3 - D2 A2 - | G2 ~ - G3 - G2 D3 -"],hat:"..x...x.",kick:"x..x..x."},
+ bye:{bpm:72,lead:["sine",.06,"C6 ~ G5 ~ E5 ~ G5 ~ | A5 ~ G5 ~ E5 ~ ~ ~ | F5 ~ E5 ~ D5 ~ G5 ~ | C5 ~ ~ ~ ~ ~ - -"],pluck:true,bass:["triangle",.05,"C3 - - - G3 - - - | F3 - - - C3 - - - | D3 - - - G2 - - - | C3 - - - - - - -"],hat:"........",kick:"........"}
+};
+const SONG_OF={station:"home",audience:"home",sound:null,rules:"home",menu:"home",show0:"show0",show1:"show1",show2:"show2",show3:"show3",show4:"show4",show5:"show5",show6:"show6",bye:"bye"};
+const BGMP=()=>typeof BGM!=="undefined"&&BGM.paused;
+const BGM=(()=>{let on=true,want=null,song=null,step=0,next=0,timer=null,bus=null;
+ function voice(f,t,d,type,v,pluck){const o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.01);if(pluck)g.gain.exponentialRampToValueAtTime(.0005,t+Math.max(.25,d));else{g.gain.setValueAtTime(v,t+d*.85);g.gain.linearRampToValueAtTime(0,t+d)}o.connect(g).connect(bus);o.start(t);o.stop(t+Math.max(.3,d)+.05)}
+ function hit(t,kind){if(kind==="h"){const b=ac.createBuffer(1,ac.sampleRate*.04,ac.sampleRate),a=b.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=Math.random()*2-1;const s=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain();s.buffer=b;f.type="highpass";f.frequency.value=7000;g.gain.setValueAtTime(.025,t);g.gain.exponentialRampToValueAtTime(.001,t+.04);s.connect(f).connect(g).connect(bus);s.start(t)}else{const o=ac.createOscillator(),g=ac.createGain();o.frequency.setValueAtTime(140,t);o.frequency.exponentialRampToValueAtTime(45,t+.12);g.gain.setValueAtTime(.12,t);g.gain.exponentialRampToValueAtTime(.001,t+.15);o.connect(g).connect(bus);o.start(t);o.stop(t+.16)}}
+ function line(spec,i,t,sp,pluck){const T=spec._t||(spec._t=tok(spec[2]));const n=T[i%T.length];if(!n||n==="-"||n==="~")return;let len=1;while(T[(i+len)%T.length]==="~"&&len<T.length)len++;voice(NOTE(n),t,len*sp*.95,spec[0],spec[1],pluck)}
+ function tick(){if(!ac||!song)return;const sp=60/song.bpm/2;while(next<ac.currentTime+.15){const t=Math.max(next,ac.currentTime+.01);
+   line(song.lead,step,t,sp,song.pluck);line(song.bass,step,t,sp,false);
+   const L=song.lead._t.length;if(song.chords&&step%8===0){const c=song.chords[(step/8|0)%song.chords.length];c.forEach(n=>voice(NOTE(n),t,sp*7.6,"sine",.018,false))}
+   if(song.hat[step%song.hat.length]==="x")hit(t,"h");if(song.kick[step%song.kick.length]==="x")hit(t,"k");
+   step=(step+1)%L;next+=sp}}
+ function apply(){if(!ac)return;if(!bus){bus=ac.createGain();bus.gain.value=0;bus.connect(ac.destination)}
+   const target=on&&!muted&&want&&!BGMP()?1:0;const now=ac.currentTime;bus.gain.cancelScheduledValues(now);bus.gain.setValueAtTime(bus.gain.value,now);
+   if(SONGS[want]!==song){bus.gain.linearRampToValueAtTime(0,now+.25);setTimeout(()=>{song=SONGS[want]||null;if(song){song.lead._t||(song.lead._t=tok(song.lead[2]));step=0;next=ac.currentTime+.05}const n2=ac.currentTime;bus.gain.cancelScheduledValues(n2);bus.gain.setValueAtTime(0,n2);bus.gain.linearRampToValueAtTime(on&&!muted&&song&&!BGMP()?1:0,n2+.4)},260)}
+   else bus.gain.linearRampToValueAtTime(target,now+.3);
+   if(!timer)timer=setInterval(tick,30)}
+ let paused=false;return{set(k){want=k;apply()},kick(){apply()},toggle(){on=!on;apply();return on},refresh(){apply()},pause(v){paused=v;apply()},get paused(){return paused}}})();
+const bgmBtn=document.getElementById("bgmBtn");
+bgmBtn.onclick=()=>{A();const o=BGM.toggle();bgmBtn.textContent=o?"♫ BGM on":"♫ BGM off";bgmBtn.setAttribute("aria-pressed",o)};
+/* ---------------- helpers ---------------- */
+const $=s=>stage.querySelector(s),$$=s=>[...stage.querySelectorAll(s)];
+const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+const fx=document.getElementById("fx");
+const scaleNow=()=>stage.getBoundingClientRect().width/1280;
+function toStage(cx,cy){const r=stage.getBoundingClientRect(),s=r.width/1280;return[(cx-r.left)/s,(cy-r.top)/s]}
+function burst(x,y,n=8,chars="★✦♡",layer=fx){for(let k=0;k<n;k++){const e=document.createElement("div");e.className="star";e.textContent=chars[k%chars.length];e.style.left=x+"px";e.style.top=y+"px";layer.appendChild(e);const a=Math.PI*2*k/n+Math.random()*.4,r=50+Math.random()*40;e.animate([{transform:"translate(-50%,-50%) scale(.4)",opacity:1},{transform:`translate(calc(-50% + ${Math.cos(a)*r}px),calc(-50% + ${Math.sin(a)*r}px)) scale(1.1) rotate(${k*40}deg)`,opacity:0}],{duration:700,easing:"cubic-bezier(.2,.8,.3,1)"}).finished.then(()=>e.remove())}}
+/* sparkle cursor trail */
+let lastT=0;const TC=["#ff7aa8","#ffd84d","#7fd3ff","#b98cff","#fff"];
+stage.addEventListener("pointermove",e=>{if(RM)return;const n=performance.now();if(n-lastT<45)return;lastT=n;const[x,y]=toStage(e.clientX,e.clientY);const t=document.createElement("div");t.className="trail";t.textContent=Math.random()<.5?"✦":"♡";t.style.color=TC[(Math.random()*5)|0];t.style.left=x+"px";t.style.top=y+"px";fx.appendChild(t);t.animate([{transform:"translate(-50%,-50%) scale(1)",opacity:1},{transform:`translate(-50%,${10+Math.random()*30}px) scale(.3) rotate(90deg)`,opacity:0}],{duration:800,easing:"ease-out"}).finished.then(()=>t.remove())});
+/* sticker clicks: tiny squeak + sparkle */
+stage.addEventListener("click",e=>{const st=e.target.closest(".stk");if(!st)return;A();tone(1200+Math.random()*600,.12,"sine",.08,600);const[x,y]=toStage(e.clientX,e.clientY);burst(x,y,6,"♡✦")});
+
+
+/* ---------------- tape deck: plays YouTube inside the page when hosted on the website ---------------- */
+const CAN_EMBED=location.protocol==="file:"||/(^|\.)opkikk\.uk$|\.pages\.dev$|^localhost$/.test(location.hostname);
+const deck=document.getElementById("deck"),deckVid=deck.querySelector(".vid");
+let bgmWasOn=null;
+function openDeck(id,title,href){deckVid.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" title="${title}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;deck.querySelector(".ttl").textContent=title;deck.querySelector(".out").href=href;deck.hidden=false;BGM.pause(true)}
+function closeDeck(){deckVid.innerHTML="";deck.hidden=true;BGM.pause(false)}
+document.getElementById("deckClose").onclick=()=>{sfx.blip();closeDeck()};
+deck.addEventListener("click",e=>{if(e.target===deck)closeDeck()});
+stage.addEventListener("click",e=>{const a=e.target.closest("a.yt");if(!a||!CAN_EMBED||!a.dataset.vid)return;e.preventDefault();A();sfx.coin();openDeck(a.dataset.vid,a.dataset.title,a.href)});
+addEventListener("keydown",e=>{if(e.key==="Escape"&&!deck.hidden)closeDeck()},true);
+/* ---------------- opening ---------------- */
+const RW=760,RH=363,SW=RW/7,CX=600,CY=450,TH=-7*Math.PI/180;
+const roll=$("#roll"),knife=$("#knife"),radio=$("#radio"),lcd=$("#lcd");
+for(let i=0;i<7;i++){const d=document.createElement("div");d.className="strip";d.style.left=(i*SW)+"px";d.style.width=(SW+1)+"px";d.style.backgroundPosition=`${-i*SW}px 0`;roll.appendChild(d)}
+const strips=[...roll.children];
+const rot=(x,y)=>[CX+x*Math.cos(TH)-y*Math.sin(TH),CY+x*Math.sin(TH)+y*Math.cos(TH)];
+const finalX=i=>545+(i-3)*114,FINAL_BOTTOM=488;
+const slices=$$(".slice"),labels=$$(".slabel");
+let state="idle",abort=false,notesTimer=null;
+const RADIO="translate(990px,330px)",KREST="translate(1080px,290px) rotate(8deg)";
+const kAt=(x,y,r=173)=>`translate(${x-35}px,${y-182}px) rotate(${r}deg)`;
+async function playOpening(){
+  if(state!=="idle")return;state="running";abort=false;
+  $("#hint").style.display="none";roll.classList.remove("idle");
+  sfx.boing();
+  await roll.animate([{transform:"rotate(-7deg) scale(1,1)"},{transform:"rotate(-7deg) scale(1.08,.9)"},{transform:"rotate(-7deg) scale(.94,1.08)"},{transform:"rotate(-7deg) scale(1.03,.97)"},{transform:"rotate(-7deg) scale(1,1)"}],{duration:650,easing:"ease-out"}).finished;
+  if(abort)return;
+  const off=[0,0,0,0,0,0,0];let cur=KREST;
+  for(let k=1;k<=6;k++){
+    const[x,y]=rot(k*SW-RW/2+off[k-1]+5,0);
+    const up=kAt(x,y-RH/2-40),down=kAt(x,y+70);
+    await knife.animate([{transform:cur},{transform:up}],{duration:k===1?420:170,easing:"ease-in-out",fill:"forwards"}).finished;if(abort)return;
+    await knife.animate([{transform:up},{transform:down}],{duration:100,easing:"ease-in",fill:"forwards"}).finished;if(abort)return;
+    sfx.chop();
+    for(let i=k;i<7;i++)off[i]+=12;
+    strips.forEach((s,i)=>s.animate([{transform:`translateX(${off[i]-(i>=k?12:0)}px)`},{transform:`translateX(${off[i]}px)`}],{duration:160,easing:"ease-out",fill:"forwards"}));
+    burst(x,y-10,4,"·✦·");
+    await knife.animate([{transform:down},{transform:up}],{duration:130,easing:"ease-out",fill:"forwards"}).finished;if(abort)return;
+    cur=up;
+  }
+  knife.animate([{transform:cur,opacity:1},{transform:"translate(1180px,120px) rotate(40deg)",opacity:0}],{duration:450,easing:"ease-in",fill:"forwards"});
+  await wait(250);if(abort)return;
+  for(let i=0;i<7;i++){
+    const[x,y]=rot((i+.5)*SW-RW/2+off[i],0);
+    sfx.poof();burst(x,y,9);
+    strips[i].animate([{opacity:1,transform:`translateX(${off[i]}px) scale(1)`},{opacity:0,transform:`translateX(${off[i]}px) scale(.3)`}],{duration:220,fill:"forwards"});
+    const sl=slices[i];sl.classList.add("on");sl.style.left=x+"px";sl.style.top=(y+68)+"px";
+    sl.animate([{transform:"translate(-50%,-100%) scale(0)"},{transform:"translate(-50%,-100%) scale(1.25)"},{transform:"translate(-50%,-100%) scale(1)"}],{duration:320,easing:"ease-out"});
+    await wait(140);if(abort)return;
+  }
+  await wait(300);if(abort)return;
+  sfx.sparkle();
+  slices.forEach((sl,i)=>{const x0=parseFloat(sl.style.left),y0=parseFloat(sl.style.top),x=finalX(i),y=FINAL_BOTTOM;
+    sl.animate([{left:x0+"px",top:y0+"px"},{left:(x0+x)/2+"px",top:Math.min(y0,y)-90+"px"},{left:x+"px",top:y+"px"}],{duration:620,delay:i*50,easing:"ease-in-out",fill:"forwards"}).finished.then(()=>{sl.getAnimations().forEach(a=>a.cancel());sl.style.left=x+"px";sl.style.top=y+"px"})});
+  await wait(1000);if(abort)return;
+  const tw=$("#titleWrap");tw.style.opacity=1;
+  tw.animate([{transform:"translateY(-260px)"},{transform:"translateY(14px)"},{transform:"translateY(-6px)"},{transform:"translateY(0)"}],{duration:700,easing:"ease-out"});
+  sfx.boing();
+  await wait(600);if(abort)return;
+  $("#tagline").animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:400,fill:"forwards"});
+  await radio.animate([{transform:"translate(1400px,330px) rotate(10deg)"},{transform:"translate(975px,330px) rotate(-4deg)"},{transform:RADIO}],{duration:600,easing:"ease-out",fill:"forwards"}).finished;
+  if(abort)return;
+  lcd.style.opacity=1;sfx.statik();
+  const t0=performance.now();
+  await new Promise(res=>{(function step(t){const p=Math.min(1,(t-t0)/1300),f=87.9+(98.1-87.9)*(1-Math.pow(1-p,3));lcd.textContent="FM "+(Math.round(f*10)/10).toFixed(1);if(p<1&&!abort)requestAnimationFrame(step);else res()})(t0)});
+  if(abort)return;
+  sfx.jingle();finish(false);
+}
+function finish(instant){
+  state="done";abort=true;
+  if(instant)secs[0].getAnimations({subtree:true}).filter(a=>!(window.CSSAnimation&&a instanceof CSSAnimation)).forEach(a=>a.cancel());
+  $("#hint").style.display="none";roll.classList.remove("idle");roll.style.visibility="hidden";
+  knife.style.opacity=0;
+  slices.forEach((sl,i)=>{sl.classList.add("on");if(instant){sl.style.left=finalX(i)+"px";sl.style.top=FINAL_BOTTOM+"px"}});
+  labels.forEach((l,i)=>{l.style.left=finalX(i)+"px";l.style.top=(FINAL_BOTTOM+8)+"px"});
+  $("#titleWrap").style.opacity=1;$("#tagline").style.opacity=1;
+  radio.style.transform=RADIO;lcd.style.opacity=1;lcd.textContent="FM 98.1";
+  const sb=$("#startBtn");sb.style.opacity=1;sb.style.pointerEvents="auto";
+  secs[0].classList.add("done");
+  if(!instant)sb.animate([{transform:"translateX(-50%) scale(0)"},{transform:"translateX(-50%) scale(1.15)"},{transform:"translateX(-50%) scale(1)"}],{duration:400,easing:"ease-out"});
+  updateBar();startNotes();BGM.set("home");
+}
+function startNotes(){clearInterval(notesTimer);if(RM)return;notesTimer=setInterval(()=>{if(cur!==0)return;const e=document.createElement("div");e.className="note";e.textContent=Math.random()<.5?"♪":"♫";e.style.left=(1070+Math.random()*120)+"px";e.style.top="340px";fx.appendChild(e);e.animate([{transform:"translateY(0)",opacity:0},{opacity:1,offset:.2},{transform:`translate(${Math.random()*40-20}px,-120px) rotate(${Math.random()*40-20}deg)`,opacity:0}],{duration:2200,easing:"ease-out"}).finished.then(()=>e.remove())},700)}
+roll.addEventListener("click",()=>{A();playOpening()});
+roll.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();A();playOpening()}});
+roll.addEventListener("mouseenter",()=>{if(state==="idle")sfx.blip()});
+slices.forEach(sl=>sl.addEventListener("click",()=>{if(state==="done"){sfx.blip();go(SHOW0+ +sl.dataset.i)}}));
+$("#startBtn").onclick=()=>{sfx.blip();go(1)};
+
+/* ---------------- per-page scenes ---------------- */
+let timers=[];const every=(f,ms)=>timers.push(setInterval(f,ms)),later=(f,ms)=>timers.push(setTimeout(f,ms));
+function clearScene(){timers.forEach(t=>{clearInterval(t);clearTimeout(t)});timers=[]}
+const enter={
+ station(sec){const el=sec.querySelector("#hits"),target=981,t0=performance.now();(function step(t){const p=Math.min(1,(t-t0)/1600),v=Math.round(target*(1-Math.pow(1-p,3)));el.innerHTML=String(v).padStart(6,"0").split("").map(c=>`<i>${c}</i>`).join("");if(p<1)requestAnimationFrame(step)})(t0)},
+ audience(){[0,1,2,3].forEach(k=>later(()=>{noise(.5,.05,3000,"highpass");tone(1500,.05,"square",.04,null,.5)},200+k*350))},
+ sound(sec){const b=sec.querySelector("#jingleBtn"),cds=sec.querySelectorAll(".cd"),eq=sec.querySelector("#eq"),r=sec.querySelector("#sndRadio");
+   b.onclick=()=>{A();sfx.jingle();cds.forEach(c=>c.classList.add("fast"));eq.classList.add("fast");r.animate([{transform:"rotate(0)"},{transform:"rotate(-5deg) scale(1.04)"},{transform:"rotate(5deg) scale(1.04)"},{transform:"rotate(0)"}],{duration:300,iterations:5});const[x,y]=[640,300];burst(x,y,10,"♪♫♡");setTimeout(()=>{cds.forEach(c=>c.classList.remove("fast"));eq.classList.remove("fast")},1500)}},
+ rules(){[.7,1.3,1.9,2.5].forEach(d=>later(()=>sfx.thud(),d*1000+250))},
+ menu(sec){const hop=sec.querySelector("#hopper");sec.querySelectorAll(".node").forEach((n,k)=>{n.onmouseenter=n.onfocus=()=>{hop.style.left=(NODES[k][0]-62)+"px";hop.style.top=(NODES[k][1]-170)+"px";sfx.blip()};n.onclick=()=>{sfx.coin();go(SHOW0+k)}})},
+ show0(sec){const box=sec.querySelector("#bento"),tm=sec.querySelector(".tm");
+   const items=[["oni_04",195,300,150],["oni_01",215,380,0],["jfood_17",395,318,120],["lowpoly_05",420,412,95],["jfood_11",510,410,90],["retro_19",330,400,0]].filter(x=>x[3]);
+   function dropAll(){sec.querySelectorAll(".dropped").forEach(e=>e.remove());items.forEach((it,k)=>{const d=document.createElement("img");d.src=`stk/${it[0]}.webp`;d.className="drop dropped";d.style.cssText=`left:${it[1]}px;top:${it[2]}px;width:${it[3]}px`;box.parentNode.appendChild(d);d.animate([{transform:"translateY(-420px) rotate(-30deg)"},{transform:"translateY(0) rotate(0) scale(1.15,.85)",offset:.7},{transform:"translateY(-24px) scale(.95,1.05)",offset:.85},{transform:"none"}],{duration:700,delay:300+k*250,easing:"ease-in",fill:"backwards"});later(()=>sfx.drop(),300+k*250+480)})}
+   dropAll();box.onclick=()=>{A();sfx.boing();dropAll()};
+   let t=300;every(()=>{t-=3;if(t<=0){tm.textContent="DONE♡";tm.parentNode.animate([{transform:"scale(1.2)"},{transform:"scale(1)"}],{duration:300});if(t<-60)t=300;return}tm.textContent=`${Math.floor(t/60)}:${String(t%60).padStart(2,"0")}`},100)},
+ show1(sec){let amt=0;const a=sec.querySelector(".amt"),bar=sec.querySelector(".mb i"),done=sec.querySelector(".complete"),bag=[375,260];
+   sec.querySelectorAll("[data-snack]").forEach(img=>{img.classList.remove("gone");img.onclick=e=>{A();if(img.classList.contains("gone"))return;
+     const sc=sec.querySelector(".scene").getBoundingClientRect(),s=scaleNow(),r=img.getBoundingClientRect(),x=(r.left-sc.left)/s-6,y=(r.top-sc.top)/s-6,w=r.width/s;
+     const f=document.createElement("img");f.src=img.src;f.className="drop";f.style.cssText=`left:${x}px;top:${y}px;width:${w}px;z-index:30`;sec.querySelector(".scene").appendChild(f);img.classList.add("gone");later(()=>img.classList.remove("gone"),4000);
+     f.animate([{transform:"none"},{transform:`translate(${(bag[0]-x)/2}px,${bag[1]-y-160}px) rotate(180deg) scale(.8)`},{transform:`translate(${bag[0]-x-w/2}px,${bag[1]-y}px) rotate(360deg) scale(.3)`,opacity:.2}],{duration:650,easing:"ease-in"}).finished.then(()=>f.remove());
+     const add=+(1.2+Math.random()*2.6).toFixed(2);amt=Math.min(99,amt+add);sfx.coin();
+     const p=document.createElement("div");p.className="ptxt";p.textContent=`+$${add.toFixed(2)}`;p.style.left=x+"px";p.style.top=y+"px";sec.querySelector(".scene").appendChild(p);p.animate([{transform:"none",opacity:1},{transform:"translateY(-60px)",opacity:0}],{duration:900}).finished.then(()=>p.remove());
+     a.textContent=`$${amt.toFixed(2)}`;bar.style.width=Math.min(100,amt/20*100)+"%";
+     if(amt>=20){sfx.sparkle();done.animate([{opacity:0,transform:"translate(-50%,-50%) rotate(-10deg) scale(3)"},{opacity:1,transform:"translate(-50%,-50%) rotate(-10deg) scale(1)"}],{duration:350,fill:"forwards",easing:"cubic-bezier(.5,0,.6,1.6)"});burst(376,190,14);
+       later(()=>{amt=0;a.textContent="$0.00";bar.style.width="0";done.animate([{opacity:1},{opacity:0}],{duration:300,fill:"forwards"})},2600)}}})},
+ show3(){},
+ show4(sec){const ph=sec.querySelector("#momPhone"),scr=ph.querySelector(".scr"),btn=ph.querySelector(".ans"),hand=sec.querySelector("#hand");
+   ph.classList.add("ring");scr.innerHTML="<b>📞 着信中…</b><br>ママ ♡<br>Mom's Recipe<br>Hotline";btn.style.display="";
+   later(()=>sfx.ring(),400);later(()=>sfx.ring(),1800);
+   btn.onclick=()=>{A();sfx.blip();ph.classList.remove("ring");btn.style.display="none";scr.innerHTML="";const msg="Mom: Add more ginger! And eat some vegetables too ♡";let k=0;const t=setInterval(()=>{scr.textContent=msg.slice(0,++k);sfx.key();if(k>=msg.length)clearInterval(t)},45);timers.push(t)};
+   ["#noodle","#naruto","#negi"].forEach((q,k)=>sec.querySelector(q).animate([{transform:"translateY(-300px)",opacity:0},{transform:"translateY(0)",opacity:1}],{duration:600,delay:300+k*350,easing:"cubic-bezier(.4,1.5,.6,1)",fill:"backwards"}));
+   hand.animate([{transform:"translate(200px,-40px)"},{transform:"translate(0,0)"},{transform:"translate(0,-30px)"},{transform:"translate(0,0)"}],{duration:3000,delay:1200,iterations:Infinity,easing:"ease-in-out"});
+   later(()=>sfx.thud(),1850)},
+ show5(sec){const imgs=sec.querySelectorAll(".crt img"),ft=sec.querySelector(".ft"),tb=sec.querySelector(".focus .tb i"),zone=sec.querySelector(".scene"),sc=sec.querySelector(".sc");let g=0,t=1500,score=0;
+   every(()=>{imgs[g].classList.remove("on");g=(g+1)%imgs.length;imgs[g].classList.add("on")},2200);
+   every(()=>{t-=7;if(t<0)t=1500;ft.textContent=`${String(Math.floor(t/60)).padStart(2,"0")}:${String(t%60).padStart(2,"0")}`;tb.style.width=(t/1500*100)+"%"},100);
+   const F=["lowpoly_02","lowpoly_06","lowpoly_05","lowpoly_09","lowpoly_04","lowpoly_03","lowpoly_11","lowpoly_12","lowpoly_08"];
+   every(()=>{const f=document.createElement("img");f.src=`stk/${F[(Math.random()*F.length)|0]}.webp`;f.className="fall";f.alt="";const x=20+Math.random()*660;f.style.left=x+"px";zone.appendChild(f);
+     const an=f.animate([{transform:"translateY(0) rotate(0)"},{transform:`translateY(760px) rotate(${Math.random()<.5?-1:1}turn)`}],{duration:4200+Math.random()*2200,easing:"linear"});an.finished.then(()=>f.remove()).catch(()=>{});
+     f.onpointerdown=e=>{A();an.cancel();f.remove();score++;sc.textContent=score;sfx.coin();const r=zone.getBoundingClientRect(),s=scaleNow();const p=document.createElement("div");p.className="ptxt";p.textContent="+1 ♡";p.style.left=((e.clientX-r.left)/s)+"px";p.style.top=((e.clientY-r.top)/s)+"px";zone.appendChild(p);p.animate([{opacity:1},{transform:"translateY(-50px)",opacity:0}],{duration:800}).finished.then(()=>p.remove())}},900)},
+ show6(sec){const scr=sec.querySelector("#mailScr");const L=[["Rina · 1:12 AM","I failed my midterm today. What should I eat?","DJ Squid: Hot udon with an egg. Soft and warm. You did your best ♡"],["Kai · 1:40 AM","I miss my grandma's cooking so much.","DJ Squid: Make her soup this weekend and call her while it cooks ♡"],["Mei · 2:05 AM","Last train is gone. I'm walking home.","DJ Squid: 7-Eleven onigiri + hot tea. Text a friend you're safe ♡"]];
+   let li=0;function run(){const[f,q,a]=L[li];li=(li+1)%L.length;const full=`✉ ${f}\n${q}\n\n${a}`;let k=0;scr.style.whiteSpace="pre-wrap";scr.textContent="";const t=setInterval(()=>{scr.textContent=full.slice(0,++k);if(k%2)sfx.key();if(k>=full.length){clearInterval(t);later(run,3200)}},38);timers.push(t)}
+   later(()=>{tone(1047,.12,"triangle",.08);tone(1319,.2,"triangle",.08,null,.12);run()},600)},
+ bye(){}
+};
+
+/* ---------------- navigation ---------------- */
+const SHOW0=pages.findIndex(p=>p.key==="show0");
+let cur=-1,fromHash=false,busy=false;
+const prev=document.getElementById("prev"),next=document.getElementById("next"),ticker=document.getElementById("ticker");
+function updateBar(){
+  const n=pages.length;document.getElementById("pageNo").textContent=String(cur+1).padStart(2,"0")+" / "+n;
+  document.getElementById("fill").style.width=((cur+1)/n*100)+"%";
+  prev.style.visibility=cur===0?"hidden":"visible";
+  next.textContent=(cur===0&&state!=="done")?"skip ▶▶":(cur===n-1?"replay ↺":"next ▶");
+}
+function show(i){
+  secs.forEach((s,k)=>{s.classList.toggle("active",k===i);s.classList.remove("play")});
+  cur=i;const p=pages[i];
+  document.getElementById("tint").style.setProperty("--tint",p.tint||"transparent");
+  stage.classList.toggle("night",!!p.night);
+  ticker.classList.toggle("hide",i===0);
+  clearScene();fx.querySelectorAll(".trail").forEach(t=>t.remove());
+  void secs[i].offsetWidth;secs[i].classList.add("play");
+  if(enter[p.key])enter[p.key](secs[i]);
+  BGM.set(p.key==="title"?(state==="done"?"home":null):(p.key in SONG_OF?SONG_OF[p.key]:"home"));
+  updateBar();
+}
+async function go(i){
+  i=Math.max(0,Math.min(pages.length-1,i));
+  if(i!==0&&state!=="done")finish(true);
+  if(i===cur||busy)return;
+  if(!fromHash){try{location.hash=i?"p"+(i+1):"title"}catch(e){}}
+  fromHash=false;
+  if(RM||cur<0){show(i);return}
+  busy=true;sfx.wipe();
+  const anims=cells.map((c,k)=>{const x=k%16,y=(k/16)|0;return c.animate([{transform:"scale(0) rotate(-90deg)"},{transform:"scale(1.05) rotate(0)"}],{duration:260,delay:(x+y)*14,easing:"ease-out",fill:"forwards"})});
+  await Promise.all(anims.map(a=>a.finished));
+  show(i);
+  const out=cells.map((c,k)=>{const x=k%16,y=(k/16)|0;return c.animate([{transform:"scale(1.05)"},{transform:"scale(0) rotate(90deg)"}],{duration:260,delay:(x+y)*14,easing:"ease-in",fill:"forwards"})});
+  await Promise.all(out.map(a=>a.finished));
+  busy=false;
+}
+prev.onclick=()=>{sfx.blip();go(cur-1)};
+next.onclick=()=>{A();sfx.blip();if(cur===0&&state!=="done"){finish(true);return}if(cur===pages.length-1){go(0);return}go(cur+1)};
+addEventListener("keydown",e=>{if(!document.getElementById("deck").hidden)return;if(e.target.closest&&e.target.closest("button,[role=button],a")&&(e.key===" "||e.key==="Enter"))return;
+  if(["ArrowRight","PageDown"," "].includes(e.key)){e.preventDefault();next.click()}
+  else if(["ArrowLeft","PageUp"].includes(e.key)){e.preventDefault();if(cur>0)prev.click()}});
+function fromLoc(){const m=/^#p(\d+)$/.exec(location.hash);return m?Math.max(0,Math.min(pages.length-1,+m[1]-1)):0}
+addEventListener("hashchange",()=>{const i=fromLoc();if(i!==cur){fromHash=true;go(i)}});
+const startAt=fromLoc();
+if(RM||startAt>0)finish(true);
+fromHash=true;go(startAt);
+})();
+</script>
+
+</body>
+</html>
