@@ -104,7 +104,7 @@ img{max-width:none;user-select:none;-webkit-user-drag:none}
 @keyframes hop{50%{transform:translateY(-6px)}}
 #gameTag{position:absolute;left:28px;top:24px;font-family:var(--f-pixel);font-size:18px;color:var(--cocoa);background:#fff8;border:3px solid var(--cocoa);border-radius:12px;padding:6px 14px;letter-spacing:.06em;transition:opacity .4s}
 .done #gameTag{opacity:0}
-.slice{position:absolute;width:110px;transform:translate(-50%,-100%);z-index:5;cursor:pointer;opacity:0;pointer-events:none;background:none;border:0;padding:0}
+.slice{position:absolute;width:98px;transform:translate(-50%,-100%);z-index:5;cursor:pointer;opacity:0;pointer-events:none;background:none;border:0;padding:0}
 .slice img{width:100%;display:block;filter:drop-shadow(0 4px 0 rgba(107,58,44,.18))}
 .slice.on{opacity:1;pointer-events:auto}
 .slice.on:hover img,.slice.on:focus-visible img{animation:jiggle2 .45s ease-in-out infinite}
@@ -197,20 +197,20 @@ img{max-width:none;user-select:none;-webkit-user-drag:none}
 
 /* ---------- 5 stage select ---------- */
 .map{position:absolute;left:30px;top:48px;width:1220px;height:592px;border:5px solid var(--cocoa);border-radius:26px;overflow:hidden;
-  background:linear-gradient(90deg,#fff3c4 0%,#ffe0c8 22%,#ffd0dc 40%,#dff2d0 55%,#f3c79e 68%,#a58ad6 82%,#2a2250 100%)}
+  background:linear-gradient(90deg,#fff3c4 0%,#ffe0c8 18%,#ffd0dc 33%,#dff2d0 46%,#f3c79e 58%,#a58ad6 70%,#2a2250 82%,#5a4796 92%,#ff9fb5 100%)}
 .map::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,#ffffff18 0 4px,transparent 4px 8px);pointer-events:none}
 .map h2{position:absolute;left:0;right:0;top:18px;text-align:center;font-size:48px}
-.map .sub{position:absolute;left:0;right:0;top:80px;text-align:center;font-family:var(--f-pixel);font-size:18px;color:var(--cocoa)}
+.map .sub{position:absolute;left:50%;top:80px;transform:translateX(-50%);white-space:nowrap;font-family:var(--f-pixel);font-size:17px;color:var(--cocoa);background:#fffd;border:3px solid var(--cocoa);border-radius:999px;padding:2px 16px;z-index:3}
 .map svg.path{position:absolute;inset:0}
 .page.play .map svg.path path{animation:dash 2.2s ease-out both}
 @keyframes dash{from{stroke-dashoffset:1400}to{stroke-dashoffset:0}}
-.node{position:absolute;width:150px;transform:translate(-50%,-50%);text-align:center;cursor:pointer;background:none;border:0;padding:0;font:inherit;color:inherit}
-.node .ped{position:relative;margin:0 auto;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 50% 38%,#fff,#ffe3eb 70%);border:4px solid var(--cocoa);box-shadow:0 6px 0 var(--cocoa);display:grid;place-items:center}
-.node .ped img{width:86px;transition:transform .2s}
+.node{position:absolute;width:134px;transform:translate(-50%,-50%);text-align:center;cursor:pointer;background:none;border:0;padding:0;font:inherit;color:inherit}
+.node .ped{position:relative;margin:0 auto;width:108px;height:108px;border-radius:50%;background:radial-gradient(circle at 50% 38%,#fff,#ffe3eb 70%);border:4px solid var(--cocoa);box-shadow:0 6px 0 var(--cocoa);display:grid;place-items:center}
+.node .ped img{width:76px;max-height:92px;object-fit:contain;transition:transform .2s}
 .node:hover .ped img,.node:focus-visible .ped img{animation:jiggle2 .45s infinite}
 .node:focus-visible{outline:3px dashed #fff;outline-offset:4px;border-radius:16px}
 .node .st{position:absolute;left:50%;top:-14px;transform:translateX(-50%);font-family:var(--f-pixel);font-size:14px;color:#fff;background:var(--hot);border:3px solid var(--cocoa);border-radius:999px;padding:0 10px;white-space:nowrap}
-.node .nm{margin-top:12px;font-family:var(--f-display);font-size:16px;line-height:1.15;color:var(--cocoa);background:#fff;border:3px solid var(--cocoa);border-radius:12px;padding:4px 8px}
+.node .nm{margin-top:12px;font-family:var(--f-display);font-size:15px;line-height:1.15;color:var(--cocoa);background:#fff;border:3px solid var(--cocoa);border-radius:12px;padding:4px 8px}
 .node .tm{display:block;font-family:var(--f-pixel);font-size:13px;color:var(--berry)}
 .node.dk .nm{background:#2f2756;color:#fff;border-color:#120d2a}
 .sun{position:absolute;width:90px;height:90px;border-radius:50%;background:#ffd84d;border:4px solid var(--cocoa);box-shadow:0 0 0 10px #ffd84d55,0 0 0 22px #ffd84d33;animation:spin 14s linear infinite}
@@ -374,6 +374,22 @@ img{max-width:none;user-select:none;-webkit-user-drag:none}
 .mail{position:absolute;left:560px;top:150px}
 .mail .scr{font-size:12px}
 
+
+/* scene 8 dawn */
+.sc8{background:linear-gradient(#1b1538 0%,#3c3172 40%,#a06aa8 70%,#ff9fb5 88%,#ffd9a0 100%)}
+.stars8{position:absolute;inset:0 0 40% 0;background-image:radial-gradient(2px 2px at 12% 20%,#fff 50%,transparent 51%),radial-gradient(2px 2px at 40% 12%,#fff 50%,transparent 51%),radial-gradient(3px 3px at 70% 26%,#ffe7a1 50%,transparent 51%),radial-gradient(2px 2px at 88% 10%,#fff 50%,transparent 51%),radial-gradient(2px 2px at 58% 40%,#fff 50%,transparent 51%);animation:fadeStars 10s ease-in-out infinite alternate}
+@keyframes fadeStars{to{opacity:.15}}
+.rise{position:absolute;left:226px;top:470px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,#fff6c2,#ffd84d 55%,#ffb347);box-shadow:0 0 80px 30px #ffd84d88;animation:rise 10s ease-in-out infinite alternate}
+@keyframes rise{from{transform:translateY(80px)}to{transform:translateY(-30px)}}
+.clk{position:absolute;z-index:8;width:160px;background:#fff;border:4px solid var(--cocoa);border-radius:14px;padding:4px 10px 6px;text-align:center}
+.clk small{display:block;font-family:var(--f-pixel);font-size:12px;color:var(--berry);letter-spacing:.1em}
+.clk b{font-family:var(--f-pixel);font-weight:400;font-size:34px;color:var(--cocoa);font-variant-numeric:tabular-nums}
+.clk span{font-family:var(--f-pixel);font-size:14px;margin-left:4px;color:var(--muted)}
+.tapes{position:absolute;left:24px;top:318px;z-index:7;display:grid;gap:8px}
+.tape8{position:relative;width:200px;height:62px;border:4px solid var(--cocoa);border-radius:10px;background:linear-gradient(#ffd0dd 0 40%,#fff 40% 100%);transform:rotate(calc((var(--k) - 1) * 3deg))}
+.tape8 span{position:absolute;left:10px;top:4px;font-family:var(--f-hand);font-size:15px;color:var(--cocoa)}
+.tape8 i{position:absolute;top:30px;width:22px;height:22px;border-radius:50%;border:3px solid var(--cocoa);background:repeating-conic-gradient(#fff 0 30deg,#ccc 30deg 60deg);animation:spin 3s linear infinite}
+.tape8 i:first-of-type{left:46px}.tape8 i:last-of-type{right:46px}
 /* ---------- 12 sound + 13 bye ---------- */
 .roll-wrap{position:absolute;left:640px;top:60px;width:560px;height:560px;overflow:hidden;-webkit-mask:linear-gradient(transparent,#000 14%,#000 86%,transparent);mask:linear-gradient(transparent,#000 14%,#000 86%,transparent)}
 .staff{position:absolute;left:0;right:0;top:100%;text-align:center;color:#fdf1e6}
@@ -383,6 +399,7 @@ img{max-width:none;user-select:none;-webkit-user-drag:none}
 .staff .big{font-family:var(--f-display);font-size:30px;margin-top:10px}
 @keyframes staff{to{transform:translateY(calc(-100% - 600px))}}
 .zzz{position:absolute;font-family:var(--f-pixel);color:#fff;font-size:24px;animation:zz 2.4s ease-out infinite;animation-delay:var(--sd)}
+@keyframes snore{50%{transform:translateY(-5px) scale(1.03,.97)}}
 @keyframes zz{from{transform:translate(0,0);opacity:0}30%{opacity:1}to{transform:translate(20px,-60px);opacity:0}}
 
 
@@ -407,18 +424,18 @@ img{max-width:none;user-select:none;-webkit-user-drag:none}
   <div id="ticker" class="hide"><div></div></div>
   <div id="fx"></div>
   <div id="deck" hidden><div class="shell" role="dialog" aria-label="Now playing">
-    <div class="lab"><span>♡ YORU TAPE DECK · NOW PLAYING ♡</span><button class="gel white" id="deckClose" style="font-size:15px;padding:4px 14px">✕ close</button></div>
+    <div class="lab"><span>♡ YORU TAPE DECK · NOW PLAYING ♡</span><button class="gel white" id="deckClose" style="font-size:15px;padding:4px 14px">✕ Close</button></div>
     <div class="vid"></div>
     <div class="reels"><i></i><span class="ttl"></span><i></i></div>
-    <a class="out" target="_blank" rel="noopener">can't play here? open it on YouTube ↗</a>
+    <a class="out" target="_blank" rel="noopener">Can't play here? Open it on YouTube ↗</a>
   </div></div>
   <div id="wipe"></div>
   <div id="bar">
-    <button class="gel white" id="prev">◀ back</button>
+    <button class="gel white" id="prev">◀ Back</button>
     <div id="timeBar"><span class="lbl">♡ TIME</span><div id="track"><div id="fill"></div></div><span id="pageNo">01 / 14</span></div>
-    <button class="gel blue" id="bgmBtn" aria-pressed="true">♫ BGM on</button>
-    <button class="gel blue" id="mute" aria-pressed="false">♪ on</button>
-    <button class="gel" id="next">next ▶</button>
+    <button class="gel blue" id="bgmBtn" aria-pressed="true">♫ BGM On</button>
+    <button class="gel blue" id="mute" aria-pressed="false">♪ On</button>
+    <button class="gel" id="next">Next ▶</button>
   </div>
 </div>
 
@@ -473,10 +490,17 @@ const SHOWS=[
   host:"DJ Squid alone. No guest. The listeners are the guests.",
   who:"Night owls, the sad, the sleepless, and the last-train people.",
   sp:"7-Eleven",ad:"“Midnight Diner Talk is brought to you by 7-Eleven, the only light still on at 1 AM.”",
-  songs:[["Midnight Pretenders","Tomoko Aran","1983"],["Plastic Love","Mariya Takeuchi","1984"],["Ride on Time","Tatsuro Yamashita","1980"]]}
+  songs:[["Midnight Pretenders","Tomoko Aran","1983"],["Plastic Love","Mariya Takeuchi","1984"],["Ride on Time","Tatsuro Yamashita","1980"]]},
+ {name:"Dawn Tapes",jp:"夜明けテープ",time:"2:00 – 7:00 AM",short:"2–7 AM",tint:"rgba(60,48,110,.45)",night:true,
+  pitch:"The quiet hours. Soft ambient music, DJ Squid's pre-recorded sleep tapes, and a free call-home line, because 3 AM in Boston is the afternoon in China.",
+  seg:["Call-Home Hour","Sleep Tapes"],
+  host:"DJ Squid on tape, with night-shift workers calling in live.",
+  who:"International students calling family back home, night-shift nurses and drivers, and anyone who can't sleep.",
+  sp:"Dunkin'",ad:"“Dawn Tapes is brought to you by Dunkin'. The first coffee of the day, ready before sunrise.”",
+  songs:[["Summer","Joe Hisaishi","1999"],["Merry Christmas Mr. Lawrence","Ryuichi Sakamoto","1983"],["Green (album)","Hiroshi Yoshimura","1986"]]}
 ];
 const SL=i=>`assets/slice${i+1}.png`;
-const VID={"Sakuranbo":"upODO6OuOOk","JOY":"ge9XkXUfzbE","Polyrhythm":"KbiSxunJatM","Twiggy Twiggy":"NcdrTlNlSds","Sugarless GiRL":"ibN26Zkkl0Q","Star Fruits Surf Rider":"8x_XUZ3n1xc","Sobakasu":"8iSG4jIUkcU","Asia no Junshin":"EO4tRtPBq30","Shangri-La":"NEb9MTNk3y4","Traveling":"4j2ZJAgdrGE","Seasons":"388RThHSPhw","Fragile":"sxLN3E3jigg","Qi Li Xiang 七里香":"7CKOG-qQKJY","Red Bean 红豆":"-zSknxs4lM8","First Love":"o1sUaVJUeB0","Chocolate Disco":"1WTy2yqKI4w","Rewrite":"omkKMzR_vZY","Ikenai Taiyou":"UzeKDH29TW0","Midnight Pretenders":"CZlbD6uLRTg","Plastic Love":"T_lC2O1oIew","Ride on Time":"Vfnwbn69zN0"};
+const VID={"Sakuranbo":"upODO6OuOOk","JOY":"ge9XkXUfzbE","Polyrhythm":"KbiSxunJatM","Twiggy Twiggy":"NcdrTlNlSds","Sugarless GiRL":"ibN26Zkkl0Q","Star Fruits Surf Rider":"8x_XUZ3n1xc","Sobakasu":"8iSG4jIUkcU","Asia no Junshin":"EO4tRtPBq30","Shangri-La":"NEb9MTNk3y4","Traveling":"4j2ZJAgdrGE","Seasons":"388RThHSPhw","Fragile":"sxLN3E3jigg","Qi Li Xiang 七里香":"7CKOG-qQKJY","Red Bean 红豆":"-zSknxs4lM8","First Love":"o1sUaVJUeB0","Chocolate Disco":"1WTy2yqKI4w","Rewrite":"omkKMzR_vZY","Ikenai Taiyou":"UzeKDH29TW0","Midnight Pretenders":"CZlbD6uLRTg","Plastic Love":"T_lC2O1oIew","Ride on Time":"Vfnwbn69zN0","Summer":"3AwdKUYGlXo","Merry Christmas Mr. Lawrence":"1cU55ywVGE0","Green (album)":"Q-k9Xu5O7AY"};
 const YT=(t,a)=>VID[t]?"https://www.youtube.com/watch?v="+VID[t]:"https://www.youtube.com/results?search_query="+encodeURIComponent(a+" "+t);
 const YA=(t,a,extra="")=>`<a class="yt" href="${YT(t,a)}" target="_blank" rel="noopener" data-vid="${VID[t]||""}" data-title="${(a+" – "+t).replace(/"/g,"")}">${extra}<span class="ytb">▶</span></a>`;
 const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
@@ -517,13 +541,13 @@ pages.push({key:"title",html:`
   <div id="roll" class="idle" role="button" tabindex="0" aria-label="Touch the roll cake to start"></div>
   <img id="knife" src="assets/knife.png" alt="">
   ${SHOWS.map((s,i)=>`<button class="slice" data-i="${i}" aria-label="${esc(s.name)}, ${s.short}"><img src="${SL(i)}" alt=""></button><div class="slabel">${s.short}</div>`).join("")}
-  <div id="hint">touch the cake! ♡<small>ケーキにタッチしてね</small></div>
+  <div id="hint">Touch the cake! ♡<small>ケーキにタッチしてね</small></div>
   <div id="titleWrap"><h1 id="logo">Yoru <em>Kitchen</em> FM</h1><div id="logoSub">夜食ラジオ <b>♡</b> FM 98.1 <b>♡</b> Boston</div></div>
   <div id="tagline">Good food, soft songs, until the last train.</div>
   <img id="radio" src="assets/radio.png" alt="A pink retro radio">
   <div id="lcd">FM 87.9</div>
-  <div id="sliceHint">one slice = one show · tap a slice to tune in</div>
-  <button class="gel" id="startBtn">start the broadcast ▶</button>`});
+  <div id="sliceHint">One slice = one show · Tap a slice to tune in</div>
+  <button class="gel" id="startBtn">Start the broadcast ▶</button>`});
 
 /* 1 · homepage */
 pages.push({key:"station",tint:"rgba(255,240,200,.15)",html:`
@@ -531,7 +555,7 @@ pages.push({key:"station",tint:"rgba(255,240,200,.15)",html:`
   <div class="win-head"><span>♡ Yoru Kitchen FM ☆ official homepage ♡</span><span class="dots"><i></i><i></i><i></i></span></div>
   <div class="hp-body">
    <nav class="side"><div class="menu-t">MENU</div>
-    <a href="#p2">TOP</a><a href="#p2">PROFILE<span class="new">NEW!</span></a><a href="#p3">LISTENERS</a><a href="#p6">TIME TABLE<span class="new">NEW!</span></a><a href="#p4">MUSIC</a><a href="#p5">RULES</a><a href="#p14">BBS</a>
+    <a href="#p2">TOP</a><a href="#p2">PROFILE<span class="new">NEW!</span></a><a href="#p3">LISTENERS</a><a href="#p6">TIME TABLE<span class="new">NEW!</span></a><a href="#p4">MUSIC</a><a href="#p5">RULES</a><a href="#p16">BBS</a>
     <div class="menu-t" style="margin-top:auto;background:#5cb8ff">LINK FREE ♡</div>
     <div style="font-family:var(--f-pixel);font-size:13px;text-align:center;line-height:1.4">since 2026.10<br>リンクはご自由に</div>
    </nav>
@@ -540,17 +564,17 @@ pages.push({key:"station",tint:"rgba(255,240,200,.15)",html:`
     <div style="font-family:var(--f-pixel);font-size:15px;color:var(--berry);margin-top:6px">ようこそ！夜食ラジオへ ♡ 管理人: DJ Squid</div>
     <table class="prof">
      <tr><th>📻 STATION</th><td>Yoru Kitchen FM · FM 98.1, Boston</td></tr>
-     <tr><th>⏰ ON AIR</th><td>7 AM – 2 AM, every day</td></tr>
+     <tr><th>⏰ ON AIR</th><td>24 hours a day, 7 days a week</td></tr>
      <tr><th>🦑 DJ</th><td>DJ Squid (that's me, Ziyan)</td></tr>
      <tr><th>🍙 FORMAT</th><td>Food tips, listener letters, call-ins, and songs that taste like 2000s Tokyo</td></tr>
      <tr><th>✨ MOOD</th><td>A DS cooking game in the morning. <i>Midnight Diner</i> after dark.</td></tr>
-     <tr><th>🍰 CONCEPT</th><td>The day is one roll cake. Every show is one slice, from sweet morning to dark-chocolate night.</td></tr>
+     <tr><th>🍰 CONCEPT</th><td>The whole day is one roll cake. Every show is one slice, from sweet morning to the last piece before sunrise.</td></tr>
     </table>
     <div class="counter" style="position:absolute;left:24px;bottom:16px">あなたは <b id="hits">${"000000".split("").map(c=>`<i>${c}</i>`).join("")}</b> 人目のリスナーです ♡</div>
     <div class="puriframe pop" style="--d:.3s"><div class="in">${SQUID(130)}<span class="doodle" style="left:8px;top:6px">DJ Squid♡</span><span class="doodle" style="right:8px;bottom:6px;font-size:16px">on air!</span></div></div>
    </div>
    <div class="blinkies">
-    <div class="bk a">● NOW ON AIR ●</div><div class="bk b">FM 98.1 ☆ Boston</div><div class="bk c">I ♡ ONIGIRI</div><div class="bk d">★ 24h snack ok ★</div><div class="bk e">♪ city pop @ night</div>
+    <div class="bk a">● NOW ON AIR ●</div><div class="bk b">FM 98.1 ☆ Boston</div><div class="bk c">I ♡ ONIGIRI</div><div class="bk d">★ 24h snacks OK ★</div><div class="bk e">♪ City pop at night</div>
     <div style="position:relative;width:100%;flex:1">${S("masc_01",0,6,74,{d:.5})}${S("masc_02",76,0,74,{d:.6})}${S("masc_04",30,84,80,{d:.7})}${S("masc_05",116,82,76,{d:.8})}</div>
    </div>
   </div>
@@ -564,7 +588,7 @@ const persona=[["lowpoly_06","The 2 AM essay writer","Has a deadline, a cup nood
  ["retro_09","The early-senioritis wanderer","Skipped class to walk around the Common for a week. Needs snacks and a soundtrack.","サボり中♡","♪♪♪"]];
 pages.push({key:"audience",tint:"rgba(255,240,200,.1)",html:`
  <h2 class="glit abs" style="left:40px;top:50px;font-size:46px">Who's tuning in?</h2>
- <div class="abs" style="left:44px;top:110px;font-family:var(--f-pixel);font-size:17px;color:var(--cocoa)">リスナーのみなさん · college kids in Boston, mostly international, always hungry</div>
+ <div class="abs" style="left:44px;top:110px;font-family:var(--f-pixel);font-size:17px;color:var(--cocoa)">リスナーのみなさん · college students in Boston: mostly international, always hungry</div>
  ${persona.map((p,k)=>`<div class="puri" style="left:${44+k*296}px;top:${150+(k%2)*18}px;transform:rotate(${[-3,2,-2,3][k]}deg);--d:${.2+k*.35}s">
    <div class="ph" style="background:${["linear-gradient(#d9ccf2,#fff)","linear-gradient(#ffe2c4,#fff)","linear-gradient(#ffd0dc,#fff)","linear-gradient(#cdeedd,#fff)"][k]}"><img src="stk/${p[0]}.webp" alt=""><span class="dd" style="left:8px;top:6px">${p[3]}</span><span class="dd" style="right:8px;bottom:6px;font-size:16px">${p[4]}</span><span class="dd" style="right:10px;top:8px;font-size:14px;color:#5cb8ff">2026.10.29</span></div>
    <h3>${p[1]}</h3><p>${p[2]}</p></div>`).join("")}
@@ -577,11 +601,11 @@ pages.push({key:"sound",tint:"rgba(255,240,200,.08)",html:`
  <div class="cd" style="left:70px;top:130px"><span class="lab">YORU MIX vol.1 ☀</span></div>
  <div class="cd night" style="left:960px;top:130px"><span class="lab">YORU MIX vol.2 ☾</span></div>
  <div class="liner" style="left:40px;top:400px;width:420px"><b class="glit" style="font-size:24px">By day · 2000s J-pop</b><div style="font-size:15px;margin-top:4px">Bright, fast, a little bit silly. The music of girls' magazines and DS menus.</div><ol>${[["Sakuranbo","Ai Otsuka"],["Polyrhythm","Perfume"],["Twiggy Twiggy","Pizzicato Five"]].map(([t,a])=>`<li>${YA(t,a,`${a} – ${t} `)}</li>`).join("")}</ol></div>
- <div class="liner dk" style="left:820px;top:400px;width:420px"><b style="font-family:var(--f-display);font-weight:400;font-size:24px;color:#ffd6e4">After dark · 80s City Pop</b><div style="font-size:15px;margin-top:4px">Slow and shiny. A taxi window at night, a konbini bag on your lap.</div><ol>${[["Midnight Pretenders","Tomoko Aran"],["Plastic Love","Mariya Takeuchi"],["Ride on Time","Tatsuro Yamashita"]].map(([t,a])=>`<li>${YA(t,a,`${a} – ${t} `)}</li>`).join("")}</ol></div>
+ <div class="liner dk" style="left:820px;top:400px;width:420px"><b style="font-family:var(--f-display);font-weight:400;font-size:24px;color:#ffd6e4">After dark · 80s City Pop</b><div style="font-size:15px;margin-top:4px">Slow and shiny. A taxi window at night, a konbini bag on your lap. From 2 AM, soft ambient piano for Dawn Tapes.</div><ol>${[["Midnight Pretenders","Tomoko Aran"],["Plastic Love","Mariya Takeuchi"],["Ride on Time","Tatsuro Yamashita"]].map(([t,a])=>`<li>${YA(t,a,`${a} – ${t} `)}</li>`).join("")}</ol></div>
  <img class="abs" id="sndRadio" src="assets/radio.png" alt="" style="left:490px;top:150px;width:300px">
  <div class="eq" id="eq" style="left:520px;top:400px">${Array.from({length:14},(_,k)=>`<i style="--t:${(.3+((k*37)%10)/22).toFixed(2)}s"></i>`).join("")}</div>
- <button class="gel abs" id="jingleBtn" style="left:640px;top:520px;transform:translateX(-50%)">▶ play our jingle</button>
- <div class="abs" style="left:640px;top:580px;transform:translateX(-50%);font-family:var(--f-pixel);font-size:14px;color:var(--cocoa);background:#fffc;border-radius:999px;padding:2px 12px;white-space:nowrap">a tiny 8-bit station ID, played every hour</div>
+ <button class="gel abs" id="jingleBtn" style="left:640px;top:520px;transform:translateX(-50%)">▶ Play our jingle</button>
+ <div class="abs" style="left:640px;top:580px;transform:translateX(-50%);font-family:var(--f-pixel);font-size:14px;color:var(--cocoa);background:#fffc;border-radius:999px;padding:2px 12px;white-space:nowrap">A tiny 8-bit station ID, played every hour</div>
  ${S("masc_03",330,90,90,{d:.3,r:-8})}${S("masc_06",860,92,90,{d:.4,r:8})}`});
 
 /* 4 · rules notebook */
@@ -595,7 +619,7 @@ pages.push({key:"rules",tint:"rgba(255,240,200,.08)",html:`
    <li><span class="hl" style="--d:1.6s">No miracle food.</span> Nothing here will fix your heart, your grades or your life. Nobody sells a “Vitajex.”<span class="stamp" style="--d:1.9s">OK♡</span></li>
    <li><span class="hl" style="--d:2.2s">The mic is always on.</span> We never say anything off air that we wouldn't say on air.<span class="stamp" style="--d:2.5s">OK♡</span></li>
   </ol>
-  <div class="hand" style="position:absolute;left:106px;right:40px;bottom:22px;font-size:18px;color:var(--muted);border-top:3px dashed #ffb7cb;padding-top:8px">memo: lesson from <i>A Face in the Crowd</i>. The audience trusts the host more than the ad, so the host has to deserve it ♡</div>
+  <div class="hand" style="position:absolute;left:106px;right:40px;bottom:22px;font-size:18px;color:var(--muted);border-top:3px dashed #ffb7cb;padding-top:8px">Memo: a lesson from <i>A Face in the Crowd</i>. The audience trusts the host more than the ad, so the host has to deserve it ♡</div>
  </div>
  ${S("retro_03",40,70,190,{d:.2,r:-6})}${S("retro_07",56,280,150,{d:.35,r:5})}${S("retro_05",30,470,200,{d:.5,r:-3})}
  ${S("retro_02",1060,60,170,{d:.3,r:6})}${S("retro_06",1040,300,210,{d:.45,r:-4})}
@@ -603,14 +627,14 @@ pages.push({key:"rules",tint:"rgba(255,240,200,.08)",html:`
  <div class="burst" style="left:1110px;top:560px;width:120px;height:80px;font-size:15px"><span>miracle<br>food</span></div>`});
 
 /* 5 · stage select */
-const NODES=[[110,440],[280,300],[450,450],[620,300],[790,450],[960,300],[1120,430]];
+const NODES=[[104,440],[252,300],[400,450],[548,300],[696,450],[844,300],[992,450],[1140,300]];
 pages.push({key:"menu",tint:"transparent",html:`
  <div class="map">
-  <div class="sun" style="left:40px;top:40px"></div><div class="moon" style="right:70px;top:46px"></div>
+  <div class="sun" style="left:40px;top:40px"></div><div class="moon" style="left:930px;top:120px"></div><div class="sun" style="left:1150px;top:470px;opacity:.85;transform:scale(.8)"></div>
   <h2 class="glit">STAGE SELECT</h2>
-  <div class="sub">本日のおしながき · 7 stages from bright morning to deep night · pick one!</div>
+  <div class="sub">本日のおしながき · 24 hours in 8 stages, from morning to the next sunrise · Pick one!</div>
   <svg class="path" viewBox="0 0 1220 592" aria-hidden="true"><path d="M${NODES.map(n=>`${n[0]-30} ${n[1]-48}`).join(" L ")}" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 22" style="stroke-dashoffset:0"/></svg>
-  ${NODES.map((n,i)=>`<button class="node ${i===6?"dk":""}" data-go="${i}" style="left:${n[0]-30}px;top:${n[1]-20}px"><div class="ped"><span class="st">STAGE ${i+1}</span><img src="${SL(i)}" alt=""></div><div class="nm"><span class="tm">${SHOWS[i].short}</span>${SHOWS[i].name}</div></button>`).join("")}
+  ${NODES.map((n,i)=>`<button class="node ${i===6||i===7?"dk":""}" data-go="${i}" style="left:${n[0]-30}px;top:${n[1]-20}px"><div class="ped"><span class="st">STAGE ${i+1}</span><img src="${SL(i)}" alt=""></div><div class="nm"><span class="tm">${SHOWS[i].short}</span>${SHOWS[i].name}</div></button>`).join("")}
   <div id="hopper" style="left:${NODES[0][0]-62}px;top:${NODES[0][1]-170}px">${SQUID(64)}</div>
  </div>`});
 
@@ -623,7 +647,7 @@ const SCENES=[
    <span class="seg" style="left:16px;top:250px;background:var(--butter)">♡ LISTENERS' BENTO GALLERY ↑</span>
    <div class="box" id="bento"><div class="in"><i></i><i></i><i></i></div></div>
    ${segs(s,["left:600px;top:300px;transform:rotate(4deg)","left:560px;top:350px;transform:rotate(-3deg)"])}
-   <div class="seg" style="left:590px;top:520px;background:#fff0f5">click the box ↺</div>
+   <div class="seg" style="left:590px;top:520px;background:#fff0f5">Click the box ↺</div>
    ${S("lowpoly_08",20,330,120,{d:.6,r:-8})}${S("oni_05",600,400,130,{d:.7,r:6})}
  </div>`,
  // 2 grocery
@@ -633,7 +657,7 @@ const SCENES=[
    <div class="sign" style="left:600px;top:96px;animation-delay:-.8s"><img src="stk/retro_06.webp" alt="" style="width:130px;display:block"></div>
    ${S("retro_08",30,170,170,{d:.3,r:-5})}<div class="burst" style="left:170px;top:150px;width:90px;height:90px;font-size:15px;z-index:3"><span>本日の<br>特売!</span></div>
    ${S("lowpoly_07",300,190,150,{d:.4})}
-   <div class="meter"><span>🧺 BASKET <b class="amt">$0.00</b> / $20</span><div class="mb"><i></i></div><div style="font-size:12px;color:var(--berry);margin-top:4px">click snacks on the belt to shop!</div></div>
+   <div class="meter"><span>🧺 BASKET <b class="amt">$0.00</b> / $20</span><div class="mb"><i></i></div><div style="font-size:12px;color:var(--berry);margin-top:4px">Click snacks on the belt to shop!</div></div>
    <div class="belt-wrap"><div class="belt"></div><div class="reel2">${(()=>{const L=["retro_10","retro_12","retro_13","retro_14","retro_15","retro_16","retro_17","retro_18","retro_19","retro_20","retro_21","retro_11","jfood_17"];return L.concat(L).map(n=>`<img src="stk/${n}.webp" alt="" data-snack>`).join("")})()}</div></div>
    ${segs(s,["left:470px;top:250px;transform:rotate(-3deg)","left:24px;top:360px;transform:rotate(3deg)"])}
    <div class="complete">COMPLETE ♡</div>
@@ -641,10 +665,10 @@ const SCENES=[
  // 3 lunch map
  (s,i)=>`<div class="scene sc3"><div class="streets"></div><div class="park"><div class="pond"></div><span>Boston Common</span></div><div class="campus"><span>Emerson ♡</span></div>
    ${sceneHead(s,i)}
-   ${[["jfood_02",290,240,"Ramen Corner","🍙🍙🍙🍙🍙","$14 · rich broth"],["jfood_04",120,420,"Omurice Café","🍙🍙🍙🍙","$12 · ketchup heart"],["jfood_14",470,520,"Udon Stand","🍙🍙🍙🍙","$11 · fast & warm"],["lowpoly_04",640,560,"Takoyaki Cart","🍙🍙🍙","$8 · hot hot hot"],["oni_02",690,240,"Onigiri Bar","🍙🍙🍙🍙🍙","$6 · two for one"]].map((p,k)=>`<div class="pin" tabindex="0" style="left:${p[1]}px;top:${p[2]}px;--d:${.3+k*.18}s"><div class="tip"><b>${p[3]}</b>${p[4]}<br>${p[5]}</div><div class="bub"><img src="stk/${p[0]}.webp" alt=""></div></div>`).join("")}
+   ${[["jfood_02",290,240,"Ramen Corner","🍙🍙🍙🍙🍙","$14 · Rich broth"],["jfood_04",120,420,"Omurice Café","🍙🍙🍙🍙","$12 · Ketchup heart"],["jfood_14",470,520,"Udon Stand","🍙🍙🍙🍙","$11 · Fast and warm"],["lowpoly_04",640,560,"Takoyaki Cart","🍙🍙🍙","$8 · Hot, hot, hot!"],["oni_02",690,240,"Onigiri Bar","🍙🍙🍙🍙🍙","$6 · Two for one"]].map((p,k)=>`<div class="pin" tabindex="0" style="left:${p[1]}px;top:${p[2]}px;--d:${.3+k*.18}s"><div class="tip"><b>${p[3]}</b>${p[4]}<br>${p[5]}</div><div class="bub"><img src="stk/${p[0]}.webp" alt=""></div></div>`).join("")}
    <div class="walker">${SQUID(54)}</div>
    ${segs(s,["left:16px;top:110px","left:16px;top:142px"])}
-   <span class="seg" style="right:16px;top:16px;background:var(--butter)">hover a pin ♡ rated in 🍙</span>
+   <span class="seg" style="right:16px;top:16px;background:var(--butter)">Hover over a pin ♡ Rated in 🍙</span>
  </div>`,
  // 4 zine
  (s,i)=>`<div class="scene sc4"><span class="tag">STAGE ${i+1} · ${s.time}</span>
@@ -676,15 +700,15 @@ const SCENES=[
    ${S("cn_xlb1",250,420,120,{d:.5,z:8})}${S("cn_xlb2",350,450,110,{d:.6,z:8})}${S("dumpling_face",470,430,150,{d:.7,z:8,r:-6})}${S("cn_gyoza",600,470,130,{d:.8,z:8})}
    ${S("cn_pandaplate",24,470,120,{d:.4,z:8})}
    <img class="slam" src="stk/cn_stamp.webp" alt="" style="left:640px;top:250px;width:80px;--r:12deg;--d:1.6s">
-   <div class="phone ring" id="momPhone" style="left:40px;top:100px"><div class="top"><div class="scr"><b>📞 着信中…</b><br>ママ ♡<br>Mom's Recipe<br>Hotline</div></div><div class="hinge"></div><div class="bot">${"<i></i>".repeat(9)}</div><button class="gel ans">answer ☎</button></div>
+   <div class="phone ring" id="momPhone" style="left:40px;top:100px"><div class="top"><div class="scr"><b>📞 着信中…</b><br>ママ ♡<br>Mom's Recipe<br>Hotline</div></div><div class="hinge"></div><div class="bot">${"<i></i>".repeat(9)}</div><button class="gel ans">Answer ☎</button></div>
    ${segs(s,["left:250px;top:110px;transform:rotate(-2deg)","left:470px;top:110px;transform:rotate(3deg)"])}
  </div>`,
  // 6 study
  (s,i)=>`<div class="scene sc6">${sceneHead(s,i)}
    <div class="crt"><div class="glass"><img src="stk/game1.webp" alt="" class="on"><img src="stk/game2.webp" alt=""><img src="stk/game3.webp" alt=""><img src="stk/game4.webp" alt=""></div></div>
    <div class="focus"><small>FOCUS TIMER</small><b class="ft">25:00</b><div class="tb"><i></i></div></div>
-   <div class="score">SNACK POWER<b class="sc">0</b>click falling snacks!</div>
-   <div class="rank"><b>RANKING ♡</b>1. cup noodle<br>2. Pocky<br>3. takoyaki<br>4. toast</div>
+   <div class="score">SNACK POWER<b class="sc">0</b>Click falling snacks!</div>
+   <div class="rank"><b>RANKING ♡</b>1. Cup noodles<br>2. Pocky<br>3. Takoyaki<br>4. Toast</div>
    <div class="desk"></div>
    ${S("lowpoly_06",40,440,110,{d:.4,r:-6,z:4})}${S("lowpoly_01",620,500,90,{d:.5,r:4,z:4})}${S("lowpoly_11",160,490,100,{d:.6,r:3,z:4})}
    ${segs(s,["left:16px;top:110px","left:16px;top:142px"])}
@@ -701,6 +725,20 @@ const SCENES=[
    ${S("jfood_02",190,400,150,{d:.4,z:5})}${S("jfood_04",340,420,170,{d:.5,z:5})}${S("jfood_14",500,410,140,{d:.6,z:5})}
    <div class="phone mail" style="left:580px;top:150px;width:150px"><div class="top" style="height:190px"><div class="scr" id="mailScr"></div></div><div class="hinge"></div><div class="bot" style="height:80px">${"<i></i>".repeat(6)}</div></div>
    ${segs(s,["left:130px;top:250px;background:#2f2756;color:#fff;border-color:#0e0a24","left:130px;top:284px;background:#2f2756;color:#fff;border-color:#0e0a24"])}
+ </div>`,
+ // 8 dawn
+ (s,i)=>`<div class="scene sc8">${sceneHead(s,i)}
+   <div class="stars8"></div>
+   <div class="rise"></div>
+   <div class="clk" style="left:24px;top:124px"><small>BOSTON</small><b class="cb">2:00</b><span class="ap">AM ☾</span></div>
+   <div class="clk" style="left:196px;top:124px"><small>GUANGZHOU</small><b class="cg">2:00</b><span class="ap2">PM ☀</span></div>
+   ${segs(s,["left:24px;top:232px;background:#2f2756;color:#fff;border-color:#0e0a24","left:24px;top:266px;background:#2f2756;color:#fff;border-color:#0e0a24"])}
+   <div class="tapes">${["Sleep Tape #1 ♡","Sleep Tape #2 ☾","Rain Sounds ☂"].map((t,k)=>`<div class="tape8" style="--k:${k}"><span>${t}</span><i></i><i></i></div>`).join("")}</div>
+   <div class="abs" style="left:330px;top:300px;z-index:6">${SQUID(92)}</div>
+   ${[0,1,2].map(k=>`<span class="zzz" style="left:${410+k*16}px;top:${290-k*12}px;--sd:${k*.8}s">z</span>`).join("")}
+   <img class="abs" src="assets/slice8.png" alt="" style="left:250px;top:400px;width:80px;z-index:6;animation:snore 2.6s ease-in-out infinite">
+   ${S("lowpoly_01",470,380,120,{d:.5,z:6})}${S("lowpoly_11",600,420,110,{d:.6,z:6,r:5})}
+   <div class="phone" style="left:560px;top:90px;width:156px;z-index:9"><div class="top" style="height:190px"><div class="scr" id="homeScr" style="white-space:pre-wrap"></div></div><div class="hinge"></div><div class="bot" style="height:70px">${"<i></i>".repeat(6)}</div></div>
  </div>`
 ];
 SHOWS.forEach((s,i)=>pages.push({key:"show"+i,tint:s.tint,night:!!s.night,dark:!!s.dark,html:SCENES[i](s,i)+status(s,i)}));
@@ -716,11 +754,11 @@ pages.push({key:"bye",tint:"rgba(18,12,44,.86)",night:true,html:`
  <div class="roll-wrap"><div class="staff">
   <p class="big">YORU KITCHEN FM 98.1</p><h4>— STAFF ROLL —</h4>
   <h4>HOST · CONCEPT · WRITING</h4><p>Ziyan Wu (DJ Squid 🦑)</p>
-  <h4>PIXEL ART</h4><p>made with ChatGPT from Ziyan's prompts</p>
-  <h4>FOOD STICKERS & PHOTOS</h4><p>collected by Ziyan from Xiaohongshu collage sheets<br>(@ichii and others) · class use only</p>
-  <h4>GAME SCREENSHOTS</h4><p>2000s flash & DS cooking games, for nostalgia</p>
+  <h4>PIXEL ART</h4><p>Made with ChatGPT from Ziyan's prompts</p>
+  <h4>FOOD STICKERS & PHOTOS</h4><p>Collected by Ziyan from Xiaohongshu collage sheets<br>(@ichii and others) · Class use only</p>
+  <h4>GAME SCREENSHOTS</h4><p>2000s Flash and DS cooking games, used for nostalgia</p>
   <h4>WEB BUILD</h4><p>Claude</p>
-  <h4>DREAM GUESTS & SPONSORS</h4><p>all imaginary bookings ♡</p>
+  <h4>DREAM GUESTS & SPONSORS</h4><p>All imaginary bookings ♡</p>
   <h4>MADE FOR</h4><p>Media Histories (VM-134-02)<br>Prof. David Stewart · Emerson College · Fall 2026</p>
   <p class="big" style="margin-top:40px">THE END ♡</p><p>おつかれさまでした</p>
  </div></div>
@@ -732,13 +770,13 @@ host.innerHTML=pages.map((p,i)=>`<section class="page ${p.dark?"dark":""}" data-
 const secs=[...host.children];
 function fit(){const s=Math.min(innerWidth/1300,innerHeight/740);stage.style.transform=`translate(-50%,-50%) scale(${s})`}
 addEventListener("resize",fit);fit();
-document.querySelector("#ticker div").textContent=("★ YORU KITCHEN FM 98.1 ★ NOW ON AIR ★ 今日もおいしいラジオ ♡ ★ request hotline open all night ★ tonight's dish: hot udon with an egg ★ キリ番 1000 を踏んだ人は BBS に書き込んでね ★ ").repeat(4);
+document.querySelector("#ticker div").textContent=("★ YORU KITCHEN FM 98.1 ★ NOW ON AIR ★ 今日もおいしいラジオ ♡ ★ Request hotline open all night ★ Tonight's dish: hot udon with an egg ★ On air 24 hours ★ キリ番 1000 を踏んだ人は BBS に書き込んでね ★ ").repeat(4);
 const wipe=document.getElementById("wipe");wipe.innerHTML="<i>♡</i>".repeat(144);const cells=[...wipe.children];
 
 /* ---------------- sound ---------------- */
 let ac=null,muted=false;
 const muteBtn=document.getElementById("mute");
-muteBtn.onclick=()=>{muted=!muted;muteBtn.textContent=muted?"♪ off":"♪ on";muteBtn.setAttribute("aria-pressed",muted);if(typeof BGM!=="undefined")BGM.refresh()};
+muteBtn.onclick=()=>{muted=!muted;muteBtn.textContent=muted?"♪ Off":"♪ On";muteBtn.setAttribute("aria-pressed",muted);if(typeof BGM!=="undefined")BGM.refresh()};
 function A(){if(!ac){try{ac=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}if(ac)setTimeout(()=>BGM.kick(),0)}if(ac&&ac.state==="suspended")ac.resume();return ac}
 function tone(f,d,type="triangle",v=.15,to=null,at=0){const c=A();if(!c||muted)return;const t=c.currentTime+at,o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(to)o.frequency.exponentialRampToValueAtTime(to,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g).connect(c.destination);o.start(t);o.stop(t+d+.02)}
 function noise(d,v=.15,freq=2000,type="highpass",at=0){const c=A();if(!c||muted)return;const t=c.currentTime+at,b=c.createBuffer(1,Math.ceil(c.sampleRate*d),c.sampleRate),a=b.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=Math.random()*2-1;const s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();s.buffer=b;f.type=type;f.frequency.value=freq;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);s.connect(f).connect(g).connect(c.destination);s.start(t)}
@@ -771,9 +809,10 @@ const SONGS={
  show4:{bpm:96,lead:["triangle",.06,"E5 ~ G5 A5 G5 ~ E5 D5 | C5 ~ D5 E5 D5 ~ ~ - | E5 ~ G5 A5 C6 ~ A5 G5 | A5 G5 E5 D5 C5 ~ ~ -"],pluck:true,bass:["triangle",.07,"C3 - G3 - C3 - G3 - | A2 - E3 - A2 - E3 - | F2 - C3 - F2 - C3 - | G2 - D3 - C3 - G2 -"],hat:"....x...",kick:"x...x..."},
  show5:{bpm:84,lead:["sine",.05,"- - E5 - G5 ~ ~ - | - - F5 - A5 ~ G5 - | - - D5 - F5 ~ E5 - | - - E5 ~ ~ ~ - -"],chords:[["A3","C4","E4","G4"],["D3","F3","A3","C4"],["G3","B3","D4","F4"],["C4","E4","G4","B4"]],bass:["triangle",.07,"A2 ~ ~ - A2 - E2 - | D2 ~ ~ - D2 - A2 - | G2 ~ ~ - G2 - D2 - | C3 ~ ~ - C3 - G2 -"],hat:"..x...x.",kick:"x....x.."},
  show6:{bpm:92,lead:["triangle",.05,"A5 ~ G5 E5 ~ ~ C5 ~ | G5 ~ F5 D5 ~ ~ B4 ~ | F5 ~ E5 C5 ~ D5 E5 ~ | D5 ~ ~ ~ G5 ~ ~ -"],chords:[["F3","A3","C4","E4"],["E3","G3","B3","D4"],["D3","F3","A3","C4"],["G3","B3","D4","F4"]],bass:["triangle",.08,"F2 ~ - F3 - F2 C3 - | E2 ~ - E3 - E2 B2 - | D2 ~ - D3 - D2 A2 - | G2 ~ - G3 - G2 D3 -"],hat:"..x...x.",kick:"x..x..x."},
+ show7:{bpm:66,lead:["sine",.045,"E6 ~ ~ ~ - - D6 ~ | C6 ~ ~ ~ - - - - | A5 ~ ~ ~ G5 ~ E5 ~ | G5 ~ ~ ~ ~ ~ - -"],pluck:true,chords:[["C4","E4","G4","B4"],["A3","C4","E4","G4"],["F3","A3","C4","E4"],["G3","B3","D4","E4"]],bass:["sine",.05,"C3 ~ ~ ~ ~ ~ ~ ~ | A2 ~ ~ ~ ~ ~ ~ ~ | F2 ~ ~ ~ ~ ~ ~ ~ | G2 ~ ~ ~ ~ ~ ~ ~"],hat:"........",kick:"........"},
  bye:{bpm:72,lead:["sine",.06,"C6 ~ G5 ~ E5 ~ G5 ~ | A5 ~ G5 ~ E5 ~ ~ ~ | F5 ~ E5 ~ D5 ~ G5 ~ | C5 ~ ~ ~ ~ ~ - -"],pluck:true,bass:["triangle",.05,"C3 - - - G3 - - - | F3 - - - C3 - - - | D3 - - - G2 - - - | C3 - - - - - - -"],hat:"........",kick:"........"}
 };
-const SONG_OF={station:"home",audience:"home",sound:null,rules:"home",menu:"home",show0:"show0",show1:"show1",show2:"show2",show3:"show3",show4:"show4",show5:"show5",show6:"show6",bye:"bye"};
+const SONG_OF={station:"home",audience:"home",sound:null,rules:"home",menu:"home",show0:"show0",show1:"show1",show2:"show2",show3:"show3",show4:"show4",show5:"show5",show6:"show6",show7:"show7",bye:"bye"};
 const BGMP=()=>typeof BGM!=="undefined"&&BGM.paused;
 const BGM=(()=>{let on=true,want=null,song=null,step=0,next=0,timer=null,bus=null;
  function voice(f,t,d,type,v,pluck){const o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.01);if(pluck)g.gain.exponentialRampToValueAtTime(.0005,t+Math.max(.25,d));else{g.gain.setValueAtTime(v,t+d*.85);g.gain.linearRampToValueAtTime(0,t+d)}o.connect(g).connect(bus);o.start(t);o.stop(t+Math.max(.3,d)+.05)}
@@ -791,7 +830,7 @@ const BGM=(()=>{let on=true,want=null,song=null,step=0,next=0,timer=null,bus=nul
    if(!timer)timer=setInterval(tick,30)}
  let paused=false;return{set(k){want=k;apply()},kick(){apply()},toggle(){on=!on;apply();return on},refresh(){apply()},pause(v){paused=v;apply()},get paused(){return paused}}})();
 const bgmBtn=document.getElementById("bgmBtn");
-bgmBtn.onclick=()=>{A();const o=BGM.toggle();bgmBtn.textContent=o?"♫ BGM on":"♫ BGM off";bgmBtn.setAttribute("aria-pressed",o)};
+bgmBtn.onclick=()=>{A();const o=BGM.toggle();bgmBtn.textContent=o?"♫ BGM On":"♫ BGM Off";bgmBtn.setAttribute("aria-pressed",o)};
 /* ---------------- helpers ---------------- */
 const $=s=>stage.querySelector(s),$$=s=>[...stage.querySelectorAll(s)];
 const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -818,12 +857,12 @@ deck.addEventListener("click",e=>{if(e.target===deck)closeDeck()});
 stage.addEventListener("click",e=>{const a=e.target.closest("a.yt");if(!a||!CAN_EMBED||!a.dataset.vid)return;e.preventDefault();A();sfx.coin();openDeck(a.dataset.vid,a.dataset.title,a.href)});
 addEventListener("keydown",e=>{if(e.key==="Escape"&&!deck.hidden)closeDeck()},true);
 /* ---------------- opening ---------------- */
-const RW=760,RH=363,SW=RW/7,CX=600,CY=450,TH=-7*Math.PI/180;
+const NP=8,RW=760,RH=363,SW=RW/NP,CX=600,CY=450,TH=-7*Math.PI/180;
 const roll=$("#roll"),knife=$("#knife"),radio=$("#radio"),lcd=$("#lcd");
-for(let i=0;i<7;i++){const d=document.createElement("div");d.className="strip";d.style.left=(i*SW)+"px";d.style.width=(SW+1)+"px";d.style.backgroundPosition=`${-i*SW}px 0`;roll.appendChild(d)}
+for(let i=0;i<NP;i++){const d=document.createElement("div");d.className="strip";d.style.left=(i*SW)+"px";d.style.width=(SW+1)+"px";d.style.backgroundPosition=`${-i*SW}px 0`;roll.appendChild(d)}
 const strips=[...roll.children];
 const rot=(x,y)=>[CX+x*Math.cos(TH)-y*Math.sin(TH),CY+x*Math.sin(TH)+y*Math.cos(TH)];
-const finalX=i=>545+(i-3)*114,FINAL_BOTTOM=488;
+const finalX=i=>545+(i-3.5)*104,FINAL_BOTTOM=488;
 const slices=$$(".slice"),labels=$$(".slabel");
 let state="idle",abort=false,notesTimer=null;
 const RADIO="translate(990px,330px)",KREST="translate(1080px,290px) rotate(8deg)";
@@ -834,14 +873,14 @@ async function playOpening(){
   sfx.boing();
   await roll.animate([{transform:"rotate(-7deg) scale(1,1)"},{transform:"rotate(-7deg) scale(1.08,.9)"},{transform:"rotate(-7deg) scale(.94,1.08)"},{transform:"rotate(-7deg) scale(1.03,.97)"},{transform:"rotate(-7deg) scale(1,1)"}],{duration:650,easing:"ease-out"}).finished;
   if(abort)return;
-  const off=[0,0,0,0,0,0,0];let cur=KREST;
-  for(let k=1;k<=6;k++){
+  const off=Array(NP).fill(0);let cur=KREST;
+  for(let k=1;k<NP;k++){
     const[x,y]=rot(k*SW-RW/2+off[k-1]+5,0);
     const up=kAt(x,y-RH/2-40),down=kAt(x,y+70);
     await knife.animate([{transform:cur},{transform:up}],{duration:k===1?420:170,easing:"ease-in-out",fill:"forwards"}).finished;if(abort)return;
     await knife.animate([{transform:up},{transform:down}],{duration:100,easing:"ease-in",fill:"forwards"}).finished;if(abort)return;
     sfx.chop();
-    for(let i=k;i<7;i++)off[i]+=12;
+    for(let i=k;i<NP;i++)off[i]+=12;
     strips.forEach((s,i)=>s.animate([{transform:`translateX(${off[i]-(i>=k?12:0)}px)`},{transform:`translateX(${off[i]}px)`}],{duration:160,easing:"ease-out",fill:"forwards"}));
     burst(x,y-10,4,"·✦·");
     await knife.animate([{transform:down},{transform:up}],{duration:130,easing:"ease-out",fill:"forwards"}).finished;if(abort)return;
@@ -849,13 +888,13 @@ async function playOpening(){
   }
   knife.animate([{transform:cur,opacity:1},{transform:"translate(1180px,120px) rotate(40deg)",opacity:0}],{duration:450,easing:"ease-in",fill:"forwards"});
   await wait(250);if(abort)return;
-  for(let i=0;i<7;i++){
+  for(let i=0;i<NP;i++){
     const[x,y]=rot((i+.5)*SW-RW/2+off[i],0);
     sfx.poof();burst(x,y,9);
     strips[i].animate([{opacity:1,transform:`translateX(${off[i]}px) scale(1)`},{opacity:0,transform:`translateX(${off[i]}px) scale(.3)`}],{duration:220,fill:"forwards"});
     const sl=slices[i];sl.classList.add("on");sl.style.left=x+"px";sl.style.top=(y+68)+"px";
     sl.animate([{transform:"translate(-50%,-100%) scale(0)"},{transform:"translate(-50%,-100%) scale(1.25)"},{transform:"translate(-50%,-100%) scale(1)"}],{duration:320,easing:"ease-out"});
-    await wait(140);if(abort)return;
+    await wait(120);if(abort)return;
   }
   await wait(300);if(abort)return;
   sfx.sparkle();
@@ -936,9 +975,14 @@ const enter={
    every(()=>{const f=document.createElement("img");f.src=`stk/${F[(Math.random()*F.length)|0]}.webp`;f.className="fall";f.alt="";const x=20+Math.random()*660;f.style.left=x+"px";zone.appendChild(f);
      const an=f.animate([{transform:"translateY(0) rotate(0)"},{transform:`translateY(760px) rotate(${Math.random()<.5?-1:1}turn)`}],{duration:4200+Math.random()*2200,easing:"linear"});an.finished.then(()=>f.remove()).catch(()=>{});
      f.onpointerdown=e=>{A();an.cancel();f.remove();score++;sc.textContent=score;sfx.coin();const r=zone.getBoundingClientRect(),s=scaleNow();const p=document.createElement("div");p.className="ptxt";p.textContent="+1 ♡";p.style.left=((e.clientX-r.left)/s)+"px";p.style.top=((e.clientY-r.top)/s)+"px";zone.appendChild(p);p.animate([{opacity:1},{transform:"translateY(-50px)",opacity:0}],{duration:800}).finished.then(()=>p.remove())}},900)},
- show6(sec){const scr=sec.querySelector("#mailScr");const L=[["Rina · 1:12 AM","I failed my midterm today. What should I eat?","DJ Squid: Hot udon with an egg. Soft and warm. You did your best ♡"],["Kai · 1:40 AM","I miss my grandma's cooking so much.","DJ Squid: Make her soup this weekend and call her while it cooks ♡"],["Mei · 2:05 AM","Last train is gone. I'm walking home.","DJ Squid: 7-Eleven onigiri + hot tea. Text a friend you're safe ♡"]];
+ show6(sec){const scr=sec.querySelector("#mailScr");const L=[["Rina · 1:12 AM","I failed my midterm today. What should I eat?","DJ Squid: Hot udon with an egg. Soft and warm. You did your best ♡"],["Kai · 1:40 AM","I miss my grandma's cooking so much.","DJ Squid: Make her soup this weekend and call her while it cooks ♡"],["Mei · 2:05 AM","The last train is gone. I'm walking home.","DJ Squid: 7-Eleven onigiri + hot tea. Text a friend that you're safe ♡"]];
    let li=0;function run(){const[f,q,a]=L[li];li=(li+1)%L.length;const full=`✉ ${f}\n${q}\n\n${a}`;let k=0;scr.style.whiteSpace="pre-wrap";scr.textContent="";const t=setInterval(()=>{scr.textContent=full.slice(0,++k);if(k%2)sfx.key();if(k>=full.length){clearInterval(t);later(run,3200)}},38);timers.push(t)}
    later(()=>{tone(1047,.12,"triangle",.08);tone(1319,.2,"triangle",.08,null,.12);run()},600)},
+ show7(sec){const cb=sec.querySelector(".cb"),cg=sec.querySelector(".cg"),ap=sec.querySelector(".ap"),ap2=sec.querySelector(".ap2"),scr=sec.querySelector("#homeScr");let m=120;
+   const f=x=>{const h=Math.floor(x/60)%12||12;return h+":"+String(x%60).padStart(2,"0")};
+   every(()=>{m+=2;if(m>420)m=120;cb.textContent=f(m);ap.textContent=(m>=360?"AM ☀":"AM ☾");cg.textContent=f(m+720);ap2.textContent="PM ☀"},90);
+   const msg="📞 Calling home…\n\nBoston: 3 AM ☾\nGuangzhou: 3 PM ☀\n\nMom: Why are you still awake?! Go to sleep! ♡";
+   later(()=>{sfx.ring();let k=0;const t=setInterval(()=>{scr.textContent=msg.slice(0,++k);if(k%2)sfx.key();if(k>=msg.length)clearInterval(t)},50);timers.push(t)},700)},
  bye(){}
 };
 
@@ -950,7 +994,7 @@ function updateBar(){
   const n=pages.length;document.getElementById("pageNo").textContent=String(cur+1).padStart(2,"0")+" / "+n;
   document.getElementById("fill").style.width=((cur+1)/n*100)+"%";
   prev.style.visibility=cur===0?"hidden":"visible";
-  next.textContent=(cur===0&&state!=="done")?"skip ▶▶":(cur===n-1?"replay ↺":"next ▶");
+  next.textContent=(cur===0&&state!=="done")?"Skip ▶▶":(cur===n-1?"Replay ↺":"Next ▶");
 }
 function show(i){
   secs.forEach((s,k)=>{s.classList.toggle("active",k===i);s.classList.remove("play")});
