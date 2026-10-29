@@ -184,8 +184,8 @@ img{max-width:none;user-select:none;-webkit-user-drag:none}
   background:linear-gradient(90deg,transparent 78px,#ff9cbd 78px 81px,transparent 81px),repeating-linear-gradient(#fffdf6 0 41px,#c9dcf5 41px 43px);padding:26px 40px 20px 106px}
 .note-pg::before{content:"";position:absolute;left:24px;top:30px;bottom:30px;width:24px;background:radial-gradient(circle,#f9cdd8 8px,var(--cocoa) 9px 10px,transparent 11px) 0 0/24px 64px repeat-y}
 .note-pg h2{font-size:36px}
-.rules{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:18px;counter-reset:r}
-.rules li{counter-increment:r;position:relative;font-family:var(--f-hand);font-size:21px;line-height:1.55;padding-right:70px}
+.rules{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:10px;counter-reset:r}
+.rules li{counter-increment:r;position:relative;font-family:var(--f-hand);font-size:19px;line-height:1.5;padding-right:70px}
 .rules li::before{content:counter(r) ".";position:absolute;left:-36px;font-family:var(--f-display);color:var(--berry)}
 .hl{background:linear-gradient(transparent 55%,#fff27a 55%) no-repeat;background-size:0 100%}
 .page.play .hl{animation:hl .6s ease-out both;animation-delay:var(--d,0s)}
@@ -618,6 +618,7 @@ pages.push({key:"rules",tint:"rgba(255,240,200,.08)",html:`
    <li><span class="hl" style="--d:1s">DJ Squid tastes it first.</span> Every sponsor's food is tasted on air before the ad. If it's bad, the ad doesn't run.<span class="stamp" style="--d:1.3s">OK♡</span></li>
    <li><span class="hl" style="--d:1.6s">No miracle food.</span> Nothing here will fix your heart, your grades or your life. Nobody sells a “Vitajex.”<span class="stamp" style="--d:1.9s">OK♡</span></li>
    <li><span class="hl" style="--d:2.2s">The mic is always on.</span> We never say anything off air that we wouldn't say on air.<span class="stamp" style="--d:2.5s">OK♡</span></li>
+   <li><span class="hl" style="--d:2.8s">No payola.</span> No record label can pay to get a song on the air. Every song is here because DJ Squid loves it.<span class="stamp" style="--d:3.1s">OK♡</span></li>
   </ol>
   <div class="hand" style="position:absolute;left:106px;right:40px;bottom:22px;font-size:18px;color:var(--muted);border-top:3px dashed #ffb7cb;padding-top:8px">Memo: a lesson from <i>A Face in the Crowd</i>. The audience trusts the host more than the ad, so the host has to deserve it ♡</div>
  </div>
@@ -943,7 +944,7 @@ const enter={
  audience(){[0,1,2,3].forEach(k=>later(()=>{noise(.5,.05,3000,"highpass");tone(1500,.05,"square",.04,null,.5)},200+k*350))},
  sound(sec){const b=sec.querySelector("#jingleBtn"),cds=sec.querySelectorAll(".cd"),eq=sec.querySelector("#eq"),r=sec.querySelector("#sndRadio");
    b.onclick=()=>{A();sfx.jingle();cds.forEach(c=>c.classList.add("fast"));eq.classList.add("fast");r.animate([{transform:"rotate(0)"},{transform:"rotate(-5deg) scale(1.04)"},{transform:"rotate(5deg) scale(1.04)"},{transform:"rotate(0)"}],{duration:300,iterations:5});const[x,y]=[640,300];burst(x,y,10,"♪♫♡");setTimeout(()=>{cds.forEach(c=>c.classList.remove("fast"));eq.classList.remove("fast")},1500)}},
- rules(){[.7,1.3,1.9,2.5].forEach(d=>later(()=>sfx.thud(),d*1000+250))},
+ rules(){[.7,1.3,1.9,2.5,3.1].forEach(d=>later(()=>sfx.thud(),d*1000+250))},
  menu(sec){const hop=sec.querySelector("#hopper");sec.querySelectorAll(".node").forEach((n,k)=>{n.onmouseenter=n.onfocus=()=>{hop.style.left=(NODES[k][0]-62)+"px";hop.style.top=(NODES[k][1]-170)+"px";sfx.blip()};n.onclick=()=>{sfx.coin();go(SHOW0+k)}})},
  show0(sec){const box=sec.querySelector("#bento"),tm=sec.querySelector(".tm");
    const items=[["oni_04",195,300,150],["oni_01",215,380,0],["jfood_17",395,318,120],["lowpoly_05",420,412,95],["jfood_11",510,410,90],["retro_19",330,400,0]].filter(x=>x[3]);
