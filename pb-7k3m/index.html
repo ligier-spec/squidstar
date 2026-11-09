@@ -1,9 +1,4 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="robots" content="noindex, nofollow">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex, nofollow"><title>Paper Bride</title></head>
 <title>Paper Bride Presentation</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -536,7 +531,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .beat{border-left:2px solid var(--cinnabar);padding:4px 0 4px 24px;margin-bottom:22px}
 .beat .k{font:16px/1 var(--display-en);letter-spacing:.3em;color:#e8525a;margin-bottom:8px}
 .beat p{margin:0;font:23px/1.45 var(--body);color:var(--mourning)}
-.pull{position:absolute;left:110px;width:880px;top:858px;text-align:center;font:italic 30px/1.3 var(--body);color:#f4d9a0}
+.pq{position:absolute;left:110px;width:880px;top:858px;text-align:center;font:italic 30px/1.3 var(--body);color:#f4d9a0}
 
 /* 13 pattern + resistance band */
 .fightband{position:absolute;left:0;right:0;bottom:96px;height:330px;z-index:4;background:linear-gradient(to top,rgba(11,6,7,.98) 62%,rgba(11,6,7,.0));display:grid;grid-template-columns:repeat(3,1fr);gap:50px;padding:120px 140px 0;align-items:start}
@@ -554,6 +549,20 @@ canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 
 .slide.on .tL.late{animation-delay:calc(var(--t0) + 4.4s)}
 .slide.on .tR.late{animation-delay:calc(var(--t0) + 4.4s)}
+
+/* v3.1 · real lanterns + talisman paper */
+.lanterns{position:absolute;right:40px;width:880px;top:70px;height:330px;display:flex;justify-content:space-around;align-items:flex-start;pointer-events:none}
+.ln2{position:relative;width:118px;height:256px;transform-origin:50% 0}
+.ln2 img{position:absolute;left:0;top:0;width:100%;height:auto}
+.ln2 .on{opacity:0}
+.ln2 .halo{position:absolute;left:-90px;top:20px;width:298px;height:240px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,110,60,.42),rgba(200,20,28,.12) 45%,transparent 70%);opacity:0;mix-blend-mode:screen}
+.slide.on .ln2 .on,.slide.on .ln2 .halo{animation:lnOn .8s ease-out both,lnFlick 2.4s ease-in-out infinite alternate;animation-delay:calc(var(--t0) + 3.2s + var(--k) * .55s),calc(var(--t0) + 4s + var(--k) * .55s)}
+.slide.on .ln2{animation:lnSway 4.4s ease-in-out infinite alternate;animation-delay:calc(var(--k) * -.8s)}
+.ln2:nth-child(even){top:30px}
+.talcard{background:none!important;border:solid transparent;border-width:64px 34px 64px;border-image:url("img/talisman.png") 150 48 150 fill / 64px 34px 64px stretch;padding:66px 0 0!important;clip-path:none!important;filter:drop-shadow(0 30px 40px rgba(0,0,0,.75))}
+.talcard::before{display:none}
+.talcard .big{top:-14px!important}
+.talcard .ig{left:0!important;right:0!important;bottom:-10px!important}
 
 </style>
 
@@ -748,8 +757,8 @@ canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
   <p class="para" data-a="fade" style="--d:3.8s;left:124px;top:760px;width:520px;font-size:20px;color:var(--ash)">* Game 6’s source is a fan reading. Pairings from player research on TapTap and Xiaohongshu.</p>
   <div class="nine">
 <div class="lv" style="--k:0"><img src="img/g1.jpg" alt=""><span class="no">01</span><span class="gt">纸嫁衣</span><div class="src"><b>《聊斋·聂小倩》</b><i>A scholar named Ning and a ghost named Nie</i><span>NIE XIAOQIAN · STRANGE TALES</span></div></div>
-<div class="lv paper" style="--k:1"><span class="no">02</span><span class="gt">奘铃村</span><div class="src"><b>《梁祝》</b><i>The Butterfly Lovers: Liang and Zhu, who die together</i><span>THE BUTTERFLY LOVERS</span></div></div>
-<div class="lv paper" style="--k:2"><span class="no">03</span><span class="gt">鸳鸯债</span><div class="src"><b>《娇红记》</b><i>Shen and Jiaoniang, buried in one grave</i><span>THE STORY OF JIAO AND HONG</span></div></div>
+<div class="lv" style="--k:1"><img src="img/g2.jpg" alt=""><span class="no">02</span><span class="gt">奘铃村</span><div class="src"><b>《梁祝》</b><i>The Butterfly Lovers: Liang and Zhu, who die together</i><span>THE BUTTERFLY LOVERS</span></div></div>
+<div class="lv" style="--k:2"><img src="img/g3.jpg" alt=""><span class="no">03</span><span class="gt">鸳鸯债</span><div class="src"><b>《娇红记》</b><i>Shen and Jiaoniang, buried in one grave</i><span>THE STORY OF JIAO AND HONG</span></div></div>
 <div class="lv" style="--k:3"><img src="img/g4.jpg" alt=""><span class="no">04</span><span class="gt">红丝缠</span><div class="src"><b>《西厢记》</b><i>Zhang and Cui, tied by the matchmaker’s red thread</i><span>ROMANCE OF THE WESTERN CHAMBER</span></div></div>
 <div class="lv" style="--k:4"><img src="img/g5.jpg" alt=""><span class="no">05</span><span class="gt">来生戏</span><div class="src"><b>《聊斋·小翠》</b><i>Yuanfeng and Xiaocui, who plays dress-up in opera robes</i><span>XIAOCUI · STRANGE TALES</span></div></div>
 <div class="lv fan" style="--k:5"><img src="img/g6.jpg" alt=""><span class="no">06</span><span class="gt">千秋魇</span><div class="src"><b>嫦娥奔月</b><i>An archer and a moon goddess, pulled apart</i><span>CHANG’E FLIES TO THE MOON</span></div></div>
@@ -793,7 +802,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
   <div class="halfL5"><img class="full push" src="img/wd_bed.jpg" alt="" style="filter:brightness(.38) saturate(1.1)"><div class="layer2" style="background:linear-gradient(90deg,rgba(11,6,7,.85),rgba(11,6,7,.35))"></div></div>
   <div class="halfR5" data-a="slowfade" style="--d:.1s"></div>
   <div style="position:absolute;left:50%;top:96px;bottom:96px;width:2px;background:var(--cinnabar);transform-origin:50% 0;--d:.6s" data-a="rule"></div>
-  <div class="lanterns"><div class="ln" style="--k:0"><div class="cord"></div><div class="halo"></div><div class="cap1"></div><div class="body"><div class="glow"></div></div><div class="cap2"></div><div class="tas"></div></div><div class="ln" style="--k:1"><div class="cord"></div><div class="halo"></div><div class="cap1"></div><div class="body"><div class="glow"></div></div><div class="cap2"></div><div class="tas"></div></div><div class="ln" style="--k:2"><div class="cord"></div><div class="halo"></div><div class="cap1"></div><div class="body"><div class="glow"></div></div><div class="cap2"></div><div class="tas"></div></div><div class="ln" style="--k:3"><div class="cord"></div><div class="halo"></div><div class="cap1"></div><div class="body"><div class="glow"></div></div><div class="cap2"></div><div class="tas"></div></div><div class="ln" style="--k:4"><div class="cord"></div><div class="halo"></div><div class="cap1"></div><div class="body"><div class="glow"></div></div><div class="cap2"></div><div class="tas"></div></div><div class="ln" style="--k:5"><div class="cord"></div><div class="halo"></div><div class="cap1"></div><div class="body"><div class="glow"></div></div><div class="cap2"></div><div class="tas"></div></div></div>
+  <div class="lanterns"><div class="ln2" style="--k:0"><div class="halo"></div><img src="img/lantern_off.png" alt=""><img class="on" src="img/lantern_on.png" alt=""></div><div class="ln2" style="--k:1"><div class="halo"></div><img src="img/lantern_off.png" alt=""><img class="on" src="img/lantern_on.png" alt=""></div><div class="ln2" style="--k:2"><div class="halo"></div><img src="img/lantern_off.png" alt=""><img class="on" src="img/lantern_on.png" alt=""></div><div class="ln2" style="--k:3"><div class="halo"></div><img src="img/lantern_off.png" alt=""><img class="on" src="img/lantern_on.png" alt=""></div><div class="ln2" style="--k:4"><div class="halo"></div><img src="img/lantern_off.png" alt=""><img class="on" src="img/lantern_on.png" alt=""></div><div class="ln2" style="--k:5"><div class="halo"></div><img src="img/lantern_off.png" alt=""><img class="on" src="img/lantern_on.png" alt=""></div></div>
   <h2 class="ttl" data-a="spread" style="--d:.3s;left:120px;top:150px;font-size:66px">RED MEANS <em>TAKEN</em></h2>
   <div class="col5" style="left:120px;--d:1.2s" data-a="left">
     <div class="k">A CUSTOM · TUJIA PEOPLE, WULING MOUNTAINS</div>
@@ -916,7 +925,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
     <div class="beat" data-a="up" style="--d:3s"><div class="k">THE LOGIC OF GHOST MARRIAGE</div><p>A woman who dies unmarried has no altar and no family. With nowhere to belong, she wanders.</p></div>
     <div class="beat" data-a="up" style="--d:4.2s"><div class="k">PAPER BRIDE</div><p>It keeps the old names, Ning and Nie, but its ghost women are not fantasies. <em style="color:#e8525a">They are women the rules threw away.</em></p></div>
   </div>
-  <p class="pull words" style="--d:5.6s">A woman with nowhere to belong becomes a ghost.</p>
+  <p class="pq words" style="--d:5.6s">A woman with nowhere to belong becomes a ghost.</p>
 </section>
 
 <!-- 10 · THE PATTERN -->
@@ -939,7 +948,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 
 <!-- NEW · SCHOLARS DISAGREE -->
 <section class="slide" data-tr="dissolve" data-fx="ash" data-kick="<b>ACT IV</b> · A COUNTERPOINT" data-notes="Not everyone reads the game this way. In a 2025 paper for DiGRA Australia, the game scholar Yue Cao looks at Paper Bride and argues that games like this use wedding and funeral customs mainly to build a horror atmosphere, not to criticize the customs. That is a fair point: the game is a horror product, and the customs are its scenery. But we think the fear points at the custom itself. The game does not just decorate with the custom. It shows the custom hurting people.">
-  <img class="full driftR" src="img/vm_twins.jpg" alt="" style="filter:brightness(.3) saturate(.7)">
+  <img class="full driftR" src="img/vm_twins.jpg" alt="" style="filter:brightness(.62) saturate(.95)"><div class="layer2" style="background:linear-gradient(to bottom,rgba(11,6,7,.55),rgba(11,6,7,.15) 40%,rgba(11,6,7,.6))"></div>
   <div class="vig"></div>
   <h2 class="ttl" data-a="spread" style="--d:.4s;left:0;right:0;top:150px;text-align:center;font-size:76px">BUT SOME SCHOLARS <em>DISAGREE</em></h2>
   <div style="position:absolute;left:150px;width:760px;top:330px;--d:1s" data-a="left">
@@ -957,8 +966,8 @@ canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 
 <!-- 15 · CONCLUSION -->
 <section class="slide" data-tr="fade" data-fx="coins" data-kick="<b>CONCLUSION</b>" data-notes="Start while the red paper is still whole. Read the question: Moli became a ghost. But who threw her away? Let the paper tear. Then slowly: In Paper Bride, we don't fear the dead. We fear the rules of the living. She wasn't born a monster. The village made one.">
-  <img class="full pull" src="img/end_shush.jpg" alt="" style="object-position:50% 25%;filter:brightness(1.35)">
-  <div class="vig"></div><div class="shade-b"></div>
+  <img class="full pull" src="img/end_shush.jpg" alt="" style="object-position:50% 30%;filter:brightness(1.9) contrast(1.05) saturate(1.1)">
+  <div class="layer2" style="background:linear-gradient(to top,rgba(11,6,7,.85),rgba(11,6,7,0) 45%)"></div>
   <div class="tL late"><b>囍</b></div><div class="tR late"><b>囍</b></div>
   <p class="q15">Moli became a ghost.<br><em style="color:#f4d9a0">But who threw her away?</em></p>
   <p class="lab" data-a="fade" style="--d:5.6s;left:0;right:0;top:600px;text-align:center;font-size:22px;color:var(--mourning)">WE DON’T FEAR THE DEAD. WE FEAR THE RULES OF THE LIVING.</p>
